@@ -82,15 +82,20 @@ import { setIsNeedLoad } from '@/redux/slices/utils'
 import GuestUserInforForm from '@/components/checkout-page/guest-user/GuestUserInforForm'
 import DineInPreferableTime from '@/components/checkout-page/DineInPreferableTime'
 
-let currentDate = moment().format('YYYY/MM/DD HH:mm')
-let nextday = moment(currentDate).add(1, 'days').format('YYYY/MM/DD')
 
-let today = moment(currentDate).format('dddd')
-let tomorrow = moment(nextday).format('dddd')
+const currentDate = moment();
 
-var CurrentDatee = moment().format()
+// Normal formats
+const nextday = currentDate.clone().add(1, 'days').format('YYYY/MM/DD');
 
-let todayTime = moment(CurrentDatee).format('HH:mm')
+const today = currentDate.format('dddd');
+const tomorrow = currentDate.clone().add(1, 'days').format('dddd');
+
+// Time
+const todayTime = currentDate.format('HH:mm');
+
+
+
 
 export const handleValuesFromCartItems = (variationValues) => {
     let value = []
