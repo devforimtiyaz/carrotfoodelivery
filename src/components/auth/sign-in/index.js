@@ -244,7 +244,8 @@ const SignInPage = ({
     }
 
     const handleOnChange = (value) => {
-        const isPlusCheck = formatPhoneNumber(value)
+        //const isPlusCheck = formatPhoneNumber(value)
+        const isPlusCheck = value
         loginFormik.setFieldValue('email_or_phone', `${isPlusCheck}`)
     }
 
@@ -362,7 +363,6 @@ const SignInPage = ({
         setForWidth(true)
         setModalFor('sign-up')
     }
-
     const loginView = () => {
         switch (state.status) {
             case 'otp':

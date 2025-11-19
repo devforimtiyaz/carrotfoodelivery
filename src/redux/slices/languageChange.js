@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     language: '',
-    countryCode: 'US',
+    countryCode: 'IN',
     countryFlag: '/_next/static/media/us.b358a5c6.svg'
 }
 

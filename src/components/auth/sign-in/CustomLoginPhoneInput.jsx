@@ -115,7 +115,7 @@ const CustomLoginPhoneNInput = ({
     const changeHandler = (phone) => {
         onHandleChange(phone)
     }
-
+    
     return (
         <CustomStackFullWidth
             alignItems="flex-start"
@@ -134,14 +134,12 @@ const CustomLoginPhoneNInput = ({
                 onBlur={() => setFocus(false)}
                 placeholder={t('Enter phone number')}
                 value={value}
-                enableSearchField
-                enableSearch
                 onChange={changeHandler}
                 inputProps={{
                     required: true,
                 }}
                 specialLabel={t('Phone')}
-                country={defaultCountry}
+                    country="in"
                 searchStyle={{ margin: '0', width: '95%', height: '50px' }}
                 inputStyle={{
                     width: '100%',
@@ -149,9 +147,12 @@ const CustomLoginPhoneNInput = ({
                 }}
                 containerClass={classes.borderClass}
                 dropdownStyle={{ height: '300px', width: '267px' }}
-                onlyCountries={[]}
-                disableDropdown={globalSettings?.country_picker_status !== 1}
-                disableCountryGuess={true}
+                onlyCountries={['in']}    // Restrict to India
+                preferredCountries={['in']}
+                disableDropdown
+                disableCountryGuess
+                 disableSearchIcon    // <-- IMPORTANT FIX
+                 countryCodeEditable={false}  // <-- IMPORTANT
             />
 
             <input

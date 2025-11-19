@@ -53,6 +53,7 @@ const ManualLogin = (props) => {
             setIsPhone('email')
         }
     }, [loginFormik.values.email_or_phone])
+
     return (
         <form onSubmit={loginFormik.handleSubmit} noValidate>
             <CustomStackFullWidth
@@ -88,7 +89,7 @@ const ManualLogin = (props) => {
                                 }}
                                 htmlFor="outlined-adornment-password"
                             >
-                                {t('Email/Phone')}
+                                {/*{t('Email/Phone')}*/}
                             </InputLabel>
                             <CustomSigninOutLine
                                 borderradius="10px"
@@ -97,7 +98,7 @@ const ManualLogin = (props) => {
                                 type="text"
                                 id="email_or_phone"
                                 name="email_or_phone"
-                                placeholder={t('Email/Phone')}
+                                placeholder={t('Phone')}
                                 value={loginFormik.values.email_or_phone}
                                 onChange={loginFormik.handleChange}
                                 error={
