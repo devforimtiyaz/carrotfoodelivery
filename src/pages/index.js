@@ -89,7 +89,6 @@ export const getServerSideProps = async (context) => {
                 headers: CustomHeader,
             }
         )
-
         if (!landingPageRes.ok) {
             console.error(
                 'Error fetching landing page data:',

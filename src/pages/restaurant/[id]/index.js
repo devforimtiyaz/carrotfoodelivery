@@ -35,6 +35,7 @@ const index = ({ restaurantData, configData }) => {
             )
         }
     }, [restaurant_zone_id])
+    console.log(restaurantData)
 
     return (
         <>
