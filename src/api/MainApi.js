@@ -1,7 +1,6 @@
 import axios from 'axios'
 export const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
-console.log(baseUrl)
 const MainApi = axios.create({
     baseURL: baseUrl,
 })

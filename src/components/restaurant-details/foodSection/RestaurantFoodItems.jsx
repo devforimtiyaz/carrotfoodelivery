@@ -38,7 +38,6 @@ const RestaurantFoodItems = ({ category_ids, restaurant_id }) => {
     const [searchKey, setSearchKey] = useState('')
     const [totalSize, setTotalSize] = useState(null)
     const [reRenderSearch, setRerenderSearch] = useState(false)
-
     const { global } = useSelector((state) => state.globalSettings)
     const categorySearch = ''
     const {

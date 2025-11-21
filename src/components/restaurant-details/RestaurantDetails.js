@@ -87,7 +87,6 @@ const RestaurantDetails = ({ restaurantData, configData }) => {
     const handleOnSuccess = (res) => {
         setAllFoods(res?.data?.products)
     }
-
     const searchFood = useRestaurentFoodSearch(
         restaurantId,
         searchKey,
@@ -131,6 +130,8 @@ const RestaurantDetails = ({ restaurantData, configData }) => {
         setSelectedId(null)
     }, [restaurantId])
 
+        console.log(recommendProducts);
+
     useEffect(() => {
         const combined = getCombinedCategoriesAndProducts(
             allCategories,
@@ -139,14 +140,15 @@ const RestaurantDetails = ({ restaurantData, configData }) => {
             recommendProducts
             // popularProducts
         )
-
         const hasProducts = combined?.filter(
             (item) => item?.products?.length > 0
         )
+
         setData(hasProducts)
         //setSelectedId(hasProducts?.[0]?.id)
         setIsFirstRender(false)
     }, [allFoods, allCategories, recommendProducts])
+
 
     const handleFocusedSection = debounce((val) => {
         setSelectedId(val?.id)
@@ -239,7 +241,6 @@ const RestaurantDetails = ({ restaurantData, configData }) => {
         restaurantData?.discount,
         restaurantData?.free_delivery
     )
-
     return (
         <CustomContainer sx={{ mb: { xs: '7px', md: '0' } }}>
             <CustomStackFullWidth

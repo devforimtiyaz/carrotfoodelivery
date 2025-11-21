@@ -37,7 +37,6 @@ const Navigation = () => {
     const scrolling = useScrollTrigger()
     const [userLocation, setUserLocation] = useState(null)
     const { userLocationUpdate } = useSelector((state) => state.globalSettings)
-    console.log(global);
     useEffect(() => {
         let location = undefined
         if (typeof window !== 'undefined') {
