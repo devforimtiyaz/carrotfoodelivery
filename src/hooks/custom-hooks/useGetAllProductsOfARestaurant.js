@@ -7,7 +7,7 @@ export const useGetAllProductsOfARestaurant = (id) => {
     const category_id = 0
     const type = 'all'
     const offset = 1
-    const page_limit = 1000
+    const page_limit = 50
     const { data, refetch, isLoading } = useQuery(
         ['latest-food', restaurant_id, category_id, type, offset, page_limit],
         () =>

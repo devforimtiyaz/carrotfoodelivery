@@ -61,7 +61,6 @@ const CategoriesWiseFood = ({
     if (typeof window !== 'undefined') {
         languageDirection = localStorage.getItem('direction')
     }
-
     return (
         <Grid container ref={ref2} gap="1rem">
             <>

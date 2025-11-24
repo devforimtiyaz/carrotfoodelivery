@@ -38,21 +38,11 @@ const getCombinedCategoriesAndProducts = (
     }
 
     if (allCategories?.length > 0 && allProducts?.length > 0) {
-        const data = allCategories?.map((item) => {
-            const categoryItems = allProducts?.filter(
-                (product) => product?.category_ids[0]?.id == item?.id
-            )
-            if (categoryItems.length > 0) {
-                return {
-                    ...item,
-                    products: categoryItems,
-                }
-            } else {
-                return {
-                    products: [],
-                }
-            }
-        })
+        const data = [
+            {
+            products: allProducts,
+        }
+        ]
         if (recommendProducts?.products?.length > 0) {
             return [recommend, ...data]
         } else if (recommendProducts?.products?.length > 0) {
@@ -87,6 +77,7 @@ const RestaurantDetails = ({ restaurantData, configData }) => {
     const handleOnSuccess = (res) => {
         setAllFoods(res?.data?.products)
     }
+
     const searchFood = useRestaurentFoodSearch(
         restaurantId,
         searchKey,
@@ -130,8 +121,6 @@ const RestaurantDetails = ({ restaurantData, configData }) => {
         setSelectedId(null)
     }, [restaurantId])
 
-        console.log(recommendProducts);
-
     useEffect(() => {
         const combined = getCombinedCategoriesAndProducts(
             allCategories,
@@ -140,15 +129,14 @@ const RestaurantDetails = ({ restaurantData, configData }) => {
             recommendProducts
             // popularProducts
         )
+
         const hasProducts = combined?.filter(
             (item) => item?.products?.length > 0
         )
-
         setData(hasProducts)
         //setSelectedId(hasProducts?.[0]?.id)
         setIsFirstRender(false)
     }, [allFoods, allCategories, recommendProducts])
-
 
     const handleFocusedSection = debounce((val) => {
         setSelectedId(val?.id)
@@ -241,6 +229,7 @@ const RestaurantDetails = ({ restaurantData, configData }) => {
         restaurantData?.discount,
         restaurantData?.free_delivery
     )
+
     return (
         <CustomContainer sx={{ mb: { xs: '7px', md: '0' } }}>
             <CustomStackFullWidth
