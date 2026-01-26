@@ -133,7 +133,7 @@ const RestaurantBoxCard = (props) => {
                                             align={
                                                 hasDiscount
                                                     ? languageDirection ===
-                                                      'rtl'
+                                                        'rtl'
                                                         ? 'right'
                                                         : 'left'
                                                     : 'center'
@@ -186,12 +186,14 @@ const RestaurantBoxCard = (props) => {
                                 zIndex: 1,
                             }}
                         >
-                            {opening_time === 'closed'
+                            {opening_time === 'closed' || !opening_time
                                 ? t('Closed Now')
-                                : ` Open at ${moment(
-                                      opening_time,
-                                      'HH:mm:ss'
-                                  ).format('hh:mm A')}`}
+                                : (() => {
+                                    const time = moment(opening_time, 'HH:mm:ss')
+                                    return time.isValid()
+                                        ? `Open at ${time.format('hh:mm A')}`
+                                        : t('Closed Now')
+                                })()}
                         </Typography>
                     </Stack>
                 )
@@ -332,7 +334,7 @@ const RestaurantBoxCard = (props) => {
                                         <>
                                             {item}{' '}
                                             {characteristics.length - 1 ===
-                                            index
+                                                index
                                                 ? ''
                                                 : ','}
                                         </>

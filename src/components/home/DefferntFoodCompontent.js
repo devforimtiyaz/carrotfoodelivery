@@ -36,7 +36,7 @@ const DifferentFoodCompontent = ({
 }) => {
     const [activeSection, setActiveSection] = useState(null)
     const parentScrollContainerRef = useRef(null)
-    const [filterType, setFilterType] = useState(null)
+    const [filterType, setFilterType] = useState(false)
     const [shouldUpdateActiveSection, setShouldUpdateActiveSection] =
         useState(true)
     const updateActiveSection = () => {
@@ -121,23 +121,23 @@ const DifferentFoodCompontent = ({
                                     borderColor:
                                         activeTab === item?.value
                                             ? (theme) =>
-                                                  theme.palette.primary.main
+                                                theme.palette.primary.main
                                             : 'none',
                                     color:
                                         activeTab === item?.value
                                             ? (theme) =>
-                                                  theme.palette.primary.main
+                                                theme.palette.primary.main
                                             : (theme) =>
-                                                  theme.palette.customColor
-                                                      ?.six,
+                                                theme.palette.customColor
+                                                    ?.six,
                                     '&.Mui-selected': {
                                         color:
                                             activeTab === item?.value
                                                 ? (theme) =>
-                                                      theme.palette.primary.main
+                                                    theme.palette.primary.main
                                                 : (theme) =>
-                                                      theme.palette.customColor
-                                                          ?.six,
+                                                    theme.palette.customColor
+                                                        ?.six,
                                     },
                                 }}
                                 label={t(item?.category_name)}
