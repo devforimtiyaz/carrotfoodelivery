@@ -3,7 +3,7 @@ import 'firebase/messaging'
 import { useStoreFcm } from '@/hooks/react-query/push-notification/usePushNotification'
 import { onMessageListener, fetchToken } from '@/firebase'
 import { toast } from 'react-hot-toast'
-import { Stack, Typography } from '@mui/material'
+import { Button, Stack, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 
 const PushNotificationLayout = ({ children, refetch, pathName }) => {
@@ -12,7 +12,30 @@ const PushNotificationLayout = ({ children, refetch, pathName }) => {
     const [fcmToken, setFcmToken] = useState('')
 
     useEffect(() => {
-        fetchToken(setFcmToken).then()
+        if (typeof window !== 'undefined' && 'Notification' in window) {
+            if (Notification.permission === 'granted') {
+                fetchToken(setFcmToken).then()
+            } else if (Notification.permission === 'default') {
+                toast.custom((t) => (
+                    <Stack direction="row" spacing={2} p={2} sx={{ background: 'white', borderRadius: 1 }}>
+                        <Typography>Enable notifications?</Typography>
+                        <Button onClick={() => {
+                            Notification.requestPermission().then((permission) => {
+                                if (permission === 'granted') {
+                                    fetchToken(setFcmToken).then()
+                                }
+                                toast.dismiss(t.id);
+                            });
+                        }}>
+                            Enable
+                        </Button>
+                        <Button onClick={() => toast.dismiss(t.id)}>
+                            No Thanks
+                        </Button>
+                    </Stack>
+                ), { duration: Infinity });
+            }
+        }
     }, [])
     let token = undefined
     if (typeof window !== 'undefined') {
@@ -22,7 +45,7 @@ const PushNotificationLayout = ({ children, refetch, pathName }) => {
     const { mutate } = useStoreFcm()
 
     useEffect(() => {
-        if (token) {
+        if (token && fcmToken) {
             mutate(fcmToken)
         }
     }, [fcmToken])

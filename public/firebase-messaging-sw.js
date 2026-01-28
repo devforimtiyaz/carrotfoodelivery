@@ -1,3 +1,17 @@
+// Firebase Cloud Messaging Service Worker
+// Note: Service workers cannot access process.env directly
+// Firebase config is injected during build time via next.config.js
+
+// These will be replaced during build
+const firebaseConfig = {
+    apiKey: "",
+    authDomain: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: ""
+}
+
 importScripts(
     'https://www.gstatic.com/firebasejs/9.13.0/firebase-app-compat.js'
 )
@@ -5,15 +19,8 @@ importScripts(
     'https://www.gstatic.com/firebasejs/9.13.0/firebase-messaging-compat.js'
 )
 
-// Initialize Firebase with proper configuration
-firebase?.initializeApp({
-    apiKey: "AIzaSyDD3Bs81nJUQ91wURfpGcmUl5_FJ3vpfWU",
-    authDomain: "food-63111.firebaseapp.com",
-    projectId: "food-63111",
-    storageBucket: "food-63111.firebasestorage.app",
-    messagingSenderId: "383776666755",
-    appId: "1:383776666755:web:06bcea210c81c2350357b6"
-})
+// Initialize Firebase with configuration
+firebase?.initializeApp(firebaseConfig)
 
 // Retrieve firebase messaging
 const messaging = firebase?.messaging()

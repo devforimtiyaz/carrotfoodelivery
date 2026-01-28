@@ -24,6 +24,7 @@ const OtpForm = ({
     const { t } = useTranslation()
     const theme = useTheme()
     const otpFormik = useFormik({
+        enableReinitialize: true,
         initialValues: {
             reset_token: '',
             phone: data,
@@ -34,7 +35,7 @@ const OtpForm = ({
         onSubmit: async (values) => {
             try {
                 formSubmitHandler(values)
-            } catch (err) {}
+            } catch (err) { }
         },
     })
 

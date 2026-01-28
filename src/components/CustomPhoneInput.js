@@ -54,9 +54,8 @@ const useStyles = makeStyles((theme) => ({
             borderRight: 'none',
             padding:
                 languageDirection === 'rtl' ? '0 25px 0 11px' : ' 0 0px 0 11px',
-            borderRadius: `${borderradius ?? '3px'} 0px 0px ${
-                borderradius ?? '3px'
-            }`,
+            borderRadius: `${borderradius ?? '3px'} 0px 0px ${borderradius ?? '3px'
+                }`,
         },
         '&.react-tel-input .selected-flag .arrow': {
             left: languageDirection === 'rtl' ? '13px' : '29px',
@@ -127,7 +126,7 @@ const CustomPhoneInput = ({
                     autoFocus: !!autoFocus,
                 }}
                 specialLabel={t('Phone')}
-                country={defaultCountry}
+                country={'in'}
                 searchStyle={{ margin: '0', width: '95%', height: '36px' }}
                 inputStyle={{
                     width: '100%',
@@ -135,8 +134,9 @@ const CustomPhoneInput = ({
                 }}
                 containerClass={classes.borderClass}
                 dropdownStyle={{ height: '197px', width: '267px' }}
-                onlyCountries={[]}
-                disableDropdown={globalSettings?.country_picker_status !== 1}
+                onlyCountries={['in']}
+                disableDropdown={true}
+                disableCountryCode={true}
             />
             {touched && errors && (
                 <CustomTypography
