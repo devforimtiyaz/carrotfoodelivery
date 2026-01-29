@@ -30,7 +30,8 @@ export const ButtonContainer = styled(Stack)(({ theme, marginBottom }) => ({
 }))
 
 export const AppBarStyle = styled(AppBar, {
-    shouldForwardProp: (prop) => prop !== 'isSmall' && prop !== 'scrolling',
+    shouldForwardProp: (prop) =>
+        prop !== 'isSmall' && prop !== 'scrolling' && prop !== 'disableGutters',
 })(({ theme, scrolling, isSmall }) => ({
     background: 'transparent !important',
     boxShadow: 'none !important',

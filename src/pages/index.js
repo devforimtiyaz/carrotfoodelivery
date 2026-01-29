@@ -13,8 +13,14 @@ const Home = ({ configData, landingPageData }) => {
     const dispatch = useDispatch()
     useEffect(() => {
         if (configData && landingPageData) {
-            if (configData.length === 0 && landingPageData.length === 0) {
-                router.push('/404')
+            // Check if configData has actual properties (not just an empty object)
+            const hasConfigData = Object.keys(configData).length > 0
+            const hasLandingData = Object.keys(landingPageData).length > 0
+
+            if (!hasConfigData || !hasLandingData) {
+                console.warn('Missing data - Config:', hasConfigData, 'Landing:', hasLandingData)
+                // Don't redirect to 404, just log the warning
+                // The component will render with whatever data is available
                 return
             }
 
@@ -59,9 +65,9 @@ export const getServerSideProps = async (context) => {
             {
                 method: 'GET',
                 headers: {
-                    'X-software-id': 33571750,
+                    'X-software-id': '33571750',
                     'X-server': 'server',
-                    'X-localization': language,
+                    'X-localization': language || 'en',
                     origin: process.env.NEXT_CLIENT_HOST_URL,
                 },
             }
@@ -73,12 +79,13 @@ export const getServerSideProps = async (context) => {
                 configRes.status,
                 configRes.statusText
             )
-            throw new Error(`Failed to fetch config data: ${configRes.status}`)
+        } else {
+            const data = await configRes.json()
+            configData = data
+            console.log('Config data fetched successfully')
         }
-
-        configData = await configRes.json()
     } catch (error) {
-        console.error('Error in config data fetch:', error)
+        console.error('Error in config data fetch:', error.message)
     }
 
     try {
@@ -86,7 +93,12 @@ export const getServerSideProps = async (context) => {
             `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/landing-page`,
             {
                 method: 'GET',
-                headers: CustomHeader,
+                headers: {
+                    'X-software-id': '33571750',
+                    'X-server': 'server',
+                    'X-localization': language || 'en',
+                    origin: process.env.NEXT_CLIENT_HOST_URL,
+                },
             }
         )
         if (!landingPageRes.ok) {
@@ -95,21 +107,20 @@ export const getServerSideProps = async (context) => {
                 landingPageRes.status,
                 landingPageRes.statusText
             )
-            throw new Error(
-                `Failed to fetch landing page data: ${landingPageRes.status}`
-            )
+        } else {
+            const data = await landingPageRes.json()
+            landingPageData = data
+            console.log('Landing page data fetched successfully')
         }
-
-        landingPageData = await landingPageRes.json()
     } catch (error) {
-        console.error('Error in landing page data fetch:', error)
+        console.error('Error in landing page data fetch:', error.message)
     }
 
+    // Return the props even if some data is missing
     return {
         props: {
-            configData,
-            landingPageData,
-            error: !configData || !landingPageData ? 'failed_fetch' : null,
+            configData: configData || {},
+            landingPageData: landingPageData || {},
         },
     }
 }

@@ -45,7 +45,7 @@ export function FacebookCircularProgress(props) {
                 sx={{
                     color: (theme) =>
                         theme.palette.grey[
-                            theme.palette.mode === 'light' ? 200 : 800
+                        theme.palette.mode === 'light' ? 200 : 800
                         ],
                 }}
                 size={25}
@@ -186,14 +186,14 @@ const HeroLocationForm = ({ mobileview, handleModalClose }) => {
         if (placeDetails) {
             setLocation({
                 lat: placeDetails?.data?.location?.latitude,
-                    lng: placeDetails?.data?.location?.longitude,
-                })
+                lng: placeDetails?.data?.location?.longitude,
+            })
         }
     }, [placeDetails])
 
     useEffect(() => {
         if (places) {
-            const tempData= places?.data?.suggestions?.map((item) => ({
+            const tempData = places?.data?.suggestions?.map((item) => ({
                 place_id: item?.placePrediction?.placeId,
                 description: `${item?.placePrediction?.structuredFormat?.mainText?.text}, ${item?.placePrediction?.structuredFormat?.secondaryText?.text}`
             }))
@@ -348,7 +348,7 @@ const HeroLocationForm = ({ mobileview, handleModalClose }) => {
                                                         </IconButton>
                                                     ),
                                                 }}
-                                                required="true"
+                                                required
                                             />
                                         )}
                                     />

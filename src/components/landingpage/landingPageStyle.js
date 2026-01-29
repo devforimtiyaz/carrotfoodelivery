@@ -39,15 +39,16 @@ export const DiscountBannerBox = styled(Box)(({ theme }) => ({
     },
 }))
 
-export const LandingHeroBox = styled(Box)(
-    ({ theme, heroImg, ImageNotFound, isXSmall }) => ({
-        backgroundImage: `url(${heroImg ? heroImg : ImageNotFound.src})`,
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        display: 'flex',
-        backgroundPosition: 'center',
-        marginInline: isXSmall && '15px',
-        borderRadius: isXSmall && '5px',
-        paddingTop: isXSmall ? '0px' : '83px',
-    })
-)
+export const LandingHeroBox = styled(Box, {
+    shouldForwardProp: (prop) =>
+        prop !== 'heroImg' && prop !== 'ImageNotFound' && prop !== 'isXSmall',
+})(({ theme, heroImg, ImageNotFound, isXSmall }) => ({
+    backgroundImage: `url(${heroImg ? heroImg : ImageNotFound.src})`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    display: 'flex',
+    backgroundPosition: 'center',
+    marginInline: isXSmall && '15px',
+    borderRadius: isXSmall && '5px',
+    paddingTop: isXSmall ? '0px' : '83px',
+}))

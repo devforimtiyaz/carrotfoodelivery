@@ -1,35 +1,35 @@
 import React from 'react';
-import {Stack, useMediaQuery} from "@mui/material";
+import { Stack, useMediaQuery } from "@mui/material";
 import Skeleton from "@mui/material/Skeleton";
-import {useTheme} from "@emotion/react";
+import { useTheme } from "@emotion/react";
 
 const FunSectionShimmer = () => {
-    const theme=useTheme()
+    const theme = useTheme()
     const isXSmall = useMediaQuery(theme.breakpoints.down('sm'))
     const isSmall = useMediaQuery(theme.breakpoints.down('md'))
 
     let count
-    const handleCount=()=>{
+    const handleCount = () => {
         if (isXSmall) {
-            count=1
+            count = 1
         } else if (isSmall) {
-            count=3
+            count = 3
         }
         return count
     }
     return (
-       <>
-           <Stack direction="row" width="100%"   justifyContent="space-between" alignItems="center" paddingX="20px">
-           {[...Array(handleCount())].map((categoryItem) => (
+        <>
+            <Stack direction="row" width="100%" justifyContent="space-between" alignItems="center" paddingX="20px">
+                {[...Array(handleCount())].map((categoryItem, index) => (
 
-                   <Stack spacing={1} justifyContent="center" alignItems="center">
-                       <Skeleton variant="rectangular" width="121px" height="140px" animation="wave"/>
-                       <Skeleton variant="text" width="90px" height="20px" animation="wave"/>
-                       <Skeleton variant="text" width="200px" height="20px" animation="wave"/>
-                   </Stack>
-           ))}
-           </Stack>
-       </>
+                    <Stack key={index} spacing={1} justifyContent="center" alignItems="center">
+                        <Skeleton variant="rectangular" width="121px" height="140px" animation="wave" />
+                        <Skeleton variant="text" width="90px" height="20px" animation="wave" />
+                        <Skeleton variant="text" width="200px" height="20px" animation="wave" />
+                    </Stack>
+                ))}
+            </Stack>
+        </>
     );
 };
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import {
     alpha,
@@ -132,7 +132,7 @@ const NavResturant = ({ zoneid }) => {
                                                 ? restaurant?.slug
                                                 : restaurant?.id
                                         return (
-                                            <>
+                                            <React.Fragment key={restaurant.id}>
                                                 {index % 2 === 0 ? (
                                                     <Grid
                                                         item
@@ -150,7 +150,7 @@ const NavResturant = ({ zoneid }) => {
                                                                 },
                                                             }}
                                                             passHref
-                                                            style={{textDecoration: 'none'}}
+                                                            style={{ textDecoration: 'none' }}
                                                         >
                                                             <MenuItem
                                                                 onClick={
@@ -221,7 +221,7 @@ const NavResturant = ({ zoneid }) => {
                                                         <Link
                                                             href={`/restaurant/${restaurantIdOrSlug}`}
                                                             passHref
-                                                            style={{textDecoration: 'none'}}
+                                                            style={{ textDecoration: 'none' }}
                                                         >
                                                             <MenuItem
                                                                 onClick={
@@ -284,7 +284,7 @@ const NavResturant = ({ zoneid }) => {
                                                         </Link>
                                                     </Grid>
                                                 )}
-                                            </>
+                                            </React.Fragment>
                                         )
                                     })}
                                 {popularRestaurants?.length === 0 && (

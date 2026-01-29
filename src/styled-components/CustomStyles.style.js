@@ -80,16 +80,16 @@ export const ImageContainer = styled(Box)(({ theme }) => ({
         objectFit: 'contain',
     },
 }))
-export const CustomColouredTypography = styled(Typography)(
-    ({ theme, color, fontsize, smallFont }) => ({
-        color: color ? color : theme.palette.primary.main,
-        fontSize: fontsize,
-        [theme.breakpoints.down('md')]: {
-            // styles
-            fontSize: smallFont ? smallFont : fontsize,
-        },
-    })
-)
+export const CustomColouredTypography = styled(Typography, {
+    shouldForwardProp: (prop) => prop !== 'fontsize' && prop !== 'smallFont',
+})(({ theme, color, fontsize, smallFont }) => ({
+    color: color ? color : theme.palette.primary.main,
+    fontSize: fontsize,
+    [theme.breakpoints.down('md')]: {
+        // styles
+        fontSize: smallFont ? smallFont : fontsize,
+    },
+}))
 
 export const CustomStack = styled(Stack)({
     alignItems: 'start',
@@ -225,7 +225,24 @@ export const CustomFab = styled(Fab)(({ theme }) => ({
         height: '35px',
     },
 }))
-export const CustomImageContainerStyled = styled(Box)(
+export const CustomImageContainerStyled = styled(Box, {
+    shouldForwardProp: (prop) =>
+        prop !== 'smWidth' &&
+        prop !== 'maxWidth' &&
+        prop !== 'marginBottom' &&
+        prop !== 'width' &&
+        prop !== 'smHeight' &&
+        prop !== 'height' &&
+        prop !== 'objectFit' &&
+        prop !== 'minwidth' &&
+        prop !== 'borderRadu' &&
+        prop !== 'smMb' &&
+        prop !== 'smMaxWidth' &&
+        prop !== 'mdHeight' &&
+        prop !== 'cursor' &&
+        prop !== 'aspectRatio' &&
+        prop !== 'boxShadow',
+})(
     ({
         theme,
         smWidth,
@@ -281,44 +298,42 @@ export const CustomListItem = styled(ListItem)(
         cursor: cursor && 'pointer',
     })
 )
-export const SliderCustom = styled(Stack)(
-    ({ theme, languageDirection, gap, paddingBottom, isCenter, ads }) => ({
-        alignItems: 'center',
-        paddingY: '1rem',
-        '& .slick-slider': {
-            '& .slick-list': {
-                '& .slick-track': {
-                    float: isCenter
-                        ? 'center'
-                        : languageDirection === 'rtl'
+export const SliderCustom = styled(Stack, {
+    shouldForwardProp: (prop) => prop !== 'isCenter' && prop !== 'ads',
+})(({ theme, languageDirection, gap, paddingBottom, isCenter, ads }) => ({
+    alignItems: 'center',
+    paddingY: '1rem',
+    '& .slick-slider': {
+        '& .slick-list': {
+            '& .slick-track': {
+                float: isCenter
+                    ? 'center'
+                    : languageDirection === 'rtl'
                         ? ads
                             ? 'left'
                             : 'right'
                         : 'left',
-                    gap: gap ? gap : '5px',
-                    paddingBottom: paddingBottom || 0,
-                    
-                   
-                },
+                gap: gap ? gap : '5px',
+                paddingBottom: paddingBottom || 0,
             },
-            '& .slick-dots': {
-                bottom: '-22px !important',
-                textAlign: 'center !important',
-                left: '0 !important',
-                '& li': {
-                    '& .slick-active': {
-                        '& button': {
-                            '&::before': {
-                                content: '" "',
-                                fontSize: '12px !important',
-                            },
+        },
+        '& .slick-dots': {
+            bottom: '-22px !important',
+            textAlign: 'center !important',
+            left: '0 !important',
+            '& li': {
+                '& .slick-active': {
+                    '& button': {
+                        '&::before': {
+                            content: '" "',
+                            fontSize: '12px !important',
                         },
                     },
                 },
             },
         },
-    })
-)
+    },
+}))
 
 export const CustomOutlinedInput = styled(OutlinedInput)(({ theme, type }) => ({
     borderRadius: '7px',
@@ -360,18 +375,18 @@ export const CustomAccordion = styled(Accordion)(({ theme, background }) => ({
         padding: '2px 5px 10px',
     },
 }))
-export const WrapperForSideDrawerFilter = styled(Box)(
-    ({ theme, smminwith }) => ({
-        paddingTop: '2rem',
-        paddingBottom: '2rem',
-        paddingLeft: '1rem',
-        paddingRight: '1rem',
-        minWidth: '250px',
-        maxWidth: '350px',
-        width: '350px',
-        [theme.breakpoints.down('sm')]: {
-            minWidth: smminwith ? smminwith : '180px',
-            width: '300px',
-        },
-    })
-)
+export const WrapperForSideDrawerFilter = styled(Box, {
+    shouldForwardProp: (prop) => prop !== 'smminwith',
+})(({ theme, smminwith }) => ({
+    paddingTop: '2rem',
+    paddingBottom: '2rem',
+    paddingLeft: '1rem',
+    paddingRight: '1rem',
+    minWidth: '250px',
+    maxWidth: '350px',
+    width: '350px',
+    [theme.breakpoints.down('sm')]: {
+        minWidth: smminwith ? smminwith : '180px',
+        width: '300px',
+    },
+}))

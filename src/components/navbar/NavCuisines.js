@@ -134,7 +134,7 @@ const NavCuisines = ({ setRestaurantModal, languageDirection }) => {
                             <>
                                 {cuisines?.map((item, index) => {
                                     return (
-                                        <>
+                                        <React.Fragment key={item.id}>
                                             {index % 2 === 0 ? (
                                                 <Grid
                                                     item
@@ -168,7 +168,7 @@ const NavCuisines = ({ setRestaurantModal, languageDirection }) => {
                                                     />{' '}
                                                 </Grid>
                                             )}
-                                        </>
+                                        </React.Fragment>
                                     )
                                 })}
                             </>
