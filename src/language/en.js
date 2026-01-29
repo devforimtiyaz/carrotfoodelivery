@@ -109,7 +109,7 @@ export const english = {
     'Start a new message': 'Start a new message',
     'Earn money to your wallet by completing the offer & challenged':
         'Earn money to your wallet by completing the offer & challenged',
-    Copyright: 'Copyright',
+    Copyright: 'Carrot FooDelivery',
     'My Addresses': 'My Addresses',
     Add: 'Add',
     wallet: 'wallet',
@@ -277,7 +277,7 @@ export const english = {
     Campaigns: 'Campaigns',
     'Best Reviewed Foods': 'Best Reviewed Foods',
     'View all': 'View all',
-    'New On StackFood': 'New On StackFood',
+    'New On StackFood': 'New On Carrot FooDelivery',
     'Popular Restaurant': 'Popular Restaurant',
     'Popular Food Nearby': 'Popular Food Nearby',
     Nearby: 'Nearby',

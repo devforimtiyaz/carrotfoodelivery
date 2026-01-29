@@ -2,7 +2,7 @@ import axios from 'axios'
 export const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
 const MainApi = axios.create({
-    baseURL: baseUrl,
+    baseURL: baseUrl.replace(/\/$/, ''),
 })
 
 MainApi.interceptors.request.use(function (config) {
@@ -23,7 +23,8 @@ MainApi.interceptors.request.use(function (config) {
     if (currentLocation) config.headers.longitude = currentLocation.lng
     if (zoneId) config.headers.zoneId = zoneId
     if (token) config.headers.authorization = `Bearer ${token}`
-    if (language) config.headers['X-localization'] = language
+    // Force English
+    config.headers['X-localization'] = 'en'
     if (hostname) config.headers['origin'] = hostname
     config.headers['X-software-id'] = software_id
 

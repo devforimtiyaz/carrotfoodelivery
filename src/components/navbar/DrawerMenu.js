@@ -77,7 +77,7 @@ const DrawerMenu = ({ zoneid, cartListRefetch }) => {
             } else {
                 router.push('/home')
             }
-        } catch (err) {}
+        } catch (err) { }
     }
 
     const toggleDrawer = (openDrawer) => (event) => {
@@ -209,12 +209,7 @@ const DrawerMenu = ({ zoneid, cartListRefetch }) => {
 
                         {location && (
                             <>
-                                <CollapsableMenu
-                                    value={collapsableMenu.cat}
-                                    setOpenDrawer={setOpenDrawer}
-                                    toggleDrawers={toggleDrawer}
-                                    pathName="/categories"
-                                />
+
                                 <CollapsableMenu
                                     value={collapsableMenu.res}
                                     setOpenDrawer={setOpenDrawer}
@@ -372,12 +367,7 @@ const DrawerMenu = ({ zoneid, cartListRefetch }) => {
                             </ListItemButton>
                             {location && (
                                 <>
-                                    <CollapsableMenu
-                                        value={collapsableMenu.cat}
-                                        setOpenDrawer={setOpenDrawer}
-                                        toggleDrawers={toggleDrawer}
-                                        pathName="/categories"
-                                    />
+
                                     <CollapsableMenu
                                         value={collapsableMenu.res}
                                         setOpenDrawer={setOpenDrawer}

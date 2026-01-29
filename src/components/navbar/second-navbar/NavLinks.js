@@ -35,12 +35,12 @@ const NavLinks = ({ zoneid, t, languageDirection }) => {
                         <Typography fontSize="14px">{t('Home')}</Typography>
                     </NavLinkStyle>
 
-                    <NavCatagory
+                    {/* <NavCatagory
                         openModal={openCategoryModal}
                         setModal={setCategoryModal}
                         setRestaurantModal={setRestaurantModal}
                         languageDirection={languageDirection}
-                    />
+                    /> */}
                     <NavCuisines
                         openModal={openCategoryModal}
                         setModal={setCategoryModal}

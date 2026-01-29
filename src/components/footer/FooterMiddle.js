@@ -40,15 +40,14 @@ const FooterMiddle = ({ landingPageData, isLoading }) => {
                     <Grid
                         item
                         xs={12}
-                        sm={12}
+                        sm={6}
                         md={4}
-                        align={isSmall && 'center'}
                     >
                         <CustomStackFullWidth
                             spacing={{ xs: 1, sm: 2, md: 4 }}
                             alignItems={{
-                                xs: 'center',
-                                sm: 'center',
+                                xs: 'flex-start',
+                                sm: 'flex-start',
                                 md: 'flex-start',
                             }}
                             justifyContent="flex-start"
@@ -73,6 +72,7 @@ const FooterMiddle = ({ landingPageData, isLoading }) => {
                             ) : (
                                 <Typography
                                     fontSize="14px"
+                                    align="left"
                                     color={alpha(
                                         theme.palette.whiteContainer.main,
                                         0.8
@@ -102,11 +102,11 @@ const FooterMiddle = ({ landingPageData, isLoading }) => {
                     <Grid
                         item
                         xs={6}
-                        sm={4}
-                        md={2.6}
+                        sm={3}
+                        md={2}
                         sx={{
                             display: 'flex',
-                            justifyContent: 'center',
+                            justifyContent: 'flex-start',
                         }}
                     >
                         <Box>
@@ -121,18 +121,18 @@ const FooterMiddle = ({ landingPageData, isLoading }) => {
                     <Grid
                         item
                         xs={6}
-                        sm={4}
-                        md={2.6}
+                        sm={3}
+                        md={2}
                         sx={{
                             display: 'flex',
-                            justifyContent: 'center',
+                            justifyContent: 'flex-start',
                         }}
                     >
                         <Box>
                             <RouteLinks
                                 token={token}
                                 global={global}
-                                title="Quick Links"
+                                title="Discover"
                                 RouteLinksData={QuickLinkData1}
                             />
                         </Box>
@@ -140,20 +140,19 @@ const FooterMiddle = ({ landingPageData, isLoading }) => {
                     <Grid
                         item
                         xs={12}
-                        sm={4}
-                        md={2.6}
+                        sm={3}
+                        md={2}
                         sx={{
                             display: 'flex',
-                            justifyContent: 'center',
+                            justifyContent: 'flex-start',
                         }}
                     >
-                        <Box alignItems="center" justifyContent="center">
+                        <Box>
                             <RouteLinks
                                 token={token}
                                 global={global}
                                 title="Other"
                                 RouteLinksData={OtherData}
-                                isCenter={isSmall && true}
                             />
                         </Box>
                     </Grid>

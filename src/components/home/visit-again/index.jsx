@@ -34,64 +34,64 @@ const CustomSlider = styled(Stack)(
     ({ theme, languageDirection, gap, paddingBottom, isCenter, itemLength }) =>
         isCenter
             ? {
-                  justifyContent: 'center',
-                  '& .custom-slide ': {
-                      transform: 'scale(.9)',
-                      transition: 'all 500ms ease-in-out',
-                  },
-                  '& .custom-active-slide ': {
-                      transform: 'scale(1)',
-                      zIndex: '1000',
-                      transition: 'all 500ms ease-in-out',
-                      opacity: 1,
-                  },
-                  '& .slick-list': {
-                      display: 'flex',
-                  },
-                  '& .slick-slider': {
-                      '& .slick-list': {
-                          '& .slick-track': {
-                              float:
-                                  languageDirection === 'rtl'
-                                      ? 'right'
-                                      : 'left',
-                              gap: gap ? gap : '8px',
-                              paddingBottom: paddingBottom || 0,
-                          },
-                      },
-                      '& .slick-dots': {
-                          bottom: '-22px !important',
-                          textAlign: 'center !important',
-                          left: '0 !important',
-                          '& li': {
-                              '& .slick-active': {
-                                  '& button': {
-                                      '&::before': {
-                                          content: '" "',
-                                          fontSize: '12px !important',
-                                      },
-                                  },
-                              },
-                          },
-                      },
-                  },
-                  '& .slick-track': {
-                      marginLeft: '-15px !important',
-                      gap: '30px !important ',
-                      '@media screen and (max-width: 450px)': {
-                          marginLeft: '85px !important',
-                      },
-                  },
-              }
+                justifyContent: 'center',
+                '& .custom-slide ': {
+                    transform: 'scale(.9)',
+                    transition: 'all 500ms ease-in-out',
+                },
+                '& .custom-active-slide ': {
+                    transform: 'scale(1)',
+                    zIndex: '1000',
+                    transition: 'all 500ms ease-in-out',
+                    opacity: 1,
+                },
+                '& .slick-list': {
+                    display: 'flex',
+                },
+                '& .slick-slider': {
+                    '& .slick-list': {
+                        '& .slick-track': {
+                            float:
+                                languageDirection === 'rtl'
+                                    ? 'right'
+                                    : 'left',
+                            gap: gap ? gap : '8px',
+                            paddingBottom: paddingBottom || 0,
+                        },
+                    },
+                    '& .slick-dots': {
+                        bottom: '-22px !important',
+                        textAlign: 'center !important',
+                        left: '0 !important',
+                        '& li': {
+                            '& .slick-active': {
+                                '& button': {
+                                    '&::before': {
+                                        content: '" "',
+                                        fontSize: '12px !important',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                '& .slick-track': {
+                    marginLeft: '-15px !important',
+                    gap: '30px !important ',
+                    '@media screen and (max-width: 450px)': {
+                        marginLeft: '85px !important',
+                    },
+                },
+            }
             : {
-                  '& .slick-slider': {
-                      '& .slick-list': {
-                          '& .slick-track': {
-                              gap: itemLength <= 3 ? '30px' : '20px !important',
-                          },
-                      },
-                  },
-              }
+                '& .slick-slider': {
+                    '& .slick-list': {
+                        '& .slick-track': {
+                            gap: itemLength <= 3 ? '30px' : '20px !important',
+                        },
+                    },
+                },
+            }
 )
 export const Puller = styled('div')(({ theme }) => ({
     width: '80px',
@@ -189,6 +189,10 @@ const VisitAgain = () => {
         initialSlide: 0,
         infinite: userData?.length > 3,
         centerPadding: '0px',
+        swipe: true,
+        touchMove: true,
+        swipeToSlide: true,
+        touchThreshold: 10,
         nextArrow: hoverOn && <HandleNext />,
         prevArrow: hoverOn && <HandlePrev />,
         beforeChange: (current, next) => setImageIndex(next),
@@ -283,7 +287,7 @@ const VisitAgain = () => {
                                 {t('Find Nearby ')}
                             </Typography>
                             <Typography
-                               
+
                                 fontSize="14px"
                                 fontWeight={400}
                                 color={theme.palette.whiteText.main}

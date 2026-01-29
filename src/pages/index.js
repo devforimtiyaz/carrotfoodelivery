@@ -109,6 +109,7 @@ export const getServerSideProps = async (context) => {
         props: {
             configData,
             landingPageData,
+            error: !configData || !landingPageData ? 'failed_fetch' : null,
         },
     }
 }

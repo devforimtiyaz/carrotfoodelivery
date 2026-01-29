@@ -166,11 +166,11 @@ const GoogleMapComponent = ({
                 onUnmount={onUnmount}
                 onMouseDown={(e) => {
                     setMapSetup(true)
-                    setDisablePickButton(true)
+                    setDisablePickButton?.(true)
                 }}
                 onMouseUp={(e) => {
                     setMapSetup(false)
-                    setDisablePickButton(false)
+                    setDisablePickButton?.(false)
                     setLocationEnabled(true)
                     setLocation({
                         lat: map?.center?.lat(),

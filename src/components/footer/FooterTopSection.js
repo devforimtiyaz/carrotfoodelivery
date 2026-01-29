@@ -51,85 +51,49 @@ const FooterTopSection = () => {
         <RTL direction={languageDirection}>
             <CustomStackFullWidth spacing={{ xs: 2, sm: 4 }}>
                 <SocialLinks global={global} />
-                {isSmall ? (
-                    <Slider {...settings}>
-                        {RouteLinksData.map((item, index) => {
-                            return (
-                                <CustomColouredTypography
-                                    key={index}
-                                    variant="h5"
-                                    color="whiteContainer.main"
-                                    onClick={() =>
-                                        handleClick(item.link, item.value)
-                                    }
-                                    sx={{
-                                        fontWeight: 400,
-                                        color: alpha(
-                                            theme.palette.whiteContainer.main,
-                                            0.8
-                                        ),
-                                        cursor: 'pointer',
-                                        borderLeft:
+                <Stack
+                    width="100%"
+                    alignItems="center"
+                    justifyContent="center"
+                    direction="row"
+                    flexWrap="wrap"
+                    gap={{ xs: 1.5, sm: 2 }}
+                >
+                    {RouteLinksData.map((item, index) => {
+                        return (
+                            <CustomColouredTypography
+                                key={index}
+                                variant="h5"
+                                color="whiteContainer.main"
+                                onClick={() => handleClick(item.link, item.value)}
+                                sx={{
+                                    fontWeight: 400,
+                                    fontSize: { xs: '13px', md: '14px' },
+                                    color: alpha(
+                                        theme.palette.whiteContainer.main,
+                                        0.8
+                                    ),
+                                    cursor: 'pointer',
+                                    borderLeft: {
+                                        md:
                                             index !== 0 &&
                                             `2px solid ${alpha(
                                                 theme.palette.text.footerText,
                                                 0.8
                                             )}`,
-                                        paddingLeft: '15px',
+                                    },
+                                    paddingLeft: { md: '15px' },
 
-                                        '&:hover': {
-                                            color: 'primary.main',
-                                        },
-                                    }}
-                                >
-                                    {t(item.name)}
-                                </CustomColouredTypography>
-                            )
-                        })}
-                    </Slider>
-                ) : (
-                    <Stack
-                        width="100%"
-                        spacing={{ xs: 1.5, sm: 2 }}
-                        alignItems="center"
-                        justifyContent="center"
-                        direction="row"
-                    >
-                        {RouteLinksData.map((item, index) => {
-                            return (
-                                <CustomColouredTypography
-                                    key={index}
-                                    variant="h5"
-                                    color="whiteContainer.main"
-                                    onClick={() =>
-                                        handleClick(item.link, item.value)
-                                    }
-                                    sx={{
-                                        fontWeight: 400,
-                                        color: alpha(
-                                            theme.palette.whiteContainer.main,
-                                            0.8
-                                        ),
-                                        cursor: 'pointer',
-                                        borderLeft:
-                                            index !== 0 &&
-                                            `2px solid ${alpha(
-                                                theme.palette.text.footerText,
-                                                0.8
-                                            )}`,
-                                        paddingLeft: '15px',
-
-                                        '&:hover': {
-                                            color: 'primary.main',
-                                        },
-                                    }}
-                                >
-                                    {t(item.name)}
-                                </CustomColouredTypography>
-                            )
-                        })}
-                    </Stack>
-                )}
+                                    '&:hover': {
+                                        color: 'primary.main',
+                                    },
+                                }}
+                            >
+                                {t(item.name)}
+                            </CustomColouredTypography>
+                        )
+                    })}
+                </Stack>
             </CustomStackFullWidth>
         </RTL>
     )

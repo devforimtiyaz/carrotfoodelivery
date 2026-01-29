@@ -79,76 +79,7 @@ const CustomLanguage = ({ formMobileMenu, language, isMobile }) => {
     }
     const arrowColor = theme.palette.neutral[500]
 
-    return (
-        <>
-            <LefRightBorderBox location={location} isMobile={isMobile}>
-                <TopBarButton
-                    formMobileMenu={formMobileMenu}
-                    variant="text"
-                    size="small"
-                    aria-controls={open ? 'demo-customized-menu' : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={open ? 'true' : undefined}
-                    disableElevation
-                    onClick={handleClick}
-                    endIcon={
-                        <KeyboardArrowDownIcon style={{ color: arrowColor }} />
-                    }
-                >
-                    <Stack flexDirection="row" gap="5px">
-                        {(!location || isMobile) && (
-                            <img width="20" alt="" src={countryFlag} />
-                        )}
-                        <CustomColouredTypography
-                            color={theme.palette.neutral[600]}
-                            sx={{ textTransform: 'capitalize' }}
-                            fontSize={{ xs: '14px', sm: '16px' }}
-                        >
-                            {languageValue(language)?.languageCode}
-                        </CustomColouredTypography>
-                    </Stack>
-                </TopBarButton>
-            </LefRightBorderBox>
-            <StyledMenu
-                id="demo-customized-menu"
-                MenuListProps={{
-                    'aria-labelledby': 'demo-customized-button',
-                }}
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-            >
-                {languageLists?.map((lan, index) => (
-                    <MenuItem
-                        onClick={() => handleLanguage(lan)}
-                        disableRipple
-                        key={index}
-                        sx={{
-                            backgroundColor:
-                                language === lan.languageCode
-                                    ? alpha(theme.palette.primary.main, 0.8)
-                                    : 'inherit',
-                            '&:hover': {
-                                backgroundColor: 'primary.main',
-                            },
-                        }}
-                    >
-                        <ListItemIcon>
-                            <img width="20" alt="" src={lan?.countryFlag} />
-                        </ListItemIcon>
-                        <Typography
-                            fontSize={{ xs: '14px', sm: '16px' }}
-                            marginRight={
-                                languageDirection === 'rtl' ? '1rem' : '0px'
-                            }
-                        >
-                            {lan.languageName}
-                        </Typography>
-                    </MenuItem>
-                ))}
-            </StyledMenu>
-        </>
-    )
+    return null
 }
 
 CustomLanguage.propTypes = {}

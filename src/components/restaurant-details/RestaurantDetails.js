@@ -37,18 +37,32 @@ const getCombinedCategoriesAndProducts = (
         isBgColor: true,
     }
 
-    if (allCategories?.length > 0 && allProducts?.length > 0) {
-        const data = [
-            {
-            products: allProducts,
-        }
-        ]
-        if (recommendProducts?.products?.length > 0) {
-            return [recommend, ...data]
-        } else if (recommendProducts?.products?.length > 0) {
-            return [recommend, ...data]
+    if (allProducts?.length > 0) {
+        if (allCategories?.length > 0) {
+            const data = [
+                {
+                    products: allProducts,
+                }
+            ]
+            if (recommendProducts?.products?.length > 0) {
+                return [recommend, ...data]
+            } else if (recommendProducts?.products?.length > 0) {
+                return [recommend, ...data]
+            } else {
+                return data
+            }
         } else {
-            return data
+            // Fallback: If no categories found but products exist, show them under a default category
+            const defaultCategory = {
+                id: 9999,
+                name: t('All Items'),
+                products: allProducts,
+            }
+            if (recommendProducts?.products?.length > 0) {
+                return [recommend, defaultCategory]
+            } else {
+                return [defaultCategory]
+            }
         }
     } else {
         return []
@@ -195,9 +209,9 @@ const RestaurantDetails = ({ restaurantData, configData }) => {
                     const isVegMatch = filterKey?.veg ? foods?.veg === 1 : true
                     const isAvailableMatch = filterKey?.currentlyAvailable
                         ? isAvailable(
-                              foods?.available_time_starts,
-                              foods?.available_time_ends
-                          )
+                            foods?.available_time_starts,
+                            foods?.available_time_ends
+                        )
                         : true
 
                     return (
@@ -240,7 +254,8 @@ const RestaurantDetails = ({ restaurantData, configData }) => {
                 <CustomStackFullWidth>
                     {!isFirstRender && (
                         <>
-                            <RestaurantCategoryBar
+                            {/* Category Bar Removed as per request */}
+                            {/* <RestaurantCategoryBar
                                 handleFilter={handleFilter}
                                 filterKey={filterKey}
                                 setFilterKey={setFilterKey}
@@ -250,7 +265,7 @@ const RestaurantDetails = ({ restaurantData, configData }) => {
                                 isSmall={isSmall}
                                 handleSearchResult={handleSearchResult}
                                 searchKey={searchKey}
-                            />
+                            /> */}
                             {!isSmall && (
                                 <Stack
                                     sx={{

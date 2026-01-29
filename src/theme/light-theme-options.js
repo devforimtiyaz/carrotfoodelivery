@@ -55,11 +55,11 @@ const divider = '#E6E8F0'
 // main: '#EF7822',
 // secondary main: '#ff903f',
 const primary = {
-    main: '#FF7918',
-    light: 'rgba(255, 121, 24, 0.60)',
-    dark: '#a3460a',
+    main: '#2E7D32',
+    light: '#60AD5E',
+    dark: '#005005',
     contrastText: '#FFFFFF',
-    midPrimary: ' #FFF5ED',
+    midPrimary: '#E8F6E9',
     overLay: '#000000',
 }
 const searchBoxBg = primary.main

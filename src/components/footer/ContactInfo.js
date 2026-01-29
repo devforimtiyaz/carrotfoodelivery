@@ -57,10 +57,16 @@ const ContactInfo = ({ global }) => {
                 sx={{ cursor: 'pointer' }}
             >
                 <ApartmentIcon
-                    sx={{ color: hovered === 'address' && 'primary.main' }}
+                    sx={{
+                        color: hovered === 'address' && 'primary.main',
+                        fontSize: { xs: '20px', md: '24px' },
+                    }}
                 />
                 <Typography
-                    sx={{ color: hovered === 'address' && 'primary.main' }}
+                    sx={{
+                        color: hovered === 'address' && 'primary.main',
+                        fontSize: { xs: '14px', md: '16px' },
+                    }}
                 >
                     {global?.address}
                 </Typography>
@@ -71,15 +77,21 @@ const ContactInfo = ({ global }) => {
                     onMouseLeave={handleMouseLeave}
                     direction="row"
                     spacing={1}
-                    alignItems="flex-start"
+                    alignItems="center"
                     color={theme.palette.text.footerText}
                     sx={{ cursor: 'pointer' }}
                 >
                     <MailIcon
-                        sx={{ color: hovered === 'mail' && 'primary.main' }}
+                        sx={{
+                            color: hovered === 'mail' && 'primary.main',
+                            fontSize: { xs: '20px', md: '24px' },
+                        }}
                     />
                     <Typography
-                        sx={{ color: hovered === 'mail' && 'primary.main' }}
+                        sx={{
+                            color: hovered === 'mail' && 'primary.main',
+                            fontSize: { xs: '14px', md: '16px' },
+                        }}
                         component="p"
                     >
                         {global?.email}
@@ -92,18 +104,20 @@ const ContactInfo = ({ global }) => {
                     onMouseLeave={handleMouseLeave}
                     direction="row"
                     spacing={1}
-                    alignItems="flex-start"
+                    alignItems="center"
                     color={theme.palette.text.footerText}
                     sx={{ cursor: 'pointer' }}
                 >
                     <LocalPhoneIcon
                         sx={{
                             color: hovered === 'phone' && 'primary.main',
+                            fontSize: { xs: '20px', md: '24px' },
                         }}
                     />
                     <Typography
                         sx={{
                             color: hovered === 'phone' && 'primary.main',
+                            fontSize: { xs: '14px', md: '16px' },
                         }}
                         component="p"
                     >
