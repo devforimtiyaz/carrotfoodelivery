@@ -2,7 +2,7 @@ export const additionalInformationInitialState = {
     streetNumber: '',
     houseNumber: '',
     floor: '',
-    note: '',
+    workingLift: 'no',
     addressType: '',
     dine_in_contact: {
         name: '',
@@ -28,10 +28,10 @@ export const additionalInformationReducer = (state, action) => {
                 ...state,
                 floor: action.payload,
             }
-        case ACTIONS.setNote:
+        case ACTIONS.setWorkingLift:
             return {
                 ...state,
-                note: action.payload,
+                workingLift: action.payload,
             }
         case ACTIONS.setAddressType:
             return {
@@ -71,7 +71,7 @@ export const ACTIONS = {
     setStreetNumber: 'setStreetNumber',
     setHouseNumber: 'setHouseNumber',
     setFloor: 'setFloor',
-    setNote: 'setNote',
+    setWorkingLift: 'setWorkingLift',
     setAddressType: 'setAddressType',
     setDineInName: 'setDineInName',
     setDineInPhone: 'setDineInPhone',

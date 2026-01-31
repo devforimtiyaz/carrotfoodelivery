@@ -17,19 +17,41 @@ const PushNotificationLayout = ({ children, refetch, pathName }) => {
                 fetchToken(setFcmToken).then()
             } else if (Notification.permission === 'default') {
                 toast.custom((t) => (
-                    <Stack direction="row" spacing={2} p={2} sx={{ background: 'white', borderRadius: 1 }}>
-                        <Typography>Enable notifications?</Typography>
-                        <Button onClick={() => {
-                            Notification.requestPermission().then((permission) => {
-                                if (permission === 'granted') {
-                                    fetchToken(setFcmToken).then()
-                                }
-                                toast.dismiss(t.id);
-                            });
-                        }}>
+                    <Stack direction="row" spacing={2} p={2} alignItems="center" sx={{
+                        background: 'white',
+                        borderRadius: 1,
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                    }}>
+                        <Typography sx={{ color: '#333', fontWeight: 500 }}>Enable notifications?</Typography>
+                        <Button
+                            variant="contained"
+                            size="small"
+                            onClick={() => {
+                                Notification.requestPermission().then((permission) => {
+                                    if (permission === 'granted') {
+                                        fetchToken(setFcmToken).then()
+                                    }
+                                    toast.dismiss(t.id);
+                                });
+                            }}
+                            sx={{
+                                bgcolor: 'primary.main',
+                                color: 'white',
+                                '&:hover': { bgcolor: 'primary.dark' }
+                            }}
+                        >
                             Enable
                         </Button>
-                        <Button onClick={() => toast.dismiss(t.id)}>
+                        <Button
+                            variant="outlined"
+                            size="small"
+                            onClick={() => toast.dismiss(t.id)}
+                            sx={{
+                                borderColor: '#666',
+                                color: '#666',
+                                '&:hover': { borderColor: '#333', color: '#333' }
+                            }}
+                        >
                             No Thanks
                         </Button>
                     </Stack>

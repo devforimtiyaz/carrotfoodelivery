@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, forwardRef, useImperativeHandle } from 'react'
 import { IconButton, Modal, Stack, useMediaQuery } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { useMutation, useQuery } from 'react-query'
@@ -22,6 +22,7 @@ import MapWithSearchBox from '../../google-map/MapWithSearchBox'
 import { useGeolocated } from 'react-geolocated'
 import GpsFixedIcon from '@mui/icons-material/GpsFixed'
 import { setLocation } from '@/redux/slices/addressData'
+import { ACTIONS } from '@/components/checkout-page/states/additionalInformationStates'
 
 const style = {
     position: 'absolute',
@@ -34,14 +35,15 @@ const style = {
     boxShadow: 24,
     borderRadius: '10px',
 }
-const AddNewAddress = ({
+const AddNewAddress = forwardRef(({
     refetch,
     buttonbg,
     guestUser,
     orderType,
     setOpenGuestUserModal,
     setEditAddress,
-}) => {
+    additionalInformationDispatch,
+}, ref) => {
     const theme = useTheme()
     const dispatch = useDispatch()
     const [rerenderMap, setRerenderMap] = useState(false)
@@ -51,6 +53,8 @@ const AddNewAddress = ({
         (state) => state.addressData
     )
     const [open, setOpen] = useState(false)
+    const [isEditing, setIsEditing] = useState(false)
+    const [editData, setEditData] = useState(null)
     const [searchKey, setSearchKey] = useState({ description: '' })
     const [value, setValue] = useState()
     const { token } = useSelector((state) => state.userToken)
@@ -58,6 +62,8 @@ const AddNewAddress = ({
 
     const { data, isError } = useQuery(['profile-info'], ProfileApi.profileInfo)
     const clickAddNew = () => {
+        setIsEditing(false)
+        setEditData(null)
         if (guestUser && orderType === 'take_away') {
             setEditAddress?.(true)
             setOpenGuestUserModal(true)
@@ -66,6 +72,25 @@ const AddNewAddress = ({
             setOpen(true)
         }
     }
+
+    useImperativeHandle(ref, () => ({
+        openForEdit: (address) => {
+            setIsEditing(true)
+            setEditData(address)
+            setOpen(true)
+            // Optionally set location/formatted_address in redux if needed for map?
+            // AddressForm uses editData props, so Map might be secondary or handled by AddressForm?
+            // But MapWithSearchBox uses redux.
+            //Ideally, we should set redux state to the address location.
+            if (address.latitude && address.longitude) {
+                dispatch(setLocation({
+                    lat: address.latitude,
+                    lng: address.longitude,
+                }))
+            }
+        }
+    }))
+
     const handleChange = (e) => {
         setValue(e.target.value)
     }
@@ -79,6 +104,7 @@ const AddNewAddress = ({
                 if (response?.data) {
                     refetch()
                     setOpen(false)
+                    setIsEditing(false)
                 }
             },
             onError: (error) => {
@@ -86,9 +112,46 @@ const AddNewAddress = ({
             },
         }
     )
+    const { mutate: editMutate, isLoading: editLoading } = useMutation(
+        'address-edit',
+        AddressApi.editAddress,
+        {
+            onSuccess: (response) => {
+                toast.success(response?.data?.message)
+                refetch()
+                setOpen(false)
+                setIsEditing(false)
+            },
+            onError: (error) => {
+                onErrorResponse(error)
+            },
+        }
+    )
+
     const formSubmitHandler = (values) => {
+        // Auto-fill delivery details with the new address values
+        if (additionalInformationDispatch) {
+            additionalInformationDispatch({
+                type: ACTIONS.setStreetNumber,
+                payload: values.road || '',
+            })
+            additionalInformationDispatch({
+                type: ACTIONS.setHouseNumber,
+                payload: values.house || '',
+            })
+            additionalInformationDispatch({
+                type: ACTIONS.setFloor,
+                payload: values.floor || '',
+            })
+        }
+
         if (token) {
-            mutate(values)
+            if (isEditing) {
+                // Ensure ID is passed
+                editMutate({ ...values, id: editData.id })
+            } else {
+                mutate(values)
+            }
         } else {
             dispatch(setGuestUserInfo(values))
             setOpen(false)
@@ -139,8 +202,8 @@ const AddNewAddress = ({
                         padding: isXs
                             ? '5px'
                             : buttonbg === 'true'
-                            ? '5px 0px'
-                            : '5px 10px',
+                                ? '5px 0px'
+                                : '5px 10px',
                         '&:hover': {
                             backgroundColor: (theme) =>
                                 theme.palette.neutral[100],
@@ -255,7 +318,9 @@ const AddNewAddress = ({
                                     lat={location?.lat || ''}
                                     lng={location?.lng || ''}
                                     formSubmit={formSubmitHandler}
-                                    isLoading={isLoading}
+                                    isLoading={isLoading || editLoading}
+                                    editAddress={isEditing}
+                                    address={editData}
                                 />
                             </CustomStackFullWidth>
                         </RTL>
@@ -264,6 +329,6 @@ const AddNewAddress = ({
             )}
         </>
     )
-}
+})
 
 export default React.memo(AddNewAddress)

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { DeliveryCaption, DeliveryTitle } from './CheckOut.style'
 import { useTranslation } from 'react-i18next'
 import FormControl from '@mui/material/FormControl'
@@ -36,6 +36,7 @@ const DeliveryDetails = (props) => {
         token,
     } = props
     const { t } = useTranslation()
+    const deliveryAddressRef = useRef(null)
 
     const handleChange = (e) => {
         if (e.target.value === 'take_away') {
@@ -43,6 +44,13 @@ const DeliveryDetails = (props) => {
         }
         setOrderType(e.target.value)
     }
+
+    const handleSavedAddressClick = (event) => {
+        if (deliveryAddressRef.current) {
+            deliveryAddressRef.current.openPopover(event)
+        }
+    }
+
     return (
         <CustomPaperBigCard>
             <CustomStackFullWidth>
@@ -75,10 +83,10 @@ const DeliveryDetails = (props) => {
                         global?.home_delivery) ||
                         (restaurantData?.data?.take_away &&
                             global?.take_away)) && (
-                        <DeliveryCaption id="demo-row-radio-buttons-group-label">
-                            {t('Delivery Options')}
-                        </DeliveryCaption>
-                    )}
+                            <DeliveryCaption id="demo-row-radio-buttons-group-label">
+                                {t('Delivery Options')}
+                            </DeliveryCaption>
+                        )}
 
                     {restaurantData?.data && (
                         <RadioGroup
@@ -105,7 +113,7 @@ const DeliveryDetails = (props) => {
                                     />
                                 )}
                             {restaurantData?.data?.is_dine_in_active &&
-                            global?.dine_in_order_option ? (
+                                global?.dine_in_order_option ? (
                                 <FormControlLabel
                                     value="dine_in"
                                     control={<Radio />}
@@ -128,6 +136,7 @@ const DeliveryDetails = (props) => {
                             orderType !== 'dine_in' &&
                             orderType !== 'take_away' && (
                                 <DeliveryAddress
+                                    ref={deliveryAddressRef}
                                     setAddress={setAddress}
                                     address={address}
                                     additionalInformationDispatch={
@@ -135,6 +144,7 @@ const DeliveryDetails = (props) => {
                                     }
                                     restaurantId={restaurantData?.data?.zone_id}
                                     token={token}
+                                    hideSavedOption={getToken()}
                                 />
                             )}
                     </>
@@ -150,6 +160,7 @@ const DeliveryDetails = (props) => {
                         additionalInformationDispatch={
                             additionalInformationDispatch
                         }
+                        onSavedAddressClick={handleSavedAddressClick}
                     />
                 )}
             </CustomStackFullWidth>

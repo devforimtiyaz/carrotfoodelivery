@@ -706,7 +706,8 @@ export const getCalculatedTotal = (
     extraCharge,
     additionalCharge,
     extraPackagingCharge,
-    referDiscount
+    referDiscount,
+    floorCharges
 ) => {
     if (couponDiscount) {
         if (couponDiscount?.coupon_type === 'free_delivery') {
@@ -745,7 +746,8 @@ export const getCalculatedTotal = (
                     global?.digit_after_decimal_point
                 ) +
                 additionalCharge +
-                extraPackagingCharge
+                extraPackagingCharge +
+                (floorCharges || 0)
             )
         } else {
             return (
@@ -799,7 +801,8 @@ export const getCalculatedTotal = (
                     global?.digit_after_decimal_point
                 ) +
                 additionalCharge +
-                extraPackagingCharge
+                extraPackagingCharge +
+                (floorCharges || 0)
             )
         }
     } else {
@@ -845,7 +848,8 @@ export const getCalculatedTotal = (
                 global?.digit_after_decimal_point
             ) +
             additionalCharge +
-            extraPackagingCharge
+            extraPackagingCharge +
+            (floorCharges || 0)
         )
     }
 }

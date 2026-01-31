@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Grid, Stack, Typography } from '@mui/material'
+import { Button, Grid, Stack, Typography } from '@mui/material'
 import { PymentTitle } from '../CheckOut.style'
 import { useTranslation } from 'react-i18next'
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
@@ -20,6 +20,8 @@ import {
     setOfflineMethod,
 } from '@/redux/slices/OfflinePayment'
 import PartialPayment from '../PartialPayment'
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
+import PaymentIcon from '@mui/icons-material/Payment'
 
 const PaymentOptions = (props) => {
     const theme = useTheme()
@@ -97,6 +99,42 @@ const PaymentOptions = (props) => {
         }
     }
 
+    // Direct payment selection handlers
+    const handleCashOnDelivery = () => {
+        const codPayment = {
+            name: 'cash_on_delivery',
+            image: null,
+        }
+        setSelected(codPayment)
+        setPaymenMethod('cash_on_delivery')
+        setPaymentMethodDetails(codPayment)
+        setSwitchToWallet(false)
+        dispatch(setOfflineInfoStep(0))
+        setIsCheckedOffline(false)
+    }
+
+    const handleRazorpay = () => {
+        // Find Razorpay from digital payment methods
+        const razorpayPayment = global?.active_payment_method_list?.find(
+            (method) => method?.gateway?.toLowerCase()?.includes('razor')
+        )
+        if (razorpayPayment) {
+            const payment = {
+                name: razorpayPayment?.gateway,
+                image: razorpayPayment?.gateway_image,
+            }
+            setSelected(payment)
+            setPaymenMethod(razorpayPayment?.gateway)
+            setPaymentMethodDetails(payment)
+            setSwitchToWallet(false)
+            dispatch(setOfflineInfoStep(0))
+            setIsCheckedOffline(false)
+        }
+    }
+
+    const isCODSelected = paymentMethodDetails?.name === 'cash_on_delivery'
+    const isRazorpaySelected = paymentMethodDetails?.name?.toLowerCase()?.includes('razor')
+
     return (
         <CustomPaperBigCard nopadding="true">
             <Grid container>
@@ -115,82 +153,77 @@ const PaymentOptions = (props) => {
                     </CustomStackFullWidth>
                 </Grid>
                 <CustomDivider />
-              
+
+                {/* Direct Payment Options */}
+                <Grid item xs={12} md={12}>
+                    <Stack
+                        direction="row"
+                        spacing={2}
+                        padding="16px"
+                        justifyContent="center"
+                    >
+                        <Button
+                            variant={isCODSelected ? "contained" : "outlined"}
+                            color="primary"
+                            onClick={handleCashOnDelivery}
+                            startIcon={<AttachMoneyIcon />}
+                            sx={{
+                                flex: 1,
+                                py: 1.5,
+                                borderRadius: '8px',
+                                textTransform: 'none',
+                                fontWeight: 600,
+                                boxShadow: isCODSelected ? 2 : 0,
+                            }}
+                        >
+                            {t('Cash on Delivery')}
+                        </Button>
+                        {global?.active_payment_method_list?.some(
+                            (method) => method?.gateway?.toLowerCase()?.includes('razor')
+                        ) && (
+                                <Button
+                                    variant={isRazorpaySelected ? "contained" : "outlined"}
+                                    color="primary"
+                                    onClick={handleRazorpay}
+                                    startIcon={<PaymentIcon />}
+                                    sx={{
+                                        flex: 1,
+                                        py: 1.5,
+                                        borderRadius: '8px',
+                                        textTransform: 'none',
+                                        fontWeight: 600,
+                                        boxShadow: isRazorpaySelected ? 2 : 0,
+                                    }}
+                                >
+                                    {t('Razorpay (UPI)')}
+                                </Button>
+                            )}
+                    </Stack>
+                </Grid>
+
+                {/* More Payment Options Link */}
                 <CustomStackFullWidth
                     direction="row"
-                    padding="16px"
+                    padding="0 16px 16px 16px"
                     sx={{ cursor: 'pointer' }}
                     onClick={handleClick}
+                    justifyContent="center"
                 >
-                    {paymentMethodDetails?.name ? (
-                        <Stack
-                            direction="row"
-                            spacing={1.5}
-                            alignItems="center"
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                        <AddCircleOutlineIcon
+                            style={{ width: '18px', height: '18px' }}
+                            color="primary"
+                        />
+                        <Typography
+                            fontSize="12px"
+                            fontWeight="500"
+                            color={theme.palette.primary.main}
                         >
-                            {paymentMethodDetails?.name === 'wallet' ||
-                            paymentMethodDetails?.name ===
-                                'cash_on_delivery' ? (
-                                <CustomImageContainer
-                                    maxWidth="100%"
-                                    width="unset"
-                                    height="32px"
-                                    objectfit="contain"
-                                    src={paymentMethodDetails?.image.src}
-                                />
-                            ) : (
-                                <>
-                                    {paymentMethodDetails?.method ===
-                                    'offline_payment' ? (
-                                        <OfflinePayment />
-                                    ) : (
-                                        <CustomImageContainer
-                                            maxWidth="100%"
-                                            width="unset"
-                                            height="32px"
-                                            objectfit="contain"
-                                            src={paymentMethodDetails?.image}
-                                        />
-                                    )}
-                                </>
-                            )}
-                            <Typography
-                                fontSize="14px"
-                                fontWeight="500"
-                                color={theme.palette.primary.main}
-                                textTransform="capitalize"
-                            >
-                                {paymentMethodDetails?.method
-                                    ? `${t(
-                                          paymentMethodDetails?.method?.replaceAll(
-                                              '_',
-                                              ' '
-                                          )
-                                      )} (${t(paymentMethodDetails?.name)})`
-                                    : `${t(
-                                          paymentMethodDetails?.name?.replaceAll(
-                                              '_',
-                                              ' '
-                                          )
-                                      )}`}
-                            </Typography>
-                        </Stack>
-                    ) : (
-                        <Stack direction="row" alignItems="center" spacing={1}>
-                            <AddCircleOutlineIcon
-                                style={{ width: '22px', height: '22px' }}
-                                color="primary"
-                            />
-                            <Typography
-                                fontSize="14px"
-                                fontWeight="500"
-                                color={theme.palette.primary.main}
-                            >
-                                {t('Add Payment Method')}
-                            </Typography>
-                        </Stack>
-                    )}
+                            {t('More Payment Options')}
+                        </Typography>
+                    </Stack>
                 </CustomStackFullWidth>
+
                 {openModal && (
                     <CustomModal
                         openModal={openModal}
@@ -233,3 +266,4 @@ const PaymentOptions = (props) => {
 PaymentOptions.propTypes = {}
 
 export default PaymentOptions
+

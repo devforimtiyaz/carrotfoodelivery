@@ -1,12 +1,12 @@
 import React from 'react'
-import { Grid, Stack, Typography } from '@mui/material'
+import { Grid, Stack, Typography, IconButton, Button } from '@mui/material'
 import {
     OrderFoodAmount,
     OrderFoodName,
     OrderFoodSubtitle,
 } from '../CheckOut.style'
 import { getAmount, getSelectedAddOn } from '@/utils/customFunctions'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { CustomStackFullWidth } from '@/styled-components/CustomStyles.style'
 import Skeleton from '@mui/material/Skeleton'
 import CustomImageContainer from '../../CustomImageContainer'
@@ -14,10 +14,15 @@ import { useTranslation } from 'react-i18next'
 import { useTheme } from '@mui/material/styles'
 import VisibleVariations from '../../floating-cart/VisibleVariations'
 import { handleTotalAmountWithAddonsFF } from '@/utils/customFunctions'
+import DeleteIcon from '@mui/icons-material/Delete'
+import { removeProduct } from '@/redux/slices/cart'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 const RegularOrders = ({ orderType }) => {
     const theme = useTheme()
     const { t } = useTranslation()
+    const dispatch = useDispatch()
     const { cartList } = useSelector((state) => state.cart)
     const { global } = useSelector((state) => state.globalSettings)
     let currencySymbol
@@ -29,6 +34,20 @@ const RegularOrders = ({ orderType }) => {
         digitAfterDecimalPoint = global.digit_after_decimal_point
     }
     const languageDirection = localStorage.getItem('direction')
+
+    const router = useRouter()
+    const handleRemove = (item) => {
+        if (cartList?.length === 1) {
+            const rId = item?.restaurant_id
+            if (rId) {
+                router.push(`/restaurant/${rId}`)
+            }
+        }
+        dispatch(removeProduct(item))
+    }
+
+    const restaurantId = cartList.length > 0 ? cartList[0].restaurant_id : null
+
     return (
         <>
             {cartList.length > 0 ? (
@@ -78,6 +97,7 @@ const RegularOrders = ({ orderType }) => {
                         </Stack>
                         <Stack
                             paddingRight={languageDirection === 'rtl' && '10px'}
+                            flexGrow="1"
                         >
                             <OrderFoodName>{item.name}</OrderFoodName>
                             {item?.variations?.length > 0 && (
@@ -126,6 +146,13 @@ const RegularOrders = ({ orderType }) => {
                                 )}
                             </OrderFoodAmount>
                         </Stack>
+                        <IconButton
+                            onClick={() => handleRemove(item)}
+                            aria-label="delete"
+                            size="small"
+                        >
+                            <DeleteIcon color="error" fontSize="small" />
+                        </IconButton>
                     </CustomStackFullWidth>
                 ))
             ) : (
@@ -155,6 +182,15 @@ const RegularOrders = ({ orderType }) => {
                     }}
                 ></Stack>
             </Grid>
+            {restaurantId && (
+                <Grid item md={12} xs={12} mt="1rem" display="flex" justifyContent="center">
+                    <Link href={`/restaurant/${restaurantId}`} passHref>
+                        <Button variant="outlined" color="primary" fullWidth>
+                            {t('Add more items')}
+                        </Button>
+                    </Link>
+                </Grid>
+            )}
         </>
     )
 }

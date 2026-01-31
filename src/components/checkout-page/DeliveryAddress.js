@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useImperativeHandle, forwardRef, useRef } from 'react'
 import { Button, InputBase, Box, Stack, Typography } from '@mui/material'
 
 import { DeliveryCaption, SaveAddressBox, InputField } from './CheckOut.style'
@@ -24,7 +24,7 @@ const getZoneWiseAddresses = (addresses, restaurantId) => {
     )
     return newArray
 }
-const DeliveryAddress = ({
+const DeliveryAddress = forwardRef(({
     setAddress,
     address,
     hideAddressSelectionField,
@@ -34,13 +34,15 @@ const DeliveryAddress = ({
     restaurantId,
     token,
     handleAddressSetSuccess,
-}) => {
+    hideSavedOption,
+}, ref) => {
     const theme = useTheme()
     const { t } = useTranslation()
     const [allAddress, setAllAddress] = useState()
     const [selectedAddress, setSelectedAddress] = useState({})
     const [data, setData] = useState(null)
     const [anchorEl, setAnchorEl] = useState(null)
+    const addNewAddressRef = useRef(null)
 
     const mainAddress = {
         ...address,
@@ -105,9 +107,21 @@ const DeliveryAddress = ({
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
     }
+
+    useImperativeHandle(ref, () => ({
+        openPopover: (event) => {
+            setAnchorEl(event.currentTarget)
+        }
+    }))
+
     const handleClose = () => {
         setAnchorEl(null)
     }
+
+    const handleEdit = (address) => {
+        addNewAddressRef.current?.openForEdit(address)
+    }
+
     const handleSelectedAddress = () => {
         setAddress(selectedAddress)
         if (additionalInformationDispatch) {
@@ -132,7 +146,7 @@ const DeliveryAddress = ({
     }
     return (
         <>
-            {!renderOnNavbar && (
+            {!renderOnNavbar && !hideSavedOption && (
                 <Stack
                     direction="row"
                     alignItems="center"
@@ -144,7 +158,7 @@ const DeliveryAddress = ({
                             color={theme.palette.primary.main}
                             sx={{ cursor: 'pointer' }}
                             fontSize="12px"
-                            // onClick={handleRoute}
+                        // onClick={handleRoute}
                         >
                             {t('Saved Address')}
                         </Typography>
@@ -166,6 +180,8 @@ const DeliveryAddress = ({
                     handleLatLng={handleLatLng}
                     t={t}
                     address={address}
+                    handleEdit={handleEdit}
+                    refetch={refetch}
                 />
             ) : (
                 <SimpleBar style={{ maxHeight: 200 }}>
@@ -206,6 +222,8 @@ const DeliveryAddress = ({
                         }
                         selectedAddress={selectedAddress}
                         renderOnNavbar={renderOnNavbar}
+                        refetch={refetch}
+                        handleEdit={handleEdit}
                     />
                     <Stack
                         justifyContent="center"
@@ -214,7 +232,12 @@ const DeliveryAddress = ({
                             data?.addresses?.length > 0 ? 'star' : 'center'
                         }
                     >
-                        <AddNewAddress refetch={refetch} buttonbg="true" />
+                        <AddNewAddress
+                            refetch={refetch}
+                            buttonbg="true"
+                            additionalInformationDispatch={additionalInformationDispatch}
+                            ref={addNewAddressRef}
+                        />
                     </Stack>
                     {data?.addresses?.length > 0 && (
                         <Stack
@@ -253,5 +276,5 @@ const DeliveryAddress = ({
             </CustomPopover>
         </>
     )
-}
+})
 export default DeliveryAddress

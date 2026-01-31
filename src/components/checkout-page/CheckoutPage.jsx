@@ -76,9 +76,11 @@ import { subscriptionReducer, subscriptionsInitialState } from './states'
 import {
     additionalInformationInitialState,
     additionalInformationReducer,
+    ACTIONS,
 } from './states/additionalInformationStates'
 import useGetMostTrips from '@/hooks/react-query/useGetMostTrips'
 import { setIsNeedLoad } from '@/redux/slices/utils'
+import CircularLoader from '@/components/loader/CircularLoader'
 import GuestUserInforForm from '@/components/checkout-page/guest-user/GuestUserInforForm'
 import DineInPreferableTime from '@/components/checkout-page/DineInPreferableTime'
 
@@ -175,11 +177,59 @@ const CheckoutPage = ({ isDineIn }) => {
     const { data, refetch: refetchNotification } =
         useGetOrderPlaceNotification(orderId)
 
+    const restaurantIdRef = useRef(null)
+
+    useEffect(() => {
+        if (cartList?.length > 0) {
+            const rId = cartList[0].restaurant_id
+            restaurantIdRef.current = rId
+            sessionStorage.setItem('last_restaurant_id', rId)
+        }
+    }, [cartList])
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const stored = sessionStorage.getItem('last_restaurant_id')
+            if (stored) {
+                restaurantIdRef.current = stored
+            }
+        }
+    }, [])
+
+    useEffect(() => {
+        if (restaurantData?.data?.id) {
+            const rId = restaurantData.data.id
+            restaurantIdRef.current = rId
+            sessionStorage.setItem('last_restaurant_id', rId)
+        }
+    }, [restaurantData])
+
     useEffect(() => {
         if (data) {
             dispatch(setIsNeedLoad(data?.reload_home))
         }
     }, [data])
+
+    const isRehydrated = useSelector((state) => state._persist?.rehydrated)
+
+    useEffect(() => {
+        console.log('Redirect Debug:', {
+            isRehydrated,
+            cartLength: cartList?.length,
+            page,
+            ref: restaurantIdRef.current,
+            session: typeof window !== 'undefined' ? sessionStorage.getItem('last_restaurant_id') : 'N/A'
+        })
+        if (isRehydrated && cartList?.length === 0 && page !== 'campaign') {
+            if (restaurantIdRef.current) {
+                console.log('Redirecting to Restaurant:', restaurantIdRef.current)
+                router.push(`/restaurant/${restaurantIdRef.current}`)
+            } else {
+                console.log('Redirecting to Home (No Ref)')
+                router.push('/home')
+            }
+        }
+    }, [cartList, page, router, isRehydrated])
     const { data: offlinePaymentOptions, refetch: OfflinePaymentRefetch } =
         useGetOfflinePaymentOptions({})
 
@@ -235,7 +285,7 @@ const CheckoutPage = ({ isDineIn }) => {
             RestaurantsApi.restaurantDetails(
                 page === 'campaign'
                     ? campFoodList?.[0]?.restaurant_id
-                    : cartList[0].restaurant_id
+                    : cartList?.[0]?.restaurant_id
             ),
         { enabled: false, onError: onErrorResponse }
     )
@@ -252,10 +302,10 @@ const CheckoutPage = ({ isDineIn }) => {
             onError: onErrorResponse,
         }
     )
-   
-    
+
+
     const tempDistance =
-        distanceData?.data?.distanceMeters/ 1000
+        distanceData?.data?.distanceMeters / 1000
     const { data: extraCharge, refetch: extraChargeRefetch } =
         useGetVehicleCharge({ tempDistance })
     useEffect(() => {
@@ -301,6 +351,31 @@ const CheckoutPage = ({ isDineIn }) => {
 
         apiRefetch()
     }, [])
+
+    // Auto-fill additional information fields when address changes
+    useEffect(() => {
+        if (address && additionalInformationDispatch) {
+            additionalInformationDispatch({
+                type: ACTIONS.setStreetNumber,
+                payload: address.road || '',
+            })
+            additionalInformationDispatch({
+                type: ACTIONS.setHouseNumber,
+                payload: address.house || '',
+            })
+            additionalInformationDispatch({
+                type: ACTIONS.setFloor,
+                payload: address.floor || '',
+            })
+            // Also update address type if available
+            if (address.address_type) {
+                additionalInformationDispatch({
+                    type: ACTIONS.setAddressType,
+                    payload: address.address_type || '',
+                })
+            }
+        }
+    }, [address])
 
     useEffect(() => {
         restaurantData && address && refetchDistance()
@@ -413,9 +488,9 @@ const CheckoutPage = ({ isDineIn }) => {
         )
         const isDigital =
             paymenMethod !== 'cash_on_delivery' &&
-            paymenMethod !== 'wallet' &&
-            paymenMethod !== 'offline_payment' &&
-            paymenMethod !== ''
+                paymenMethod !== 'wallet' &&
+                paymenMethod !== 'offline_payment' &&
+                paymenMethod !== ''
                 ? 'digital_payment'
                 : paymenMethod
 
@@ -436,7 +511,7 @@ const CheckoutPage = ({ isDineIn }) => {
             floor: !getToken()
                 ? guestUserInfo?.floor
                 : additionalInformationStates?.floor,
-            order_note: additionalInformationStates?.note,
+            working_lift: additionalInformationStates?.workingLift || 'no',
             partial_payment: usePartialPayment,
             payment_method: isDigital,
             order_type: orderType,
@@ -466,8 +541,8 @@ const CheckoutPage = ({ isDineIn }) => {
             contact_person_number: additionalInformationStates?.dine_in_contact
                 ?.phone
                 ? formatPhoneNumber(
-                      additionalInformationStates?.dine_in_contact?.phone
-                  )
+                    additionalInformationStates?.dine_in_contact?.phone
+                )
                 : formatPhoneNumber(guestUserInfo?.contact_person_number),
             is_guest: token ? 0 : 1,
             is_buy_now: page === 'campaign' ? 1 : 0,
@@ -477,7 +552,7 @@ const CheckoutPage = ({ isDineIn }) => {
             extra_packaging_amount: extraPackagingCharge,
             contact_person_email:
                 additionalInformationStates?.dine_in_contact?.email,
-             bring_change_amount: changeAmount
+            bring_change_amount: changeAmount
         }
     }
 
@@ -524,15 +599,12 @@ const CheckoutPage = ({ isDineIn }) => {
                                 toast.success(response?.data?.message)
                                 const newBaseUrl = baseUrl.substring(0, 31)
                                 const callBackUrl = `${window.location.origin}/order`
-                                const url = `${
-                                    window.location.origin
-                                }/payment-mobile?order_id=${
-                                    response?.data?.order_id
-                                }&customer_id=${
-                                    customerData?.data?.id
+                                const url = `${window.location.origin
+                                    }/payment-mobile?order_id=${response?.data?.order_id
+                                    }&customer_id=${customerData?.data?.id
                                         ? customerData?.data?.id
                                         : getGuestId()
-                                }&callback=${callBackUrl}`
+                                    }&callback=${callBackUrl}`
                             } else if (paymenMethod === 'wallet') {
                                 toast.success(response?.data?.message)
                                 setOrderSuccess(true)
@@ -567,7 +639,7 @@ const CheckoutPage = ({ isDineIn }) => {
                 if (
                     totalMaxCodAmount !== 0 &&
                     Number.parseInt(totalAmountOrSubTotalAmount) >
-                        Number.parseInt(totalMaxCodAmount)
+                    Number.parseInt(totalMaxCodAmount)
                 ) {
                     toast.error(
                         `${text1} ${getAmount(
@@ -624,15 +696,13 @@ const CheckoutPage = ({ isDineIn }) => {
                         if (paymenMethod !== 'cash_on_delivery') {
                             const callBackUrl = token
                                 ? // ? `${window.location.origin}/order-history/${response?.data?.order_id}`
-                                  `${window.location.origin}/info?page=${page}`
+                                `${window.location.origin}/info?page=${page}`
                                 : `${window.location.origin}/order`
-                            const url = `${baseUrl}/payment-mobile?order_id=${
-                                response?.data?.order_id
-                            }&customer_id=${
-                                customerData?.data?.id
+                            const url = `${baseUrl}/payment-mobile?order_id=${response?.data?.order_id
+                                }&customer_id=${customerData?.data?.id
                                     ? customerData?.data?.id
                                     : getGuestId()
-                            }&payment_platform=${payment_platform}&callback=${callBackUrl}&payment_method=${paymenMethod}`
+                                }&payment_platform=${payment_platform}&callback=${callBackUrl}&payment_method=${paymenMethod}`
                             Router.push(url)
                         } else {
                             toast.success(response?.data?.message)
@@ -711,16 +781,14 @@ const CheckoutPage = ({ isDineIn }) => {
                                 } else {
                                     toast(
                                         t(
-                                            `Your chosen delivery ${
-                                                subscriptionStates?.days
-                                                    ?.length > 1
-                                                    ? 'days'
-                                                    : 'day'
-                                            } and ${
-                                                subscriptionStates?.days
-                                                    ?.length > 1
-                                                    ? 'times'
-                                                    : 'time'
+                                            `Your chosen delivery ${subscriptionStates?.days
+                                                ?.length > 1
+                                                ? 'days'
+                                                : 'day'
+                                            } and ${subscriptionStates?.days
+                                                ?.length > 1
+                                                ? 'times'
+                                                : 'time'
                                             } must be in between start date and end date`
                                         ),
                                         {
@@ -735,14 +803,12 @@ const CheckoutPage = ({ isDineIn }) => {
                             } else {
                                 toast(
                                     t(
-                                        `Your chosen delivery ${
-                                            subscriptionStates?.days?.length > 1
-                                                ? 'days'
-                                                : 'day'
-                                        } and ${
-                                            subscriptionStates?.days?.length > 1
-                                                ? 'times'
-                                                : 'time'
+                                        `Your chosen delivery ${subscriptionStates?.days?.length > 1
+                                            ? 'days'
+                                            : 'day'
+                                        } and ${subscriptionStates?.days?.length > 1
+                                            ? 'times'
+                                            : 'time'
                                         } must be in between start date and end date`
                                     ),
                                     {
@@ -787,14 +853,12 @@ const CheckoutPage = ({ isDineIn }) => {
                         } else {
                             toast(
                                 t(
-                                    `Your chosen delivery ${
-                                        subscriptionStates?.days?.length > 1
-                                            ? 'days'
-                                            : 'day'
-                                    } and ${
-                                        subscriptionStates?.days?.length > 1
-                                            ? 'times'
-                                            : 'time'
+                                    `Your chosen delivery ${subscriptionStates?.days?.length > 1
+                                        ? 'days'
+                                        : 'day'
+                                    } and ${subscriptionStates?.days?.length > 1
+                                        ? 'times'
+                                        : 'time'
                                     } must be in between start date and end date`
                                 ),
                                 {
@@ -840,7 +904,7 @@ const CheckoutPage = ({ isDineIn }) => {
             handlePlaceOrder()
         }
     }
-    const counponRemove = () => {}
+    const counponRemove = () => { }
     if (orderSuccess) {
         if (token) {
             router.push(
@@ -1097,6 +1161,18 @@ const CheckoutPage = ({ isDineIn }) => {
         hasOnlyPaymentMethod()
     }, [global])
 
+    if (isRehydrated && cartList?.length === 0 && page !== 'campaign') {
+        return (
+            <CustomStackFullWidth
+                alignItems="center"
+                justifyContent="center"
+                sx={{ height: '50vh' }}
+            >
+                <CircularLoader />
+            </CustomStackFullWidth>
+        )
+    }
+
     return (
         <Grid
             container
@@ -1182,7 +1258,7 @@ const CheckoutPage = ({ isDineIn }) => {
                                     tripsData={tripsData}
                                 />
                             )}
-                    
+
                         <PaymentOptions
                             global={global}
                             paymenMethod={paymenMethod}
@@ -1198,8 +1274,8 @@ const CheckoutPage = ({ isDineIn }) => {
                             walletAmount={walletAmount}
                             totalAmount={totalAmount}
                             switchToWallet={switchToWallet}
-                            handlePartialPayment = {handlePartialPayment}
-                            removePartialPayment = {removePartialPayment}
+                            handlePartialPayment={handlePartialPayment}
+                            removePartialPayment={removePartialPayment}
                             setChangeAmount={setChangeAmount}
                             changeAmount={changeAmount}
                         />
@@ -1229,10 +1305,7 @@ const CheckoutPage = ({ isDineIn }) => {
                         <OrderSummary variant="h4">
                             {t('Order Summary')}
                         </OrderSummary>
-                        {zoneData &&
-                            orderType !== 'dine_in' &&
-                            orderType !== 'take_away' &&
-                            handleBadWeatherUi(zoneData?.data?.zone_data)}
+                        {/* Bad weather UI removed as per user request */}
                         <SimpleBar
                             style={{ maxHeight: '500px', width: '100%' }}
                         >
@@ -1275,61 +1348,61 @@ const CheckoutPage = ({ isDineIn }) => {
                             )}
 
                             {restaurantData?.data?.is_extra_packaging_active &&
-                            global?.extra_packaging_charge
+                                global?.extra_packaging_charge
                                 ? !restaurantData?.data
-                                      ?.extra_packaging_status &&
-                                  restaurantData?.data
-                                      ?.extra_packaging_amount != null &&
-                                  restaurantData?.data?.extra_packaging_amount >
-                                      0 &&
-                                  orderType !== 'dine_in' && (
-                                      <Stack
-                                          direction="row"
-                                          justifyContent="space-between"
-                                          alignItems="center"
-                                          boxShadow={theme.shadows2[0]}
-                                          borderRadius="8px"
-                                          minHeight="50px"
-                                          py={0.5}
-                                          px={2}
-                                      >
-                                          <FormControlLabel
-                                              onChange={(e) =>
-                                                  handleExtraPackaging(e)
-                                              }
-                                              control={<Checkbox />}
-                                              label={
-                                                  <Typography
-                                                      fontWeight="700"
-                                                      fontSize="14px"
-                                                      color={
-                                                          theme.palette.primary
-                                                              .main
-                                                      }
-                                                  >
-                                                      {t(
-                                                          'Need Extra Packaging'
-                                                      )}
-                                                  </Typography>
-                                              }
-                                          />
-                                          <Typography
-                                              component="span"
-                                              m="0"
-                                              fontWeight="700"
-                                              fontSize="14px"
-                                              mt="6px"
-                                          >
-                                              {getAmount(
-                                                  restaurantData.data
-                                                      .extra_packaging_amount,
-                                                  currencySymbolDirection,
-                                                  currencySymbol,
-                                                  digitAfterDecimalPoint
-                                              )}
-                                          </Typography>
-                                      </Stack>
-                                  )
+                                    ?.extra_packaging_status &&
+                                restaurantData?.data
+                                    ?.extra_packaging_amount != null &&
+                                restaurantData?.data?.extra_packaging_amount >
+                                0 &&
+                                orderType !== 'dine_in' && (
+                                    <Stack
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="center"
+                                        boxShadow={theme.shadows2[0]}
+                                        borderRadius="8px"
+                                        minHeight="50px"
+                                        py={0.5}
+                                        px={2}
+                                    >
+                                        <FormControlLabel
+                                            onChange={(e) =>
+                                                handleExtraPackaging(e)
+                                            }
+                                            control={<Checkbox />}
+                                            label={
+                                                <Typography
+                                                    fontWeight="700"
+                                                    fontSize="14px"
+                                                    color={
+                                                        theme.palette.primary
+                                                            .main
+                                                    }
+                                                >
+                                                    {t(
+                                                        'Need Extra Packaging'
+                                                    )}
+                                                </Typography>
+                                            }
+                                        />
+                                        <Typography
+                                            component="span"
+                                            m="0"
+                                            fontWeight="700"
+                                            fontSize="14px"
+                                            mt="6px"
+                                        >
+                                            {getAmount(
+                                                restaurantData.data
+                                                    .extra_packaging_amount,
+                                                currencySymbolDirection,
+                                                currencySymbol,
+                                                digitAfterDecimalPoint
+                                            )}
+                                        </Typography>
+                                    </Stack>
+                                )
                                 : null}
                         </Stack>
 
@@ -1366,6 +1439,13 @@ const CheckoutPage = ({ isDineIn }) => {
                             cashbackAmount={cashbackAmount}
                             extraPackagingCharge={extraPackagingCharge}
                             distanceLoading={distanceLoading}
+                            floorCharges={
+                                additionalInformationStates?.workingLift === 'yes'
+                                    ? 0
+                                    : additionalInformationStates?.floor
+                                        ? parseInt(additionalInformationStates?.floor) * 3
+                                        : 0
+                            }
                         />
                     </Stack>
                 </CustomPaperBigCard>
@@ -1375,7 +1455,7 @@ const CheckoutPage = ({ isDineIn }) => {
                 <CustomModal
                     openModal={openModal}
                     bgColor={theme.palette.customColor.ten}
-                    //handleClose={() => setOpenModal(false)}
+                //handleClose={() => setOpenModal(false)}
                 >
                     <PartialPaymentModal
                         global={global}

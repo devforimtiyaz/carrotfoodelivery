@@ -11,6 +11,14 @@ import CustomImageContainer from '@/components/CustomImageContainer'
 import noAddress from '../assets/no-address.png'
 import SimpleBar from 'simplebar-react'
 import 'simplebar-react/dist/simplebar.min.css'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
+import { Menu, MenuItem, IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, ListItemIcon } from '@mui/material'
+import { useMutation } from 'react-query'
+import { AddressApi } from '@/hooks/react-query/config/addressApi'
+import { toast } from 'react-hot-toast'
+import { onErrorResponse } from '../../ErrorResponse'
 
 const AddressSelectionList = (props) => {
     const theme = useTheme()
@@ -25,6 +33,54 @@ const AddressSelectionList = (props) => {
         isRefetching,
         additionalInformationDispatch,
     } = props
+    const [anchorEl, setAnchorEl] = React.useState(null)
+    const [menuAddress, setMenuAddress] = React.useState(null)
+    const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false)
+
+    const handleMenuOpen = (event, address) => {
+        event.stopPropagation()
+        setAnchorEl(event.currentTarget)
+        setMenuAddress(address)
+    }
+
+    const handleMenuClose = () => {
+        setAnchorEl(null)
+        setMenuAddress(null)
+    }
+
+    const { mutate: deleteAddressMutation, isLoading: isDeleting } = useMutation(
+        'delete-address',
+        AddressApi.deleteAddress,
+        {
+            onSuccess: (response) => {
+                toast.success(response?.data?.message)
+                handleMenuClose()
+                setOpenDeleteDialog(false)
+                props.refetch?.()
+            },
+            onError: (error) => {
+                onErrorResponse(error)
+                setOpenDeleteDialog(false)
+            },
+        }
+    )
+
+    const handleDeleteClick = () => {
+        setOpenDeleteDialog(true)
+        setAnchorEl(null) // Close menu but keep menuAddress for dialog
+    }
+
+    const handleConfirmDelete = () => {
+        if (menuAddress?.id) {
+            deleteAddressMutation(menuAddress.id)
+        }
+    }
+
+    const handleEditClick = () => {
+        handleMenuClose()
+        props.handleEdit?.(menuAddress)
+    }
+
     const handleClick = (adres) => {
         handleLatLng(adres)
     }
@@ -108,6 +164,15 @@ const AddressSelectionList = (props) => {
                                                 </Typography>
                                             }
                                         />
+                                        <IconButton
+                                            aria-label="more"
+                                            aria-controls="long-menu"
+                                            aria-haspopup="true"
+                                            onClick={(e) => handleMenuOpen(e, adres)}
+                                            size="small"
+                                        >
+                                            <MoreVertIcon fontSize="small" />
+                                        </IconButton>
                                     </CustomStackFullWidth>
                                 </ListItemButton>
                             </React.Fragment>
@@ -166,7 +231,57 @@ const AddressSelectionList = (props) => {
                     {!data && <CustomCheckOutShimmer />}
                 </List>
             </SimpleBar>
-        </CustomStackFullWidth>
+
+            <Menu
+                id="long-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+                PaperProps={{
+                    style: {
+                        width: '20ch',
+                    },
+                }}
+            >
+                <MenuItem onClick={handleEditClick}>
+                    <ListItemIcon>
+                        <EditIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText primary={t('Edit')} />
+                </MenuItem>
+                <MenuItem onClick={handleDeleteClick}>
+                    <ListItemIcon>
+                        <DeleteIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText primary={t('Delete')} />
+                </MenuItem>
+            </Menu>
+
+            <Dialog
+                open={openDeleteDialog}
+                onClose={() => setOpenDeleteDialog(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {t('Delete Address?')}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        {t('Are you sure you want to delete this address?')}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenDeleteDialog(false)} color="primary">
+                        {t('Cancel')}
+                    </Button>
+                    <Button onClick={handleConfirmDelete} color="error" autoFocus>
+                        {t('Delete')}
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </CustomStackFullWidth >
     )
 }
 
