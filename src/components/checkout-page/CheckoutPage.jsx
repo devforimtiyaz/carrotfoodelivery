@@ -25,6 +25,7 @@ import {
 } from '@mui/material'
 import moment from 'moment'
 import Router, { useRouter } from 'next/router'
+import dynamic from 'next/dynamic'
 import React, { useEffect, useReducer, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
@@ -33,7 +34,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { onErrorResponse, onSingleErrorResponse } from '../ErrorResponse'
 import { DeliveryTitle, OrderSummary } from './CheckOut.style'
 import DeliveryDetails from './DeliveryDetails'
-import RestaurantScheduleTime from './RestaurantScheduleTime'
 import { getDayNumber } from './const'
 import OrderCalculation from './order-summary/OrderCalculation'
 import OrderSummaryDetails from './order-summary/OrderSummaryDetails'
@@ -82,7 +82,16 @@ import useGetMostTrips from '@/hooks/react-query/useGetMostTrips'
 import { setIsNeedLoad } from '@/redux/slices/utils'
 import CircularLoader from '@/components/loader/CircularLoader'
 import GuestUserInforForm from '@/components/checkout-page/guest-user/GuestUserInforForm'
-import DineInPreferableTime from '@/components/checkout-page/DineInPreferableTime'
+
+// Dynamic imports for components with date-pickers to avoid SSR bundling issues
+const RestaurantScheduleTime = dynamic(
+    () => import('./RestaurantScheduleTime'),
+    { ssr: false }
+)
+const DineInPreferableTime = dynamic(
+    () => import('@/components/checkout-page/DineInPreferableTime'),
+    { ssr: false }
+)
 
 
 const currentDate = moment();
