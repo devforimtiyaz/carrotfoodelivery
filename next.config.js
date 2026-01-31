@@ -4,12 +4,17 @@ module.exports = {
     compiler: {
         styledComponents: true,
     },
-    transpilePackages: [
-        'date-fns',
-        'lodash',
-        '@mui/x-date-pickers',
-        '@mui/x-date-pickers-pro',
-    ],
+    modularizeImports: {
+        '@mui/material': {
+            transform: '@mui/material/{{member}}',
+        },
+        '@mui/icons-material': {
+            transform: '@mui/icons-material/{{member}}',
+        },
+        'lodash': {
+            transform: 'lodash/{{member}}',
+        },
+    },
     images: {
         domains: ['stackfood.6am.one', 'carrotfoodelivery.com'],
     },
