@@ -135,25 +135,8 @@ const PlaceOrder = (props) => {
                                             sx={{ fontSize: '13px' }}
                                         >
                                             {t(
-                                                `I agree that placing the order places me under`
+                                                `Please double check your order and address details, Order Cannot be CANCELLED once accepted by Restaurant.`
                                             )}{' '}
-                                            <Link
-                                                href="/terms-and-conditions"
-                                                style={{
-                                                    textDecoration: 'underline',
-                                                }}
-                                            >
-                                                {t('Terms and Conditions')}
-                                            </Link>{' '}
-                                            {t('&')}
-                                            <Link
-                                                href="/privacy-policy"
-                                                style={{
-                                                    textDecoration: 'underline',
-                                                }}
-                                            >
-                                                {t('Privacy Policy')}
-                                            </Link>
                                         </CustomTypography>
                                     }
                                 />
@@ -177,15 +160,15 @@ const PlaceOrder = (props) => {
                         <>
                             {(offlineInfoStep === 1 ||
                                 offlineInfoStep === 0) && (
-                                <LoadingButton
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    onClick={handleOfflineOrder}
-                                >
-                                    {t('Confirm Order')}
-                                </LoadingButton>
-                            )}
+                                    <LoadingButton
+                                        type="submit"
+                                        fullWidth
+                                        variant="contained"
+                                        onClick={handleOfflineOrder}
+                                    >
+                                        {t('Confirm Order')}
+                                    </LoadingButton>
+                                )}
                         </>
                     )}
                 </>

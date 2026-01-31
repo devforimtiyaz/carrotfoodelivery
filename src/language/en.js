@@ -351,8 +351,8 @@ export const english = {
     'cash on delivery': 'cash on delivery',
     'Digital payment': 'Digital payment',
     'Wallet payment': 'Wallet payment',
-    ' I agree that placing the order places me under Terms and Conditions & Privacy Policies':
-        ' I agree that placing the order places me under Terms and Conditions & Privacy Policies',
+    'Please double check your order and address details, Order Cannot be CANCELLED once accepted by Restaurant.':
+        'Please double check your order and address details, Order Cannot be CANCELLED once accepted by Restaurant.',
     'Have a Coupon?': 'Have a Coupon?',
     'Apply Now': 'Apply Now',
     'View Saved Address': 'View Saved Address',
