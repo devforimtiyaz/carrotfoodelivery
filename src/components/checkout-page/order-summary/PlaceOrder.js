@@ -1,12 +1,8 @@
-import React, { useState } from 'react'
-import { FormControlLabel } from '@mui/material'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { CustomStackFullWidth } from '@/styled-components/CustomStyles.style'
 import { CustomTypography } from '../../custom-tables/Tables.style'
 import LoadingButton from '@mui/lab/LoadingButton'
-import Link from 'next/link'
-import FormGroup from '@mui/material/FormGroup'
-import Checkbox from '@mui/material/Checkbox'
 import { useDispatch, useSelector } from 'react-redux'
 import {
     setOfflineInfoStep,
@@ -29,13 +25,9 @@ const PlaceOrder = (props) => {
     const router = useRouter()
     const { t } = useTranslation()
     const dispatch = useDispatch()
-    const [checked, setChecked] = useState(false)
     const { token } = useSelector((state) => state.userToken)
     const { offlineInfoStep } = useSelector((state) => state.offlinePayment)
     const { guestUserInfo } = useSelector((state) => state.guestUserInfo)
-    const handleChange = (e) => {
-        setChecked(e.target.checked)
-    }
     const handleOfflineOrder = () => {
         if (!token && guestUserInfo === null) {
             toast.error(t('The Contact Person Info Is Required.'), {
@@ -122,25 +114,18 @@ const PlaceOrder = (props) => {
                 <>
                     {offlineInfoStep === 2 ? (
                         <>
-                            <FormGroup>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            checked={checked}
-                                            onChange={handleChange}
-                                        />
-                                    }
-                                    label={
-                                        <CustomTypography
-                                            sx={{ fontSize: '13px' }}
-                                        >
-                                            {t(
-                                                `Please double check your order and address details, Order Cannot be CANCELLED once accepted by Restaurant.`
-                                            )}{' '}
-                                        </CustomTypography>
-                                    }
-                                />
-                            </FormGroup>
+                            <CustomTypography
+                                sx={{
+                                    fontSize: '13px',
+                                    color: 'error.main',
+                                    textAlign: 'center',
+                                    mb: 1
+                                }}
+                            >
+                                {t(
+                                    `Please double check your order and address details, Order Cannot be CANCELLED once accepted by Restaurant.`
+                                )}
+                            </CustomTypography>
                             <LoadingButton
                                 type="submit"
                                 fullWidth
@@ -151,7 +136,6 @@ const PlaceOrder = (props) => {
                                     offlinePaymentLoading ||
                                     distanceLoading
                                 }
-                                disabled={!checked}
                             >
                                 {t('Place Order')}
                             </LoadingButton>
