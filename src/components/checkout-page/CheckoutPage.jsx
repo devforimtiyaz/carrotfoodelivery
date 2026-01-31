@@ -263,7 +263,9 @@ const CheckoutPage = ({ isDineIn }) => {
         digitAfterDecimalPoint = global.digit_after_decimal_point
     }
 
-    currentLatLng = JSON.parse(window.localStorage.getItem('currentLatLng'))
+    currentLatLng = typeof window !== 'undefined'
+        ? JSON.parse(window.localStorage.getItem('currentLatLng'))
+        : null
     const { data: zoneData } = useQuery(
         ['zoneId', location],
         async () => GoogleApi.getZoneId(currentLatLng),
