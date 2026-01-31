@@ -174,7 +174,7 @@ const CheckoutPage = ({ isDineIn }) => {
     const [cashbackAmount, setCashbackAmount] = useState(null)
     const [extraPackagingCharge, setExtraPackagingCharge] = useState(0)
     const [changeAmount, setChangeAmount] = useState()
-    const { method } = router.query
+    const { method, page } = router.query
     const { mutate: offlineMutate, isLoading: offlinePaymentLoading } =
         useOfflinePayment()
     const [offlineCheck, setOfflineCheck] = useState(false)
@@ -272,7 +272,7 @@ const CheckoutPage = ({ isDineIn }) => {
 
     const text1 = t('You can not Order more then')
     const text2 = t('on COD order')
-    const { page } = router.query
+
     let currencySymbol
     let currencySymbolDirection
     let digitAfterDecimalPoint
