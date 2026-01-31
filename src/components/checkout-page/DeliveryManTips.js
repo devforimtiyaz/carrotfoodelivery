@@ -114,7 +114,7 @@ const DeliveryManTips = ({ deliveryTip, setDeliveryTip, tripsData }) => {
                                             color={
                                                 item === deliveryTip
                                                     ? theme.palette
-                                                          .whiteContainer.main
+                                                        .whiteContainer.main
                                                     : theme.palette.primary.main
                                             }
                                         >
@@ -124,21 +124,27 @@ const DeliveryManTips = ({ deliveryTip, setDeliveryTip, tripsData }) => {
                                             !isSmall && (
                                                 <Stack
                                                     position="absolute"
-                                                    bottom="0px"
+                                                    top="-12px"
+                                                    left="50%"
+                                                    sx={{ transform: 'translateX(-50%)' }}
                                                     alignItems="center"
-                                                    width="100%"
+                                                    justifyContent="center"
+                                                    width="max-content"
                                                     backgroundColor={
-                                                        theme.palette.primary
-                                                            .main
+                                                        theme.palette.primary.main
                                                     }
+                                                    borderRadius="10px"
+                                                    padding="2px 8px"
+                                                    zIndex="9"
                                                 >
                                                     <Typography
                                                         color={
-                                                            theme.palette
-                                                                .whiteContainer
+                                                            theme.palette.whiteContainer
                                                                 .main
                                                         }
-                                                        fontSize="8px"
+                                                        fontSize="10px"
+                                                        fontWeight="bold"
+                                                        lineHeight="1"
                                                     >
                                                         {t('Most Tipped')}
                                                     </Typography>

@@ -163,8 +163,7 @@ const PaymentOptions = (props) => {
                         justifyContent="center"
                     >
                         <Button
-                            variant={isCODSelected ? "contained" : "outlined"}
-                            color="primary"
+                            variant={isCODSelected ? 'contained' : 'outlined'}
                             onClick={handleCashOnDelivery}
                             startIcon={<AttachMoneyIcon />}
                             sx={{
@@ -174,6 +173,28 @@ const PaymentOptions = (props) => {
                                 textTransform: 'none',
                                 fontWeight: 600,
                                 boxShadow: isCODSelected ? 2 : 0,
+                                color: (theme) =>
+                                    !isCODSelected &&
+                                        theme.palette.mode === 'light'
+                                        ? 'common.black'
+                                        : !isCODSelected
+                                            ? 'primary.main'
+                                            : 'white',
+                                borderColor: (theme) =>
+                                    !isCODSelected &&
+                                        theme.palette.mode === 'light'
+                                        ? 'rgba(0, 0, 0, 0.23)'
+                                        : 'primary.main',
+                                '&:hover': {
+                                    backgroundColor: (theme) =>
+                                        theme.palette.mode === 'light'
+                                            ? 'rgba(0, 0, 0, 0.04)'
+                                            : undefined,
+                                    borderColor: (theme) =>
+                                        theme.palette.mode === 'light'
+                                            ? 'common.black'
+                                            : undefined,
+                                },
                             }}
                         >
                             {t('Cash on Delivery')}
@@ -182,8 +203,11 @@ const PaymentOptions = (props) => {
                             (method) => method?.gateway?.toLowerCase()?.includes('razor')
                         ) && (
                                 <Button
-                                    variant={isRazorpaySelected ? "contained" : "outlined"}
-                                    color="primary"
+                                    variant={
+                                        isRazorpaySelected
+                                            ? 'contained'
+                                            : 'outlined'
+                                    }
                                     onClick={handleRazorpay}
                                     startIcon={<PaymentIcon />}
                                     sx={{
@@ -193,6 +217,28 @@ const PaymentOptions = (props) => {
                                         textTransform: 'none',
                                         fontWeight: 600,
                                         boxShadow: isRazorpaySelected ? 2 : 0,
+                                        color: (theme) =>
+                                            !isRazorpaySelected &&
+                                                theme.palette.mode === 'light'
+                                                ? 'common.black'
+                                                : !isRazorpaySelected
+                                                    ? 'primary.main'
+                                                    : 'white',
+                                        borderColor: (theme) =>
+                                            !isRazorpaySelected &&
+                                                theme.palette.mode === 'light'
+                                                ? 'rgba(0, 0, 0, 0.23)'
+                                                : 'primary.main',
+                                        '&:hover': {
+                                            backgroundColor: (theme) =>
+                                                theme.palette.mode === 'light'
+                                                    ? 'rgba(0, 0, 0, 0.04)'
+                                                    : undefined,
+                                            borderColor: (theme) =>
+                                                theme.palette.mode === 'light'
+                                                    ? 'common.black'
+                                                    : undefined,
+                                        },
                                     }}
                                 >
                                     {t('Razorpay (UPI)')}

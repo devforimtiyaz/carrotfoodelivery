@@ -15,9 +15,17 @@ import { useTheme } from '@mui/material/styles'
 import VisibleVariations from '../../floating-cart/VisibleVariations'
 import { handleTotalAmountWithAddonsFF } from '@/utils/customFunctions'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { removeProduct } from '@/redux/slices/cart'
+import {
+    removeProduct,
+    incrementProductQty,
+    decrementProductQty,
+} from '@/redux/slices/cart'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import AddIcon from '@mui/icons-material/Add'
+import RemoveIcon from '@mui/icons-material/Remove'
+import { toast } from 'react-hot-toast'
+import { getCartItemDisplayName } from '@/utils/customFunctions'
 
 const RegularOrders = ({ orderType }) => {
     const theme = useTheme()
@@ -44,6 +52,25 @@ const RegularOrders = ({ orderType }) => {
             }
         }
         dispatch(removeProduct(item))
+    }
+
+    const handleIncrement = (item) => {
+        if (item?.maximum_cart_quantity) {
+            if (item?.maximum_cart_quantity <= item?.quantity) {
+                toast.error(t('Out of Stock'))
+            }
+        }
+        const quantity = item?.quantity + 1
+        const price = item?.totalPrice / item?.quantity
+        const totalPrice = price * quantity
+        dispatch(incrementProductQty({ ...item, quantity, totalPrice }))
+    }
+
+    const handleDecrement = (item) => {
+        const quantity = item?.quantity - 1
+        const price = item?.totalPrice / item?.quantity
+        const totalPrice = price * quantity
+        dispatch(decrementProductQty({ ...item, quantity, totalPrice }))
     }
 
     const restaurantId = cartList.length > 0 ? cartList[0].restaurant_id : null
@@ -121,19 +148,6 @@ const RegularOrders = ({ orderType }) => {
                                     </OrderFoodSubtitle>
                                 </Stack>
                             )}
-                            <Stack
-                                direction="row"
-                                alignItems="center"
-                                spacing={0.5}
-                            >
-                                <OrderFoodSubtitle>
-                                    {t('Qty')}
-                                </OrderFoodSubtitle>
-                                <OrderFoodSubtitle>:</OrderFoodSubtitle>
-                                <OrderFoodSubtitle>
-                                    {item.quantity}
-                                </OrderFoodSubtitle>
-                            </Stack>
                             <OrderFoodAmount>
                                 {getAmount(
                                     handleTotalAmountWithAddonsFF(
@@ -146,13 +160,65 @@ const RegularOrders = ({ orderType }) => {
                                 )}
                             </OrderFoodAmount>
                         </Stack>
-                        <IconButton
-                            onClick={() => handleRemove(item)}
-                            aria-label="delete"
-                            size="small"
+                        <Stack
+                            direction="row"
+                            alignItems="center"
+                            spacing={2}
                         >
-                            <DeleteIcon color="error" fontSize="small" />
-                        </IconButton>
+                            <Stack
+                                direction="row"
+                                alignItems="center"
+                                justifyContent="space-between"
+                                spacing={1}
+                                sx={{
+                                    border: `1px solid ${theme.palette.neutral[300]}`,
+                                    borderRadius: '8px',
+                                    padding: '4px 8px',
+                                }}
+                            >
+                                {item?.quantity > 1 ? (
+                                    <IconButton
+                                        size="small"
+                                        onClick={() => handleDecrement(item)}
+                                        sx={{
+                                            padding: '4px',
+                                            color: theme.palette.neutral[400],
+                                        }}
+                                    >
+                                        <RemoveIcon fontSize="small" />
+                                    </IconButton>
+                                ) : (
+                                    <IconButton
+                                        size="small"
+                                        onClick={() => handleRemove(item)}
+                                        sx={{
+                                            padding: '4px',
+                                            color: theme.palette.error.main,
+                                        }}
+                                    >
+                                        <DeleteIcon fontSize="small" />
+                                    </IconButton>
+                                )}
+                                <Typography
+                                    fontWeight="600"
+                                    fontSize="14px"
+                                    color={theme.palette.neutral[1000]}
+                                >
+                                    {item.quantity}
+                                </Typography>
+                                <IconButton
+                                    size="small"
+                                    onClick={() => handleIncrement(item)}
+                                    sx={{
+                                        padding: '4px',
+                                        color: theme.palette.neutral[1000],
+                                    }}
+                                >
+                                    <AddIcon fontSize="small" />
+                                </IconButton>
+                            </Stack>
+                        </Stack>
+
                     </CustomStackFullWidth>
                 ))
             ) : (
@@ -185,7 +251,17 @@ const RegularOrders = ({ orderType }) => {
             {restaurantId && (
                 <Grid item md={12} xs={12} mt="1rem" display="flex" justifyContent="center">
                     <Link href={`/restaurant/${restaurantId}`} passHref>
-                        <Button variant="outlined" color="primary" fullWidth>
+                        <Button
+                            variant="outlined"
+                            color="primary"
+                            fullWidth
+                            sx={{
+                                color: (theme) =>
+                                    theme.palette.mode === 'light'
+                                        ? 'common.black'
+                                        : 'primary.main',
+                            }}
+                        >
                             {t('Add more items')}
                         </Button>
                     </Link>

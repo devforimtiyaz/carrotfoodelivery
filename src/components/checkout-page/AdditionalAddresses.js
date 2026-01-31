@@ -161,25 +161,51 @@ const AdditionalAddresses = (props) => {
                                 padding: '8px 12px',
                                 borderRadius: '8px',
                                 border: `1px solid ${theme.palette.divider}`,
-                                backgroundColor: theme.palette.grey[50],
+                                backgroundColor: (theme) =>
+                                    theme.palette.mode === 'dark'
+                                        ? theme.palette.grey[900]
+                                        : theme.palette.grey[50],
                             }}
                         >
-                            <Typography fontSize="14px" fontWeight="500">
+                            <Typography
+                                fontSize="14px"
+                                fontWeight="500"
+                                sx={{
+                                    color: (theme) =>
+                                        theme.palette.mode === 'dark'
+                                            ? '#fff'
+                                            : 'inherit',
+                                }}
+                            >
                                 {t('Working Lift')}
                             </Typography>
-                            <Stack direction="row" spacing={1} alignItems="center">
+                            <Stack
+                                direction="row"
+                                spacing={1}
+                                alignItems="center"
+                            >
                                 <Typography
                                     fontSize="12px"
-                                    color={additionalInformationStates.workingLift === 'no' ? 'primary' : 'text.secondary'}
+                                    color={
+                                        additionalInformationStates.workingLift ===
+                                            'no'
+                                            ? 'primary'
+                                            : 'text.secondary'
+                                    }
                                 >
                                     {t('No')}
                                 </Typography>
                                 <Switch
-                                    checked={additionalInformationStates.workingLift === 'yes'}
+                                    checked={
+                                        additionalInformationStates.workingLift ===
+                                        'yes'
+                                    }
                                     onChange={(e) =>
                                         additionalInformationDispatch({
                                             type: ACTIONS.setWorkingLift,
-                                            payload: e.target.checked ? 'yes' : 'no',
+                                            payload: e.target.checked
+                                                ? 'yes'
+                                                : 'no',
                                         })
                                     }
                                     color="primary"
@@ -187,7 +213,12 @@ const AdditionalAddresses = (props) => {
                                 />
                                 <Typography
                                     fontSize="12px"
-                                    color={additionalInformationStates.workingLift === 'yes' ? 'primary' : 'text.secondary'}
+                                    color={
+                                        additionalInformationStates.workingLift ===
+                                            'yes'
+                                            ? 'primary'
+                                            : 'text.secondary'
+                                    }
                                 >
                                     {t('Yes')}
                                 </Typography>

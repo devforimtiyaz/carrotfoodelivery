@@ -88,6 +88,7 @@ const Homes = ({ configData }) => {
     } = useSelector((state) => state.storedData)
 
     const { welcomeModal, isNeedLoad } = useSelector((state) => state.utilsData)
+    const { zoneData } = useSelector((state) => state.globalSettings)
     const dispatch = useDispatch()
     const onSuccessHandler = (response) => {
         setFetcheedData(response)
@@ -147,32 +148,42 @@ const Homes = ({ configData }) => {
     })
 
     const apiRefetch = async () => {
-            if (
-                (banners?.banners?.length === 0 &&
-                    banners?.campaigns?.length === 0) ||
-                isNeedLoad
-            ) {
-                await refetchBannerData()
-            }
-            if (addStores?.length === 0 || isNeedLoad) {
-                await addRefetch()
-            }
-
-            if (campaignFoods?.length === 0 || isNeedLoad) {
-                await refetchCampaignData()
-            }
-            if (bestReviewedFoods?.length === 0 || isNeedLoad) {
-                await refetchMostReviewed()
-            }
-            if (popularFood?.length === 0 || isNeedLoad) {
-                await refetchNearByPopularRestaurantData()
-            }
+        if (
+            (banners?.banners?.length === 0 &&
+                banners?.campaigns?.length === 0) ||
+            isNeedLoad
+        ) {
+            await refetchBannerData()
         }
+        if (addStores?.length === 0 || isNeedLoad) {
+            await addRefetch()
+        }
+
+        if (campaignFoods?.length === 0 || isNeedLoad) {
+            await refetchCampaignData()
+        }
+        if (bestReviewedFoods?.length === 0 || isNeedLoad) {
+            await refetchMostReviewed()
+        }
+        if (popularFood?.length === 0 || isNeedLoad) {
+            await refetchNearByPopularRestaurantData()
+        }
+    }
     useEffect(() => {
-        
+
 
         apiRefetch()
     }, [])
+
+    useEffect(() => {
+        if (zoneData) {
+            refetchBannerData()
+            refetchCampaignData()
+            refetchMostReviewed()
+            refetchNearByPopularRestaurantData()
+            addRefetch()
+        }
+    }, [zoneData])
 
     useEffect(() => {
         if (addData) {
@@ -414,10 +425,10 @@ const Homes = ({ configData }) => {
                         >
                             {userData?.is_valid_for_discount
                                 ? t(
-                                      `Get ready for a special welcome gift, enjoy a special discount on your first order within `
-                                  ) +
-                                  userData?.validity +
-                                  '.'
+                                    `Get ready for a special welcome gift, enjoy a special discount on your first order within `
+                                ) +
+                                userData?.validity +
+                                '.'
                                 : ''}
                             {'  '}
                             {t(

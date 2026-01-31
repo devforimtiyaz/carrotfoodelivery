@@ -10,6 +10,7 @@ import {
 } from '@/redux/slices/OfflinePayment'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
+import { Alert } from '@mui/material'
 
 const PlaceOrder = (props) => {
     const {
@@ -69,18 +70,11 @@ const PlaceOrder = (props) => {
         <CustomStackFullWidth alignItems="center" spacing={2} marginTop="1rem">
             {paymentMethodDetails?.method !== 'offline_payment' ? (
                 <>
-                    <CustomTypography
-                        sx={{
-                            fontSize: '13px',
-                            color: 'error.main',
-                            textAlign: 'center',
-                            mb: 1
-                        }}
-                    >
+                    <Alert severity="warning" sx={{ mb: 1, fontSize: '13px' }}>
                         {t(
-                            `Please double check your order and address details, Order Cannot be CANCELLED once accepted by Restaurant.`
+                            `Please double check your order and address details. Order Cannot be CANCELLED once accepted by Restaurant.`
                         )}
-                    </CustomTypography>
+                    </Alert>
                     <LoadingButton
                         type="submit"
                         fullWidth
@@ -95,18 +89,14 @@ const PlaceOrder = (props) => {
                 <>
                     {offlineInfoStep === 2 ? (
                         <>
-                            <CustomTypography
-                                sx={{
-                                    fontSize: '13px',
-                                    color: 'error.main',
-                                    textAlign: 'center',
-                                    mb: 1
-                                }}
+                            <Alert
+                                severity="warning"
+                                sx={{ mb: 1, fontSize: '13px' }}
                             >
                                 {t(
-                                    `Please double check your order and address details, Order Cannot be CANCELLED once accepted by Restaurant.`
+                                    `Please double check your order and address details. Order Cannot be CANCELLED once accepted by Restaurant.`
                                 )}
-                            </CustomTypography>
+                            </Alert>
                             <LoadingButton
                                 type="submit"
                                 fullWidth
