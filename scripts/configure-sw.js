@@ -2,8 +2,9 @@ const fs = require('fs');
 const path = require('path');
 
 // Read the service worker template
-const swPath = path.join(__dirname, '..', 'public', 'firebase-messaging-sw.js');
-let swContent = fs.readFileSync(swPath, 'utf8');
+const swTemplatePath = path.join(__dirname, '..', 'public', 'firebase-messaging-sw.js.template');
+const swOutputPath = path.join(__dirname, '..', 'public', 'firebase-messaging-sw.js');
+let swContent = fs.readFileSync(swTemplatePath, 'utf8');
 
 // Replace placeholders with actual environment variables
 swContent = swContent
@@ -15,6 +16,6 @@ swContent = swContent
     .replace('FIREBASE_APP_ID_PLACEHOLDER', process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '');
 
 // Write the updated content back
-fs.writeFileSync(swPath, swContent);
+fs.writeFileSync(swOutputPath, swContent);
 
 console.log('✅ Firebase service worker configured with environment variables');
