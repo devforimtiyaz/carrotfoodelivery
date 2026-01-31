@@ -33,7 +33,7 @@ import CustomPhoneInput from '../CustomPhoneInput'
 import CustomDivider from '../CustomDivider'
 import { getAcceptedFileInputFormat } from '@/utils/getAcceptedFileInputFormat'
 import { Calendar } from 'react-date-range'
-import { format } from 'date-fns'
+import format from 'date-fns/format'
 import { CustomTextFieldStyle } from '../form-fields/CustomTextField.style'
 import { formatPhoneNumber } from '@/utils/customFunctions'
 

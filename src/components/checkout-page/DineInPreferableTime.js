@@ -17,7 +17,8 @@ import FormControl from '@mui/material/FormControl'
 import { getAllSchedule, getDayNumber } from '@/components/checkout-page/const'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { DateTimePicker, MobileTimePicker } from '@mui/x-date-pickers'
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
+import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker'
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers'
 import dayjs from 'dayjs'
 import moment from 'moment'
@@ -157,13 +158,11 @@ const DineInPreferableTime = ({
             const isSelectedTimeInsideRange = (selectedDateTime) => {
                 return slotList.some((slot) => {
                     const slotStart = dayjs(
-                        `${dayjs(selectedDateTime?.$d).format('YYYY-MM-DD')} ${
-                            slot.start
+                        `${dayjs(selectedDateTime?.$d).format('YYYY-MM-DD')} ${slot.start
                         }`
                     )
                     const slotEnd = dayjs(
-                        `${dayjs(selectedDateTime?.$d).format('YYYY-MM-DD')} ${
-                            slot.end
+                        `${dayjs(selectedDateTime?.$d).format('YYYY-MM-DD')} ${slot.end
                         }`
                     )
 

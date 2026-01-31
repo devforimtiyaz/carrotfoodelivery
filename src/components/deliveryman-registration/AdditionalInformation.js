@@ -32,7 +32,7 @@ import dayjs from 'dayjs'
 import { getAcceptedFileInputFormat } from '@/utils/getAcceptedFileInputFormat'
 import { CustomTextFieldStyle } from '../form-fields/CustomTextField.style'
 import { Calendar } from 'react-date-range'
-import { format } from 'date-fns'
+import format from 'date-fns/format'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import { formatPhoneNumber } from '@/utils/customFunctions'
 // const acceptedFileInputFormat =
