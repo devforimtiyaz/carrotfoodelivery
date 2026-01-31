@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import Router from 'next/router'
 import { Typography, useMediaQuery } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-import { router } from 'next/client'
+
 import MapModal from '../landingpage/google-map/MapModal'
 import { CustomToaster } from '../custom-toaster/CustomToaster'
 import { alpha } from '@mui/material'
@@ -114,7 +114,7 @@ const RouteLinks = (props) => {
         }
     }
     const handleClickToRoute = (href) => {
-        router.push(href, undefined, { shallow: true })
+        Router.push(href, undefined, { shallow: true })
     }
 
     return (
