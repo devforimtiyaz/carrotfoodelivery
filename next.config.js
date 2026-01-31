@@ -4,17 +4,7 @@ module.exports = {
     compiler: {
         styledComponents: true,
     },
-    modularizeImports: {
-        '@mui/material': {
-            transform: '@mui/material/{{member}}',
-        },
-        '@mui/icons-material': {
-            transform: '@mui/icons-material/{{member}}',
-        },
-        'lodash': {
-            transform: 'lodash/{{member}}',
-        },
-    },
+    productionBrowserSourceMaps: true,
     images: {
         domains: ['stackfood.6am.one', 'carrotfoodelivery.com'],
     },
