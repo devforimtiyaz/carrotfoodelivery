@@ -69,43 +69,24 @@ const PlaceOrder = (props) => {
         <CustomStackFullWidth alignItems="center" spacing={2} marginTop="1rem">
             {paymentMethodDetails?.method !== 'offline_payment' ? (
                 <>
-                    <FormGroup>
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={checked}
-                                    onChange={handleChange}
-                                />
-                            }
-                            label={
-                                <CustomTypography sx={{ fontSize: '13px' }}>
-                                    {t(
-                                        `I agree that placing the order places me under`
-                                    )}{' '}
-                                    <Link
-                                        href="/terms-and-conditions"
-                                        style={{ textDecoration: 'underline' }}
-                                    >
-                                        {t('Terms and Conditions')}
-                                    </Link>{' '}
-                                    {t('&')}
-                                    <Link
-                                        href="/privacy-policy"
-                                        style={{ textDecoration: 'underline' }}
-                                    >
-                                        {t('Privacy Policy')}
-                                    </Link>
-                                </CustomTypography>
-                            }
-                        />
-                    </FormGroup>
+                    <CustomTypography
+                        sx={{
+                            fontSize: '13px',
+                            color: 'error.main',
+                            textAlign: 'center',
+                            mb: 1
+                        }}
+                    >
+                        {t(
+                            `Please double check your order and address details, Order Cannot be CANCELLED once accepted by Restaurant.`
+                        )}
+                    </CustomTypography>
                     <LoadingButton
                         type="submit"
                         fullWidth
                         variant="contained"
                         onClick={placeOrder}
                         loading={orderLoading || distanceLoading}
-                        disabled={!checked}
                     >
                         {t('Place Order')}
                     </LoadingButton>
