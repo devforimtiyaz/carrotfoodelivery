@@ -8,6 +8,9 @@ const initialSettings = {
 }
 
 export const restoreSettings = () => {
+    if (typeof window === 'undefined') {
+        return null
+    }
     let settings = null
     try {
         const storedData = window.localStorage.getItem('settings')
@@ -23,18 +26,21 @@ export const restoreSettings = () => {
                     : 'light',
             }
         }
-    } catch (err) {}
+    } catch (err) { }
 
     return settings
 }
 
 export const storeSettings = (settings) => {
+    if (typeof window === 'undefined') {
+        return
+    }
     window.localStorage.setItem('settings', JSON.stringify(settings))
 }
 
 export const SettingsContext = createContext({
     settings: initialSettings,
-    saveSettings: () => {},
+    saveSettings: () => { },
 })
 
 export const SettingsProvider = (props) => {
