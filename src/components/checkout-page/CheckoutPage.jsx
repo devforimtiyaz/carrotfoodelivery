@@ -188,6 +188,17 @@ const CheckoutPage = ({ isDineIn }) => {
 
     const restaurantIdRef = useRef(null)
 
+    const { data: restaurantData, refetch } = useQuery(
+        [`restaurant-details`],
+        () =>
+            RestaurantsApi.restaurantDetails(
+                page === 'campaign'
+                    ? campFoodList?.[0]?.restaurant_id
+                    : cartList?.[0]?.restaurant_id
+            ),
+        { enabled: false, onError: onErrorResponse }
+    )
+
     useEffect(() => {
         if (cartList?.length > 0) {
             const rId = cartList[0].restaurant_id
@@ -290,16 +301,7 @@ const CheckoutPage = ({ isDineIn }) => {
             }
         }
     }, [zoneData])
-    const { data: restaurantData, refetch } = useQuery(
-        [`restaurant-details`],
-        () =>
-            RestaurantsApi.restaurantDetails(
-                page === 'campaign'
-                    ? campFoodList?.[0]?.restaurant_id
-                    : cartList?.[0]?.restaurant_id
-            ),
-        { enabled: false, onError: onErrorResponse }
-    )
+
 
     const {
         data: distanceData,
