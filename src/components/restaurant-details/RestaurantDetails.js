@@ -25,11 +25,7 @@ const getCombinedCategoriesAndProducts = (
     all_products,
     restaurantCategoryIds,
     recommendProducts
-    // popularProducts
 ) => {
-    const allCategories = all_categories
-    const allProducts = all_products
-
     const recommend = {
         id: 1233,
         name: t('Recommend Products'),
@@ -37,35 +33,101 @@ const getCombinedCategoriesAndProducts = (
         isBgColor: true,
     }
 
-    if (allProducts?.length > 0) {
-        if (allCategories?.length > 0) {
-            const data = [
-                {
-                    products: allProducts,
+    if (!all_products || all_products.length === 0) {
+        return []
+    }
+
+    // First try: Use categories from API (now fetched with restaurant_id)
+    if (all_categories && all_categories.length > 0) {
+        const categoryMap = {}
+        all_categories.forEach(cat => {
+            categoryMap[cat.id] = cat
+        })
+
+        const productsByCategory = {}
+        all_products.forEach(product => {
+            // Get the product's category_id
+            const catId = product.category_id || product.category_ids?.[0]?.id
+            if (catId && categoryMap[catId]) {
+                if (!productsByCategory[catId]) {
+                    productsByCategory[catId] = []
                 }
-            ]
-            if (recommendProducts?.products?.length > 0) {
-                return [recommend, ...data]
-            } else if (recommendProducts?.products?.length > 0) {
-                return [recommend, ...data]
-            } else {
-                return data
+                productsByCategory[catId].push(product)
             }
-        } else {
-            // Fallback: If no categories found but products exist, show them under a default category
-            const defaultCategory = {
+        })
+
+        const categoriesWithProducts = Object.keys(productsByCategory).map(catId => ({
+            ...categoryMap[catId],
+            products: productsByCategory[catId]
+        })).filter(cat => cat.products && cat.products.length > 0)
+
+        if (categoriesWithProducts.length > 0) {
+            const result = []
+            if (recommendProducts?.products?.length > 0) {
+                result.push(recommend)
+            }
+            // Add "All" category first
+            result.push({
                 id: 9999,
-                name: t('All Items'),
-                products: allProducts,
-            }
-            if (recommendProducts?.products?.length > 0) {
-                return [recommend, defaultCategory]
-            } else {
-                return [defaultCategory]
+                name: t('All'),
+                products: all_products,
+            })
+            result.push(...categoriesWithProducts)
+            return result
+        }
+    }
+
+    // Second try: Group by cuisines from products (fallback)
+    const productsByCuisine = {}
+    const cuisineInfo = {}
+
+    all_products.forEach(product => {
+        if (product.cuisines && product.cuisines.length > 0) {
+            const cuisine = product.cuisines[0]
+            const cuisineId = cuisine.id || cuisine.cuisine_id || cuisine.name
+            const cuisineName = cuisine.name || cuisine.cuisine_name
+
+            if (cuisineId && cuisineName) {
+                if (!productsByCuisine[cuisineId]) {
+                    productsByCuisine[cuisineId] = []
+                    cuisineInfo[cuisineId] = { id: cuisineId, name: cuisineName }
+                }
+                productsByCuisine[cuisineId].push(product)
             }
         }
+    })
+
+    const cuisineCategories = Object.keys(productsByCuisine).map(cuisineId => ({
+        id: cuisineId,
+        name: cuisineInfo[cuisineId].name,
+        products: productsByCuisine[cuisineId]
+    })).filter(cat => cat.products && cat.products.length > 0)
+
+    if (cuisineCategories.length > 0) {
+        const result = []
+        if (recommendProducts?.products?.length > 0) {
+            result.push(recommend)
+        }
+        result.push({
+            id: 9999,
+            name: t('All'),
+            products: all_products,
+        })
+        result.push(...cuisineCategories)
+        return result
+    }
+
+    // Fallback: Show all items under "All Food Items"
+    const defaultCategory = {
+        id: 9999,
+        name: t('All Food Items'),
+        products: all_products,
+    }
+
+    if (recommendProducts?.products?.length > 0) {
+        return [recommend, defaultCategory]
     } else {
-        return []
+        return [defaultCategory]
     }
 }
 
@@ -82,7 +144,7 @@ const RestaurantDetails = ({ restaurantData, configData }) => {
     const [searchKey, setSearchKey] = useState('')
     const restaurantId = restaurantData?.id
     const allProducts = useGetAllProductsOfARestaurant(restaurantId)
-    const allCategories = useGetAllCategories()
+    const allCategories = useGetAllCategories('', restaurantId)
     const theme = useTheme()
     const isSmall = useMediaQuery(theme.breakpoints.down('md'))
     const refs = useRef([])
@@ -141,14 +203,12 @@ const RestaurantDetails = ({ restaurantData, configData }) => {
             allFoods,
             restaurantCategoryIds,
             recommendProducts
-            // popularProducts
         )
 
         const hasProducts = combined?.filter(
             (item) => item?.products?.length > 0
         )
         setData(hasProducts)
-        //setSelectedId(hasProducts?.[0]?.id)
         setIsFirstRender(false)
     }, [allFoods, allCategories, recommendProducts])
 
@@ -254,8 +314,7 @@ const RestaurantDetails = ({ restaurantData, configData }) => {
                 <CustomStackFullWidth>
                     {!isFirstRender && (
                         <>
-                            {/* Category Bar Removed as per request */}
-                            {/* <RestaurantCategoryBar
+                            <RestaurantCategoryBar
                                 handleFilter={handleFilter}
                                 filterKey={filterKey}
                                 setFilterKey={setFilterKey}
@@ -265,7 +324,7 @@ const RestaurantDetails = ({ restaurantData, configData }) => {
                                 isSmall={isSmall}
                                 handleSearchResult={handleSearchResult}
                                 searchKey={searchKey}
-                            /> */}
+                            />
                             {!isSmall && (
                                 <Stack
                                     sx={{

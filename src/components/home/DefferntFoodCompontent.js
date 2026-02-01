@@ -9,20 +9,41 @@ import ScrollSpy from 'react-ui-scrollspy'
 
 export const CustomHomeTab = styled(Tabs)(({ theme }) => ({
     color: 'none',
-    borderBottom: `1px solid ${theme.palette.borderBottomBg}`,
+    borderBottom: `2px solid ${theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}`,
     zIndex: 9,
+    paddingTop: '8px',
+    paddingBottom: '4px',
     '& .MuiButtonBase-root': {
-        paddingInlineEnd: '10px',
-        paddingInlineStart: '10px',
+        paddingInlineEnd: '16px',
+        paddingInlineStart: '16px',
+        paddingTop: '10px',
+        paddingBottom: '10px',
+        borderRadius: '24px',
+        minHeight: '40px',
+        textTransform: 'none',
+        fontSize: '14px',
+        fontWeight: 500,
+        transition: 'all 0.25s ease',
+        '&:hover': {
+            backgroundColor: theme.palette.mode === 'dark'
+                ? 'rgba(255,255,255,0.08)'
+                : 'rgba(0,0,0,0.04)',
+        },
         '& .MuiTabScrollButton-root': {
             width: 20,
         },
     },
     '& .MuiTabs-flexContainer': {
-        gap: '10px',
+        gap: '8px',
     },
     '& .MuiTabScrollButton-root': {
-        width: 20,
+        width: 28,
+        borderRadius: '50%',
+        '&:hover': {
+            backgroundColor: theme.palette.mode === 'dark'
+                ? 'rgba(255,255,255,0.08)'
+                : 'rgba(0,0,0,0.04)',
+        },
     },
     '& .MuiTabs-indicator': {
         display: 'none',
@@ -104,40 +125,34 @@ const DifferentFoodCompontent = ({
                     allowScrollButtonsMobile
                 >
                     {foodTabData?.map((item) => {
+                        const isActive = activeTab === item?.value
                         return (
                             <Tab
                                 key={item?.id}
                                 value={item.value}
                                 sx={{
-                                    fontWeight:
-                                        activeTab === item?.value
-                                            ? '700'
-                                            : '400',
-                                    transition: 'all 0.2s',
-                                    borderBottom:
-                                        activeTab === item?.value
-                                            ? '2px solid'
-                                            : 'none',
-                                    borderColor:
-                                        activeTab === item?.value
-                                            ? (theme) =>
-                                                theme.palette.primary.main
-                                            : 'none',
-                                    color:
-                                        activeTab === item?.value
-                                            ? (theme) =>
-                                                theme.palette.primary.main
-                                            : (theme) =>
-                                                theme.palette.customColor
-                                                    ?.six,
+                                    fontWeight: isActive ? '600' : '500',
+                                    transition: 'all 0.3s ease',
+                                    borderRadius: '24px',
+                                    border: 'none',
+                                    backgroundColor: isActive
+                                        ? (theme) => theme.palette.primary.main
+                                        : 'transparent',
+                                    color: isActive
+                                        ? '#fff'
+                                        : (theme) => theme.palette.customColor?.six,
+                                    boxShadow: isActive
+                                        ? '0 4px 12px rgba(255, 130, 0, 0.25)'
+                                        : 'none',
                                     '&.Mui-selected': {
-                                        color:
-                                            activeTab === item?.value
-                                                ? (theme) =>
-                                                    theme.palette.primary.main
-                                                : (theme) =>
-                                                    theme.palette.customColor
-                                                        ?.six,
+                                        color: '#fff',
+                                    },
+                                    '&:hover': {
+                                        backgroundColor: isActive
+                                            ? (theme) => theme.palette.primary.main
+                                            : (theme) => theme.palette.mode === 'dark'
+                                                ? 'rgba(255,255,255,0.08)'
+                                                : 'rgba(0,0,0,0.04)',
                                     },
                                 }}
                                 label={t(item?.category_name)}

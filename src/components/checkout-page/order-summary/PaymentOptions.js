@@ -20,7 +20,7 @@ import {
     setOfflineMethod,
 } from '@/redux/slices/OfflinePayment'
 import PartialPayment from '../PartialPayment'
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
+
 import PaymentIcon from '@mui/icons-material/Payment'
 
 const PaymentOptions = (props) => {
@@ -165,7 +165,7 @@ const PaymentOptions = (props) => {
                         <Button
                             variant={isCODSelected ? 'contained' : 'outlined'}
                             onClick={handleCashOnDelivery}
-                            startIcon={<AttachMoneyIcon />}
+                            startIcon={<Typography fontWeight="600" fontSize="18px">₹</Typography>}
                             sx={{
                                 flex: 1,
                                 py: 1.5,
@@ -187,13 +187,18 @@ const PaymentOptions = (props) => {
                                         : 'primary.main',
                                 '&:hover': {
                                     backgroundColor: (theme) =>
-                                        theme.palette.mode === 'light'
-                                            ? 'rgba(0, 0, 0, 0.04)'
-                                            : undefined,
-                                    borderColor: (theme) =>
-                                        theme.palette.mode === 'light'
-                                            ? 'common.black'
-                                            : undefined,
+                                        isCODSelected
+                                            ? theme.palette.primary.dark
+                                            : theme.palette.mode === 'light'
+                                                ? 'rgba(255, 130, 0, 0.12)'
+                                                : 'rgba(255, 130, 0, 0.2)',
+                                    borderColor: 'primary.main',
+                                    color: (theme) =>
+                                        isCODSelected
+                                            ? 'white'
+                                            : theme.palette.mode === 'light'
+                                                ? '#333333'
+                                                : theme.palette.primary.main,
                                 },
                             }}
                         >
@@ -231,13 +236,18 @@ const PaymentOptions = (props) => {
                                                 : 'primary.main',
                                         '&:hover': {
                                             backgroundColor: (theme) =>
-                                                theme.palette.mode === 'light'
-                                                    ? 'rgba(0, 0, 0, 0.04)'
-                                                    : undefined,
-                                            borderColor: (theme) =>
-                                                theme.palette.mode === 'light'
-                                                    ? 'common.black'
-                                                    : undefined,
+                                                isRazorpaySelected
+                                                    ? theme.palette.primary.dark
+                                                    : theme.palette.mode === 'light'
+                                                        ? 'rgba(255, 130, 0, 0.12)'
+                                                        : 'rgba(255, 130, 0, 0.2)',
+                                            borderColor: 'primary.main',
+                                            color: (theme) =>
+                                                isRazorpaySelected
+                                                    ? 'white'
+                                                    : theme.palette.mode === 'light'
+                                                        ? '#333333'
+                                                        : theme.palette.primary.main,
                                         },
                                     }}
                                 >

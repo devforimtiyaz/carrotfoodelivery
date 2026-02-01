@@ -174,7 +174,7 @@ const HorizontalFoodCard = (props) => {
                                                 Number(product?.veg) === 0
                                                     ? theme.palette.nonVeg
                                                     : theme.palette.success
-                                                          .light
+                                                        .light
                                             }
                                         />
                                     ) : null}
@@ -219,8 +219,8 @@ const HorizontalFoodCard = (props) => {
                                 {(product?.avg_rating !== 0 &&
                                     isRestaurantDetails &&
                                     !isSmall) ||
-                                (!isRestaurantDetails &&
-                                    product?.avg_rating !== 0) ? (
+                                    (!isRestaurantDetails &&
+                                        product?.avg_rating !== 0) ? (
                                     <FoodRating
                                         product_avg_rating={product?.avg_rating}
                                     />

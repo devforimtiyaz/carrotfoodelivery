@@ -87,21 +87,21 @@ const ProductCardMedia = (props) => {
                             available_time_starts,
                             available_time_ends
                         ) && (
-                            <Stack
-                                position="absolute"
-                                bottom="10%"
-                                left="0"
-                                zIndex="1"
-                            >
-                                {handleBadge(
-                                    product,
-                                    currencySymbol,
-                                    currencySymbolDirection,
-                                    digitAfterDecimalPoint,
-                                    available_date_ends
-                                )}
-                            </Stack>
-                        )}
+                                <Stack
+                                    position="absolute"
+                                    bottom="10%"
+                                    left="0"
+                                    zIndex="1"
+                                >
+                                    {handleBadge(
+                                        product,
+                                        currencySymbol,
+                                        currencySymbolDirection,
+                                        digitAfterDecimalPoint,
+                                        available_date_ends
+                                    )}
+                                </Stack>
+                            )}
                         {isRestaurantDetails &&
                             isSmall &&
                             product?.avg_rating !== 0 &&

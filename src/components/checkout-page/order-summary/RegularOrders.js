@@ -14,7 +14,6 @@ import { useTranslation } from 'react-i18next'
 import { useTheme } from '@mui/material/styles'
 import VisibleVariations from '../../floating-cart/VisibleVariations'
 import { handleTotalAmountWithAddonsFF } from '@/utils/customFunctions'
-import DeleteIcon from '@mui/icons-material/Delete'
 import {
     removeProduct,
     incrementProductQty,
@@ -22,6 +21,7 @@ import {
 } from '@/redux/slices/cart'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import { toast } from 'react-hot-toast'

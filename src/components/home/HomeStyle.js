@@ -49,10 +49,9 @@ export const HomeTextTypography = styled(Typography)(({ theme }) => ({
 export const PopularRestaurantCard = styled(Card)(({ theme }) => ({
     margin: '20px 0',
     padding: '30px',
-    boxShadow: `${
-        theme.palette.mode === 'light' &&
+    boxShadow: `${theme.palette.mode === 'light' &&
         '0px 0px 2px rgba(239, 120, 34, 0.1),0px 6px 12px rgba(239, 120, 34, 0.08)'
-    }`,
+        }`,
     borderRadius: '10px',
     color: `${theme.palette.mode === 'dark' && '#fff'}`,
     [theme.breakpoints.down('sm')]: {
@@ -125,10 +124,17 @@ export const MapSetionWrapper = styled(Stack)(({ theme }) => ({
     backgroundImage: `url(${map.src})`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
-    borderRadius: '16px',
-
+    borderRadius: '20px',
+    overflow: 'hidden',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+    '&:hover': {
+        transform: 'translateY(-4px)',
+        boxShadow: '0 12px 40px rgba(0, 0, 0, 0.18)',
+    },
     [theme.breakpoints.down('sm')]: {
         height: '340px',
+        borderRadius: '16px',
     },
     '.map-overly': {
         height: '425px',
@@ -136,17 +142,38 @@ export const MapSetionWrapper = styled(Stack)(({ theme }) => ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: '16px',
-        background: 'rgba(20, 19, 19, 0.5)',
-        gap: '50px',
+        borderRadius: '20px',
+        background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.65) 0%, rgba(30, 30, 30, 0.55) 100%)',
+        backdropFilter: 'blur(4px)',
+        gap: '40px',
+        padding: '24px',
+        [theme.breakpoints.down('sm')]: {
+            height: '340px',
+            gap: '30px',
+            borderRadius: '16px',
+        },
     },
 }))
 export const VisitAgainWrapper = styled(Stack)(({ theme }) => ({
-    borderRadius: '16px',
+    borderRadius: '20px',
     alignItems: 'center',
-    paddingBlock: '30px',
-    gap: '30px',
-    backgroundColor: theme.palette.customColor.thirteen,
+    paddingBlock: '32px',
+    gap: '28px',
+    background: theme.palette.mode === 'dark'
+        ? 'linear-gradient(145deg, rgba(40, 40, 45, 0.95) 0%, rgba(30, 30, 35, 0.98) 100%)'
+        : 'linear-gradient(145deg, #FFF8F2 0%, #FFF5EB 50%, #FFF0E3 100%)',
+    border: theme.palette.mode === 'dark'
+        ? '1px solid rgba(255, 255, 255, 0.08)'
+        : '1px solid rgba(255, 140, 0, 0.12)',
+    boxShadow: theme.palette.mode === 'dark'
+        ? '0 4px 24px rgba(0, 0, 0, 0.25)'
+        : '0 4px 24px rgba(255, 140, 0, 0.08)',
+    transition: 'box-shadow 0.3s ease, transform 0.3s ease',
+    '&:hover': {
+        boxShadow: theme.palette.mode === 'dark'
+            ? '0 8px 32px rgba(0, 0, 0, 0.35)'
+            : '0 8px 32px rgba(255, 140, 0, 0.12)',
+    },
     '& .slick-dots': {
         position: 'absolute !important',
         bottom: '-35px !important',
@@ -155,12 +182,20 @@ export const VisitAgainWrapper = styled(Stack)(({ theme }) => ({
         padding: 0,
         margin: 0,
         textAlign: 'center !important',
+        '& li button:before': {
+            color: theme.palette.primary.main,
+            opacity: 0.4,
+        },
+        '& li.slick-active button:before': {
+            opacity: 1,
+        },
     },
     [theme.breakpoints.down('sm')]: {
-        paddingBlock: '18px',
+        paddingBlock: '20px',
         gap: '16px',
+        borderRadius: '16px',
     },
     '& .slick-track': {
-        gap: '30px',
+        gap: '24px',
     },
 }))

@@ -164,36 +164,48 @@ const CustomDrawerCart = () => {
                                                         <OrderFoodName>
                                                             {item.name}
                                                         </OrderFoodName>
+                                                        {restaurantData?.data?.name && (
+                                                            <OrderFoodSubtitle
+                                                                sx={{
+                                                                    color: 'text.secondary',
+                                                                    fontSize: '12px',
+                                                                    fontStyle: 'italic',
+                                                                    mb: 0.5,
+                                                                }}
+                                                            >
+                                                                {restaurantData?.data?.name}
+                                                            </OrderFoodSubtitle>
+                                                        )}
                                                         {item?.variation
                                                             ?.length > 0 && (
-                                                            <OrderFoodSubtitle>
-                                                                Variation :
-                                                                {getVariation(
-                                                                    item?.variation
-                                                                )}
-                                                            </OrderFoodSubtitle>
-                                                        )}
+                                                                <OrderFoodSubtitle>
+                                                                    Variation :
+                                                                    {getVariation(
+                                                                        item?.variation
+                                                                    )}
+                                                                </OrderFoodSubtitle>
+                                                            )}
                                                         {item?.add_ons?.length >
                                                             0 && (
-                                                            <OrderFoodSubtitle>
-                                                                Addon :
-                                                                {getSelectedAddOn(
-                                                                    item?.add_ons
-                                                                )}
-                                                            </OrderFoodSubtitle>
-                                                        )}
+                                                                <OrderFoodSubtitle>
+                                                                    Addon :
+                                                                    {getSelectedAddOn(
+                                                                        item?.add_ons
+                                                                    )}
+                                                                </OrderFoodSubtitle>
+                                                            )}
                                                     </Grid>
                                                     <Grid item md={6} xs={6}>
                                                         <OrderFoodAmount>
                                                             {getAmount(
                                                                 item.price -
-                                                                    item.discount_amount
+                                                                item.discount_amount
                                                             )}
                                                         </OrderFoodAmount>
                                                     </Grid>
                                                     <Grid md={6} xs={6}>
                                                         {item?.quantity ===
-                                                        1 ? (
+                                                            1 ? (
                                                             <IconButton
                                                                 aria-label="delete"
                                                                 size="small"

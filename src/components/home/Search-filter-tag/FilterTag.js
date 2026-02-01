@@ -222,7 +222,7 @@ const FilterTag = ({
                                             sx={{
                                                 marginInlineEnd:
                                                     languageDirection ===
-                                                        'rtl' &&
+                                                    'rtl' &&
                                                     '10px !important',
                                             }}
                                             onClick={(event) =>
@@ -271,7 +271,7 @@ const FilterTag = ({
                                                 onClick={() =>
                                                     handleClick(item?.value)
                                                 }
-                                                //onDelete={() => handleDelete(item)}
+                                            //onDelete={() => handleDelete(item)}
                                             />
                                         )
                                     }

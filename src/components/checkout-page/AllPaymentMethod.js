@@ -53,7 +53,7 @@ const OfflineButton = styled(Button)(({ theme, value, paymentMethod }) => ({
     border: `1px solid ${theme.palette.neutral[300]}`,
     gap: '5px',
     background: value === paymentMethod ? theme.palette.neutral[800] : theme.palette.neutral[100],
-    color: value === paymentMethod 
+    color: value === paymentMethod
         ? `${theme.palette.whiteContainer.main} !important`
         : `${theme.palette.neutral[1000]} !important`,
     '&:hover': {
@@ -63,115 +63,115 @@ const OfflineButton = styled(Button)(({ theme, value, paymentMethod }) => ({
 }))
 
 
-export const BringChangeAmount = ({changeAmount, setChangeAmount,theme,expanded,setExpanded}) => {
+export const BringChangeAmount = ({ changeAmount, setChangeAmount, theme, expanded, setExpanded }) => {
     return (
-        <Accordion 
-                            elevation={0} 
-                            sx={{
-                                border: 'none',
-                                width: '100%',
-                            '&.MuiPaper-root.MuiAccordion-root::before': {
-                                display: 'none',
-                                height: '0px',
-                                position: 'absolute',
-                                top: '0',
-                                left: '0',
-                                right: '0',
-                                bottom: '0',
-                                zIndex: '1000',
-                                backgroundColor: 'transparent',
-                            }
-                            }}
+        <Accordion
+            elevation={0}
+            sx={{
+                border: 'none',
+                width: '100%',
+                '&.MuiPaper-root.MuiAccordion-root::before': {
+                    display: 'none',
+                    height: '0px',
+                    position: 'absolute',
+                    top: '0',
+                    left: '0',
+                    right: '0',
+                    bottom: '0',
+                    zIndex: '1000',
+                    backgroundColor: 'transparent',
+                }
+            }}
+        >
+            <AccordionSummary
+                expandIcon={null}
+                aria-controls="panel1-content"
+                id="panel1-header"
+                sx={{
+                    minHeight: 'auto',
+                    backgroundColor: theme.palette.customColor.ten,
+                    '&.Mui-expanded': {
+                        minHeight: '0px',
+                        backgroundColor: theme.palette.customColor.ten,
+                    },
+                    '& .MuiAccordionSummary-content': {
+                        justifyContent: 'center',
+                        margin: '0',
+                        backgroundColor: theme.palette.customColor.ten,
+                    }
+                }}
+                onClick={() => setExpanded(!expanded)}
+            >
+                <Typography
+                    component="span"
+                    sx={{
+                        fontSize: "12px",
+                        color: theme.palette.primary.main,
+                        fontWeight: "600"
+                    }}
+                >
+                    {expanded ? t("See less") : t("See more")}
+                </Typography>
+            </AccordionSummary>
+
+            <AccordionDetails sx={{ padding: '8px 0px 8px', backgroundColor: theme.palette.customColor.ten }}>
+                <Stack
+                    width="100%"
+                    direction={{ xs: "column", md: "row" }}
+                    justifyContent="space-between"
+                    alignItems={{ xs: "flex-start", md: "center" }}
+                    gap="10px"
+                    padding="16px"
+                    backgroundColor={theme.palette.mode === 'dark' ? "#46494DB3 " : alpha(theme.palette.neutral[300], 0.7)}
+                    borderRadius="10px"
+                >
+                    <Stack>
+                        <Typography
+                            fontSize="12px"
+                            color={theme.palette.neutral[1000]}
+                            fontWeight="500"
                         >
-                            <AccordionSummary
-                                expandIcon={null}
-                                aria-controls="panel1-content"
-                                id="panel1-header"
-                                sx={{
-                                    minHeight:'auto',
-                                    backgroundColor:theme.palette.customColor.ten,
-                                    '&.Mui-expanded': {
-                                        minHeight: '0px',
-                                        backgroundColor:theme.palette.customColor.ten,
-                                    },
-                                    '& .MuiAccordionSummary-content': {
-                                        justifyContent: 'center',
-                                        margin: '0',
-                                        backgroundColor:theme.palette.customColor.ten,
-                                    }
-                                }}
-                                onClick={() => setExpanded(!expanded)}
-                            >
-                                <Typography 
-                                    component="span" 
-                                    sx={{
-                                        fontSize:"12px",
-                                        color: theme.palette.primary.main,
-                                        fontWeight:"600"
-                                    }}
-                                >
-                                    {expanded ? t("See less") : t("See more")}
-                                </Typography>
-                            </AccordionSummary>
+                            {t("Bring Change Intruction")}
+                        </Typography>
+                        <Typography
+                            fontSize="12px"
+                            color={theme.palette.neutral[600]}
+                            fontWeight="400"
+                        >
+                            {t('Insert amount if you need deliveryman to bring')}
+                        </Typography>
+                    </Stack>
 
-                            <AccordionDetails sx={{padding: '8px 0px 8px',backgroundColor:theme.palette.customColor.ten}}>
-                                <Stack 
-                                    width="100%"
-                                    direction={{xs:"column",md:"row"}}
-                                    justifyContent="space-between"
-                                    alignItems={{xs:"flex-start",md:"center"}}
-                                    gap="10px"
-                                    padding="16px"
-                                    backgroundColor={theme.palette.mode === 'dark' ? "#46494DB3 " :   alpha(theme.palette.neutral[300], 0.7)}
-                                    borderRadius="10px"
-                                >
-                                    <Stack>
-                                        <Typography 
-                                            fontSize="12px" 
-                                            color={theme.palette.neutral[1000]} 
-                                            fontWeight="500"
-                                        >
-                                            {t("Bring Change Intruction")}
-                                        </Typography>
-                                        <Typography 
-                                            fontSize="12px" 
-                                            color={theme.palette.neutral[600]} 
-                                            fontWeight="400"
-                                        >
-                                            {t('Insert amount if you need deliveryman to bring')}
-                                        </Typography>
-                                    </Stack>
-
-                                    <Stack>
-                                        <Typography  
-                                            marginBottom="5px" 
-                                            fontSize="12px" 
-                                            color={theme.palette.neutral[1000]} 
-                                            fontWeight="500"
-                                        >
-                                            {t("Change Amount ($)")}
-                                        </Typography>
-                                        <TextField
-                                            sx={{
-                                                width: '100%',
-                                                height: '33px',
-                                                backgroundColor: theme => theme.palette.neutral[100],
-                                                borderRadius: '5px',
-                                                '& .MuiInputBase-input.MuiOutlinedInput-input': {
-                                                    padding: '5.5px 14px'
-                                                }
-                                            }}
-                                            value={changeAmount}
-                                            onChange={(e) => setChangeAmount(e.target.value)}
-                                        />
-                                    </Stack>
-                                </Stack>
-                            </AccordionDetails>
-                        </Accordion>
+                    <Stack>
+                        <Typography
+                            marginBottom="5px"
+                            fontSize="12px"
+                            color={theme.palette.neutral[1000]}
+                            fontWeight="500"
+                        >
+                            {t("Change Amount (₹)")}
+                        </Typography>
+                        <TextField
+                            sx={{
+                                width: '100%',
+                                height: '33px',
+                                backgroundColor: theme => theme.palette.neutral[100],
+                                borderRadius: '5px',
+                                '& .MuiInputBase-input.MuiOutlinedInput-input': {
+                                    padding: '5.5px 14px'
+                                }
+                            }}
+                            value={changeAmount}
+                            onChange={(e) => setChangeAmount(e.target.value)}
+                        />
+                    </Stack>
+                </Stack>
+            </AccordionDetails>
+        </Accordion>
     )
 }
 
-const  AllPaymentMethod = ({
+const AllPaymentMethod = ({
     usePartialPayment,
     global,
     getPaymentMethod,
@@ -247,28 +247,28 @@ const  AllPaymentMethod = ({
             </button>
 
             <Stack padding="0px 10px">
-                <Stack 
-                    direction="row" 
-                    justifyContent="space-between" 
-                    alignItems="center" 
-                    gap="10px" 
+                <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    gap="10px"
                     width="100%"
                 >
                     <PymentTitle>{t('Payment Method')}</PymentTitle>
-                    <Typography 
-                        fontSize="12px" 
-                        color={theme.palette.neutral[600]} 
+                    <Typography
+                        fontSize="12px"
+                        color={theme.palette.neutral[600]}
                         fontWeight="600"
                     >
                         {t("Total bill")}
                     </Typography>
                 </Stack>
 
-                <Stack 
-                    direction="row" 
-                    justifyContent="space-between" 
-                    alignItems="center" 
-                    gap="10px" 
+                <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    gap="10px"
                     width="100%"
                 >
                     <Typography
@@ -278,9 +278,9 @@ const  AllPaymentMethod = ({
                     >
                         {t('Select a Payment Method to Proceed')}
                     </Typography>
-                    <Typography 
-                        fontSize="20px" 
-                        color={theme.palette.primary.main} 
+                    <Typography
+                        fontSize="20px"
+                        color={theme.palette.primary.main}
                         fontWeight="700"
                     >
                         {getAmount(
@@ -305,10 +305,12 @@ const  AllPaymentMethod = ({
                             padding: '0px 10px',
                         }}
                     >
-                        <Box sx={{flex: {
+                        <Box sx={{
+                            flex: {
                                 xs: '0 0 100%',
                                 sm: '0 0 48%'
-                            }}}>
+                            }
+                        }}>
                             {subscriptionStates.order !== '1' &&
                                 global?.customer_wallet_status === 1 &&
                                 walletAmount > 0 &&
@@ -325,36 +327,38 @@ const  AllPaymentMethod = ({
                                         removePartialPayment={removePartialPayment}
                                         totalAmount={totalAmount}
                                     />
-                            )}
+                                )}
                         </Box>
 
-                        <Box sx={{flex: {
+                        <Box sx={{
+                            flex: {
                                 xs: '0 0 100%',
                                 sm: '0 0 48%'
-                            }}}>
-                            <Stack 
-                                backgroundColor={alpha(theme.palette.neutral[500], 0.1)} 
+                            }
+                        }}>
+                            <Stack
+                                backgroundColor={alpha(theme.palette.neutral[500], 0.1)}
                                 padding={paymenMethod === "wallet" ? "18px" : "10px"}
-                                borderRadius="10px" 
+                                borderRadius="10px"
                                 width="100%"
                             >
-                                <Stack 
-                                    direction="row" 
-                                    justifyContent="space-between" 
-                                    alignItems="center" 
-                                    gap="10px" 
+                                <Stack
+                                    direction="row"
+                                    justifyContent="space-between"
+                                    alignItems="center"
+                                    gap="10px"
                                     width="100%"
                                 >
-                                    <Typography 
-                                        fontSize="12px" 
-                                        color={theme.palette.neutral[600]} 
+                                    <Typography
+                                        fontSize="12px"
+                                        color={theme.palette.neutral[600]}
                                         fontWeight="600"
                                     >
                                         {t('Paid By Wallet')}
                                     </Typography>
-                                    <Typography 
-                                        fontSize="12px" 
-                                        color={theme.palette.neutral[600]} 
+                                    <Typography
+                                        fontSize="12px"
+                                        color={theme.palette.neutral[600]}
                                         fontWeight="500"
                                     >
                                         {getAmount(
@@ -367,11 +371,11 @@ const  AllPaymentMethod = ({
                                 </Stack>
 
                                 {paymenMethod === "wallet" ? null : (
-                                    <Stack 
-                                        direction="row" 
-                                        justifyContent="space-between" 
-                                        alignItems="center" 
-                                        gap="10px" 
+                                    <Stack
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="center"
+                                        gap="10px"
                                         width="100%"
                                     >
                                         <Typography
@@ -382,9 +386,9 @@ const  AllPaymentMethod = ({
                                         >
                                             {t('Remaining Bill')}
                                         </Typography>
-                                        <Typography 
-                                            fontSize="18px" 
-                                            color={theme.palette.neutral[1000]} 
+                                        <Typography
+                                            fontSize="18px"
+                                            color={theme.palette.neutral[1000]}
                                             fontWeight="700"
                                         >
                                             {getAmount(
@@ -399,9 +403,9 @@ const  AllPaymentMethod = ({
                             </Stack>
 
                             {paymenMethod === "wallet" ? null : (
-                                <Typography 
-                                    fontSize="10px" 
-                                    color={theme.palette.error.main} 
+                                <Typography
+                                    fontSize="10px"
+                                    color={theme.palette.error.main}
                                     fontWeight="400"
                                 >
                                     {t("* Please select an option to pay the rest of the amount")}
@@ -413,14 +417,14 @@ const  AllPaymentMethod = ({
                             flex: {
                                 xs: '0 0 100%',
                                 sm: '0 0 48%'
-                            }, 
+                            },
                             marginTop: paymenMethod === "wallet" ? '.5rem' : '-1.2rem'
                         }}>
                             {usePartialPayment ? (
                                 <>
                                     {global?.cash_on_delivery &&
-                                    (global?.partial_payment_method === 'both' ||
-                                        global?.partial_payment_method === 'cod') ? (
+                                        (global?.partial_payment_method === 'both' ||
+                                            global?.partial_payment_method === 'cod') ? (
                                         <PayButton
                                             value="cash_on_delivery"
                                             paymentMethod={selected?.name}
@@ -432,37 +436,41 @@ const  AllPaymentMethod = ({
                                             }}
                                             sx={{
                                                 width: '100%',
-                                            }}  
+                                            }}
                                         >
                                             <Stack direction="row" alignItems="center" gap="10px" width="100%" justifyContent="space-between">
-                                    {selected?.name === 'cash_on_delivery' && (
-                                            <CheckCircleIcon 
-                                                sx={{
-                                                    fontSize: '16px',
-                                                    color: theme.palette.primary.main
-                                                }}
-                                            />
-                                        )}
-                                        <Stack direction="row" alignItems="center" gap="10px" alignSelf="flex-start" width="100%"> 
-                                        <CustomImageContainer
-                                            src={money.src}
-                                            width="20px"
-                                            height="20px"
-                                            alt="cod"
-                                        />
-                                        <Typography
-                                            fontSize="12px"
-                                            color={
-                                                selected?.name === 'cash_on_delivery'
-                                                    ? theme.palette.neutral[1000]
-                                                    : theme.palette.primary.main
-                                            }
-                                        >
-                                            {t('Cash on Delivery')}
-                                        </Typography>
-                                        </Stack>
-                                       
-                                    </Stack>
+                                                {selected?.name === 'cash_on_delivery' && (
+                                                    <CheckCircleIcon
+                                                        sx={{
+                                                            fontSize: '16px',
+                                                            color: theme.palette.primary.main
+                                                        }}
+                                                    />
+                                                )}
+                                                <Stack direction="row" alignItems="center" gap="10px" alignSelf="flex-start" width="100%">
+                                                    <Typography
+                                                        fontSize="20px"
+                                                        color={
+                                                            selected?.name === 'cash_on_delivery'
+                                                                ? theme.palette.neutral[1000]
+                                                                : theme.palette.primary.main
+                                                        }
+                                                    >
+                                                        {'₹'}
+                                                    </Typography>
+                                                    <Typography
+                                                        fontSize="12px"
+                                                        color={
+                                                            selected?.name === 'cash_on_delivery'
+                                                                ? theme.palette.neutral[1000]
+                                                                : theme.palette.primary.main
+                                                        }
+                                                    >
+                                                        {t('Cash on Delivery')}
+                                                    </Typography>
+                                                </Stack>
+
+                                            </Stack>
                                         </PayButton>
                                     ) : null}
                                 </>
@@ -480,23 +488,27 @@ const  AllPaymentMethod = ({
                                             }}
                                             sx={{
                                                 width: '100%',
-                                            }}  
+                                            }}
                                         >
                                             {selected?.name === 'cash_on_delivery' && (
-                                                    <CheckCircleIcon 
-                                                        sx={{
-                                                            fontSize: '16px',
-                                                            color: theme.palette.primary.main
-                                                        }}
-                                                    />
-                                                )}
-                                            <Stack direction="row" alignItems="center" gap="10px">
-                                                <CustomImageContainer
-                                                    src={money.src}
-                                                    width="20px"
-                                                    height="20px"
-                                                    alt="cod"
+                                                <CheckCircleIcon
+                                                    sx={{
+                                                        fontSize: '16px',
+                                                        color: theme.palette.primary.main
+                                                    }}
                                                 />
+                                            )}
+                                            <Stack direction="row" alignItems="center" gap="10px">
+                                                <Typography
+                                                    fontSize="20px"
+                                                    color={
+                                                        selected?.name === 'cash_on_delivery'
+                                                            ? theme.palette.neutral[1000]
+                                                            : theme.palette.primary.main
+                                                    }
+                                                >
+                                                    {'₹'}
+                                                </Typography>
                                                 <Typography
                                                     fontSize="12px"
                                                     color={
@@ -507,7 +519,7 @@ const  AllPaymentMethod = ({
                                                 >
                                                     {t('Cash on Delivery')}
                                                 </Typography>
-                                                
+
                                             </Stack>
                                         </PayButton>
                                     ) : null}
@@ -515,7 +527,7 @@ const  AllPaymentMethod = ({
                             )}
                         </Box>
 
-                        {selected?.name === "cash_on_delivery" && BringChangeAmount({changeAmount, setChangeAmount,theme,expanded,setExpanded})}
+                        {selected?.name === "cash_on_delivery" && BringChangeAmount({ changeAmount, setChangeAmount, theme, expanded, setExpanded })}
                     </CustomStackFullWidth>
 
                     {global?.digital_payment && subscriptionStates.order !== '1' && (
@@ -539,29 +551,29 @@ const  AllPaymentMethod = ({
 
                             <Grid container rowGap="2.1rem">
                                 {(
-                                    (global?.digital_payment && 
-                                     (global?.partial_payment_method === 'digital_payment' || 
-                                      global?.partial_payment_method === 'both'))) && (
-                                    <>
-                                        {global?.active_payment_method_list?.map(
-                                            (item, index) => {
-                                                return (
-                                                    <Grid item md={6} key={index}>
-                                                        <PaymentMethodCard
-                                                            paymentType={item?.gateway_title}
-                                                            image={item?.gateway_image_full_url}
-                                                            type={item?.gateway}
-                                                            imageUrl={global?.base_urls?.gateway_image_url}
-                                                            digitalPaymentMethodActive={global?.digital_payment}
-                                                            getPaymentMethod={getPaymentMethod}
-                                                            selected={selected}
-                                                        />
-                                                    </Grid>
-                                                )
-                                            }
-                                        )}
-                                    </>
-                                )}
+                                    (global?.digital_payment &&
+                                        (global?.partial_payment_method === 'digital_payment' ||
+                                            global?.partial_payment_method === 'both'))) && (
+                                        <>
+                                            {global?.active_payment_method_list?.map(
+                                                (item, index) => {
+                                                    return (
+                                                        <Grid item md={6} key={index}>
+                                                            <PaymentMethodCard
+                                                                paymentType={item?.gateway_title}
+                                                                image={item?.gateway_image_full_url}
+                                                                type={item?.gateway}
+                                                                imageUrl={global?.base_urls?.gateway_image_url}
+                                                                digitalPaymentMethodActive={global?.digital_payment}
+                                                                getPaymentMethod={getPaymentMethod}
+                                                                selected={selected}
+                                                            />
+                                                        </Grid>
+                                                    )
+                                                }
+                                            )}
+                                        </>
+                                    )}
                             </Grid>
                         </CustomStackFullWidth>
                     )}
@@ -579,15 +591,17 @@ const  AllPaymentMethod = ({
                             padding: '0px 10px',
                         }}
                     >
-                       
-                            {subscriptionStates.order !== '1' &&
-                                global?.customer_wallet_status === 1 &&
-                                walletAmount > 0 &&
-                                global?.partial_payment_status === 1 && (
-                                    <Box sx={{flex: {
+
+                        {subscriptionStates.order !== '1' &&
+                            global?.customer_wallet_status === 1 &&
+                            walletAmount > 0 &&
+                            global?.partial_payment_status === 1 && (
+                                <Box sx={{
+                                    flex: {
                                         xs: '0 0 100%',
                                         sm: '0 0 48%'
-                                    }}}>
+                                    }
+                                }}>
                                     <PartialPayment
                                         offLineWithPartial={offLineWithPartial}
                                         global={global}
@@ -600,38 +614,40 @@ const  AllPaymentMethod = ({
                                         removePartialPayment={removePartialPayment}
                                         totalAmount={totalAmount}
                                     />
-                                     </Box>
+                                </Box>
                             )}
-                       
+
 
                         {paymenMethod === "wallet" && switchToWallet ? (
-                            <Box sx={{flex: {
-                                xs: '0 0 100%',
-                                sm: '0 0 48%'
-                            }}}>
-                                <Stack 
-                                    backgroundColor={alpha(theme.palette.neutral[500], 0.1)} 
-                                    padding="18px" 
-                                    borderRadius="10px" 
+                            <Box sx={{
+                                flex: {
+                                    xs: '0 0 100%',
+                                    sm: '0 0 48%'
+                                }
+                            }}>
+                                <Stack
+                                    backgroundColor={alpha(theme.palette.neutral[500], 0.1)}
+                                    padding="18px"
+                                    borderRadius="10px"
                                     width="100%"
                                 >
-                                    <Stack 
-                                        direction="row" 
-                                        justifyContent="space-between" 
-                                        alignItems="center" 
-                                        gap="10px" 
+                                    <Stack
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="center"
+                                        gap="10px"
                                         width="100%"
                                     >
-                                        <Typography 
-                                            fontSize="12px" 
-                                            color={theme.palette.neutral[600]} 
+                                        <Typography
+                                            fontSize="12px"
+                                            color={theme.palette.neutral[600]}
                                             fontWeight="600"
                                         >
                                             {t('Paid By Wallet')}
                                         </Typography>
-                                        <Typography 
-                                            fontSize="12px" 
-                                            color={theme.palette.neutral[600]} 
+                                        <Typography
+                                            fontSize="12px"
+                                            color={theme.palette.neutral[600]}
                                             fontWeight="500"
                                         >
                                             {getAmount(
@@ -642,11 +658,11 @@ const  AllPaymentMethod = ({
                                             )}
                                         </Typography>
                                     </Stack>
-                                    <Stack 
-                                        direction="row" 
-                                        justifyContent="space-between" 
-                                        alignItems="center" 
-                                        gap="10px" 
+                                    <Stack
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="center"
+                                        gap="10px"
                                         width="100%"
                                     />
                                 </Stack>
@@ -671,47 +687,47 @@ const  AllPaymentMethod = ({
                                     }}
                                     sx={{
                                         width: '100%',
-                                        
+
                                     }}
                                 >
-                                     
+
 
 
                                     <Stack direction="row" alignItems="center" gap="10px" width="100%" justifyContent="space-between">
-                                    {selected?.name === 'cash_on_delivery' && (
-                                            <CheckCircleIcon 
+                                        {selected?.name === 'cash_on_delivery' && (
+                                            <CheckCircleIcon
                                                 sx={{
                                                     fontSize: '16px',
                                                     color: theme.palette.primary.main
                                                 }}
                                             />
                                         )}
-                                        <Stack direction="row" alignItems="center" gap="10px" alignSelf="flex-start" width="100%"> 
-                                        <CustomImageContainer
-                                            src={money.src}
-                                            width="20px"
-                                            height="20px"
-                                            alt="cod"
-                                        />
-                                        <Typography
-                                            fontSize="12px"
-                                            color={
-                                                selected?.name === 'cash_on_delivery'
-                                                    ? theme.palette.neutral[1000]
-                                                    : theme.palette.primary.main
-                                            }
-                                        >
-                                            {t('Cash on Delivery')}
-                                        </Typography>
+                                        <Stack direction="row" alignItems="center" gap="10px" alignSelf="flex-start" width="100%">
+                                            <CustomImageContainer
+                                                src={money.src}
+                                                width="20px"
+                                                height="20px"
+                                                alt="cod"
+                                            />
+                                            <Typography
+                                                fontSize="12px"
+                                                color={
+                                                    selected?.name === 'cash_on_delivery'
+                                                        ? theme.palette.neutral[1000]
+                                                        : theme.palette.primary.main
+                                                }
+                                            >
+                                                {t('Cash on Delivery')}
+                                            </Typography>
                                         </Stack>
-                                       
+
                                     </Stack>
                                 </PayButton>
                             ) : null}
                         </Box>
                     </CustomStackFullWidth>
 
-                    {selected?.name === "cash_on_delivery" && BringChangeAmount({changeAmount, setChangeAmount,theme,expanded,setExpanded})}
+                    {selected?.name === "cash_on_delivery" && BringChangeAmount({ changeAmount, setChangeAmount, theme, expanded, setExpanded })}
 
                     {global?.digital_payment && subscriptionStates.order !== '1' && (
                         <CustomStackFullWidth spacing={2.4} padding="0px 10px">

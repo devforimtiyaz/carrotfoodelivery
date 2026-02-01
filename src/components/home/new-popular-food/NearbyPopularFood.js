@@ -72,7 +72,7 @@ const NearbyPopularFood = ({ isLoading }) => {
         infinite: false,
         speed: 500,
         slidesPerRow: 1,
-        rows: 2,
+        rows: 1,
         slidesToShow: 3,
         slidesToScroll: 1,
         prevArrow: hoverOn && <HandlePrev />,
@@ -85,7 +85,7 @@ const NearbyPopularFood = ({ isLoading }) => {
                 settings: {
                     slidesToShow: 0.8,
                     slidesPerRow: 1,
-                    rows: 2,
+                    rows: 1,
                     slidesToScroll: 1,
                 },
             },
@@ -94,7 +94,7 @@ const NearbyPopularFood = ({ isLoading }) => {
                 settings: {
                     slidesToShow: 1.05,
                     slidesPerRow: 1,
-                    rows: 2,
+                    rows: 1,
                     slidesToScroll: 1,
                 },
             },
@@ -103,7 +103,7 @@ const NearbyPopularFood = ({ isLoading }) => {
                 settings: {
                     slidesToShow: 1.2,
                     slidesPerRow: 1,
-                    rows: 2,
+                    rows: 1,
                     slidesToScroll: 1,
                 },
             },
@@ -112,7 +112,7 @@ const NearbyPopularFood = ({ isLoading }) => {
                 settings: {
                     slidesToShow: 1.5,
                     slidesPerRow: 1,
-                    rows: 2,
+                    rows: 1,
                     slidesToScroll: 1,
                 },
             },
@@ -121,7 +121,7 @@ const NearbyPopularFood = ({ isLoading }) => {
                 settings: {
                     slidesToShow: 1.6,
                     slidesPerRow: 1,
-                    rows: 2,
+                    rows: 1,
                     slidesToScroll: 2,
                 },
             },
@@ -130,7 +130,7 @@ const NearbyPopularFood = ({ isLoading }) => {
                 settings: {
                     slidesToShow: 1.8,
                     slidesPerRow: 1,
-                    rows: 2,
+                    rows: 1,
                     slidesToScroll: 2,
                 },
             },
@@ -139,7 +139,7 @@ const NearbyPopularFood = ({ isLoading }) => {
                 settings: {
                     slidesToShow: 2.1,
                     slidesPerRow: 1,
-                    rows: 2,
+                    rows: 1,
                     slidesToScroll: 1,
                 },
             },
@@ -148,7 +148,7 @@ const NearbyPopularFood = ({ isLoading }) => {
                 settings: {
                     slidesToShow: 2.4,
                     slidesPerRow: 1,
-                    rows: 2,
+                    rows: 1,
                     slidesToScroll: 3,
                 },
             },
@@ -157,7 +157,7 @@ const NearbyPopularFood = ({ isLoading }) => {
                 settings: {
                     slidesToShow: 2.7,
                     slidesPerRow: 1,
-                    rows: 2,
+                    rows: 1,
                     slidesToScroll: 1,
                 },
             },
@@ -166,7 +166,7 @@ const NearbyPopularFood = ({ isLoading }) => {
                 settings: {
                     slidesToShow: 3,
                     slidesPerRow: 1,
-                    rows: 2,
+                    rows: 1,
                     slidesToScroll: 1,
                 },
             },
@@ -175,7 +175,7 @@ const NearbyPopularFood = ({ isLoading }) => {
                 settings: {
                     slidesToShow: 3.5,
                     slidesPerRow: 1,
-                    rows: 2,
+                    rows: 1,
                     slidesToScroll: 1,
                 },
             },
@@ -236,7 +236,7 @@ const NearbyPopularFood = ({ isLoading }) => {
                         gap="12px"
                         paddingBottom={isSmall ? '10px' : '20px'}
                     >
-                      {popularFood?.length > 0 && (  <CustomStackFullWidth>
+                        {popularFood?.length > 0 && (<CustomStackFullWidth>
                             <Slider {...settings}>
                                 {popularFood?.map((product) => {
                                     if (
@@ -261,7 +261,7 @@ const NearbyPopularFood = ({ isLoading }) => {
                                 })}
                             </Slider>
                         </CustomStackFullWidth>
-                      )}
+                        )}
                     </SliderCustom1>
                 ) : (
                     <CustomStackFullWidth>

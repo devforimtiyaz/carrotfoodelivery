@@ -54,34 +54,61 @@ export const FoodTitleTypography = styled(Typography)(
 )
 
 export const CustomFoodCard = styled(Card)(({ theme }) => ({
-    borderRadius: '10px',
+    borderRadius: '14px',
     position: 'relative',
     margin: '0 auto',
     marginBottom: '10px',
     overflow: 'hidden',
     maxWidth: '230px',
     cursor: 'pointer',
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+    boxShadow: theme.palette.mode === 'dark'
+        ? '0 4px 16px rgba(0, 0, 0, 0.3)'
+        : '0 4px 16px rgba(0, 0, 0, 0.08)',
+    border: theme.palette.mode === 'dark'
+        ? '1px solid rgba(255, 255, 255, 0.06)'
+        : '1px solid rgba(0, 0, 0, 0.04)',
+    '&:hover': {
+        transform: 'translateY(-4px)',
+        boxShadow: theme.palette.mode === 'dark'
+            ? '0 8px 24px rgba(0, 0, 0, 0.4)'
+            : '0 8px 24px rgba(0, 0, 0, 0.12)',
+    },
     [theme.breakpoints.down('sm')]: {
         maxWidth: '150px',
+        borderRadius: '12px',
     },
 }))
 export const CustomFoodCardNew = styled(Card)(
     ({ theme, width, maxwidth, height, smheight, background, horizontal }) => ({
         backgroundColor: background,
         position: 'relative',
-        padding: '8px',
+        padding: '10px',
         overflow: 'hidden',
         width: horizontal ? width : '100%',
         maxWidth: maxwidth,
         cursor: 'pointer',
-        borderRadius: horizontal ? '8px' : '10px',
-        boxShadow: horizontal
-            ? `8px 10px 10px rgba(154 154 154 / 10%)`
-            : ` 8px 10px 10px rgba(0, 0, 0, 0.10)`,
+        borderRadius: horizontal ? '12px' : '14px',
+        boxShadow: theme.palette.mode === 'dark'
+            ? '0 4px 16px rgba(0, 0, 0, 0.25)'
+            : horizontal
+                ? '0 4px 16px rgba(0, 0, 0, 0.06)'
+                : '0 4px 16px rgba(0, 0, 0, 0.08)',
+        border: theme.palette.mode === 'dark'
+            ? '1px solid rgba(255, 255, 255, 0.06)'
+            : '1px solid rgba(0, 0, 0, 0.04)',
+        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
         height: height ? height : '100%',
+        '&:hover': {
+            transform: 'translateY(-3px)',
+            boxShadow: theme.palette.mode === 'dark'
+                ? '0 8px 28px rgba(0, 0, 0, 0.35)'
+                : '0 8px 28px rgba(0, 0, 0, 0.12)',
+        },
         [theme.breakpoints.down('sm')]: {
             height: smheight ? smheight : '100%',
-            padding: '5px',
+            padding: '6px',
+            borderRadius: horizontal ? '10px' : '12px',
         },
     })
 )

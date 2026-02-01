@@ -207,13 +207,26 @@ export const CustomOverlayBox = styled(Box)(({ theme, borderradius }) => ({
 export const CustomViewAll = styled(Stack)(({ theme, marginRight }) => ({
     justifyContent: 'end',
     color: theme.palette.primary.main,
-    paddingTop: '5px',
-    paddingBottom: '5px',
+    paddingTop: '8px',
+    paddingBottom: '8px',
+    paddingLeft: '16px',
+    paddingRight: '16px',
     fontSize: '14px',
+    fontWeight: 500,
     cursor: 'pointer',
     marginInlineEnd: marginRight ? marginRight : '1rem',
+    borderRadius: '20px',
+    transition: 'all 0.25s ease',
+    '&:hover': {
+        backgroundColor: theme.palette.mode === 'dark'
+            ? 'rgba(255, 140, 0, 0.12)'
+            : 'rgba(255, 140, 0, 0.08)',
+        transform: 'translateX(4px)',
+    },
     [theme.breakpoints.down('md')]: {
         marginInlineEnd: marginRight ? '.3rem' : '0',
+        paddingLeft: '12px',
+        paddingRight: '12px',
     },
 }))
 export const CustomFab = styled(Fab)(({ theme }) => ({

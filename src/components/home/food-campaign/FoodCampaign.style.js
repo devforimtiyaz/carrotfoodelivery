@@ -43,14 +43,33 @@ export const CustomGridWithBgColor = styled(Grid)(
         background:
             foodsize > 0 && newSection
                 ? theme.palette.mode === 'dark'
-                    ? `linear-gradient(123deg, #262830 16.3%, #19213D 33.95%, #19213D 46.04%, #19213D 61.93%, #262830 81.67%)`
-                    : `linear-gradient(123deg, #F6F6F6 16.3%, #F9FAFF 35.29%, #EFF3FF 49.83%, #F4F7FF 61.93%, #F6F6F6 81.67%)`
+                    ? `linear-gradient(135deg, #1a1c24 0%, #1f2233 25%, #252a3d 50%, #1f2233 75%, #1a1c24 100%)`
+                    : `linear-gradient(135deg, #f8f9fc 0%, #f0f4ff 25%, #e8efff 50%, #f0f4ff 75%, #f8f9fc 100%)`
                 : `${theme.palette.sectionBg}`,
-        padding: foodsize > 0 && (padding || '23px 0px 23px 23px'),
-        borderRadius: '8px',
+        padding: foodsize > 0 && (padding || '28px 0px 28px 28px'),
+        borderRadius: '20px',
         position: 'relative',
+        boxShadow: foodsize > 0 && newSection
+            ? theme.palette.mode === 'dark'
+                ? '0 4px 20px rgba(0, 0, 0, 0.3)'
+                : '0 4px 20px rgba(0, 0, 0, 0.06)'
+            : 'none',
+        border: foodsize > 0 && newSection
+            ? theme.palette.mode === 'dark'
+                ? '1px solid rgba(255, 255, 255, 0.06)'
+                : '1px solid rgba(0, 0, 0, 0.04)'
+            : 'none',
+        transition: 'box-shadow 0.3s ease',
+        '&:hover': {
+            boxShadow: foodsize > 0 && newSection
+                ? theme.palette.mode === 'dark'
+                    ? '0 6px 28px rgba(0, 0, 0, 0.4)'
+                    : '0 6px 28px rgba(0, 0, 0, 0.09)'
+                : 'none',
+        },
         [theme.breakpoints.down('sm')]: {
-            padding: foodsize > 0 && '10px 0px 13px 10px',
+            padding: foodsize > 0 && '12px 0px 16px 12px',
+            borderRadius: '16px',
         },
     })
 )

@@ -149,7 +149,7 @@ const AddressReselectPopover = (props) => {
                                     hideAddressSelectionField="true"
                                     renderOnNavbar="true"
                                     token={token}
-                                    //handleAddressSetSuccess={handleAddressSetSuccess}
+                                //handleAddressSetSuccess={handleAddressSetSuccess}
                                 />
                                 <Button
                                     startIcon={<AddCircleOutlineIcon />}

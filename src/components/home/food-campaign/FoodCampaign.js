@@ -154,102 +154,104 @@ const FoodCampaign = ({ isLoading }) => {
                     campaignFoods?.length > 0 && { xs: '0.5rem', sm: '1.9rem' }
                 }
             >
-                <CustomGridWithBgColor
-                    foodsize={campaignFoods?.length}
-                    padding="23px 0 0 23px"
-                    item
-                    container
-                    xs={12}
-                    md={12}
-                    sm={12}
-                    lg={12}
-                    onMouseEnter={() => setHoverOn(true)}
-                    onMouseLeave={() => setHoverOn(false)}
-                >
-                    {campaignFoods?.length > 0 && (
-                        <Stack
-                            direction="row"
-                            alignItems="center"
-                            paddingBottom="20px"
-                            paddingInlineStart="5px"
-                            spacing={1}
-                        >
-                            <CustomImageContainer
-                                src={fire_image.src}
-                                width="26px"
-                                height="26px"
-                            />
-                            <Typography
-                                fontSize={{ xs: '16px', md: '20px' }}
-                                fontWeight={{ xs: '500', md: '700' }}
-                                color={theme.palette.neutral[1000]}
-                                component="h2"
+                {(campaignFoods?.length > 0 || isLoading) && (
+                    <CustomGridWithBgColor
+                        foodsize={campaignFoods?.length}
+                        padding="23px 0 0 23px"
+                        item
+                        container
+                        xs={12}
+                        md={12}
+                        sm={12}
+                        lg={12}
+                        onMouseEnter={() => setHoverOn(true)}
+                        onMouseLeave={() => setHoverOn(false)}
+                    >
+                        {campaignFoods?.length > 0 && (
+                            <Stack
+                                direction="row"
+                                alignItems="center"
+                                paddingBottom="20px"
+                                paddingInlineStart="5px"
+                                spacing={1}
                             >
-                                {t('Todays Trends')}
-
-                            </Typography>
-                        </Stack>
-                    )}
-
-                    <CustomStackFullWidth justifyContent="right">
-                        {!isLoading ? (
-                            <CustomStackFullWidth>
-                                <SliderCustom
-                                    gap="12px"
-                                    paddingBottom={isSmall ? '10px' : '20px'}
-                                    languageDirection={languageDirection}
-                                >
-                                        {campaignFoods?.length > 0 && (
-                                        <Slider
-                                            ref={foodCampaignSliderRef}
-                                            {...settings}
-                                    >
-                                        {campaignFoods?.map((product) => {
-                                            if (
-                                                product?.variations === null ||
-                                                product?.variations[0]
-                                                    ?.values ||
-                                                product?.variations?.length ===
-                                                    0
-                                            ) {
-                                                return (
-                                                    <FoodCard
-                                                        campaign
-                                                        key={product?.id}
-                                                        product={product}
-                                                        productImageUrl={
-                                                            global?.base_urls
-                                                                ?.campaign_image_url
-                                                        }
-                                                        hasBackGroundSection="true"
-                                                    />
-                                                )
-                                            }
-                                        })}
-                                        </Slider>
-                                    )}
-                                </SliderCustom>
-                            </CustomStackFullWidth>
-                        ) : (
-                            <Stack marginTop="40px" spacing={2}>
-                                <Skeleton
-                                    variant="rectangular"
-                                    width="40%"
-                                    height="20px"
+                                <CustomImageContainer
+                                    src={fire_image.src}
+                                    width="26px"
+                                    height="26px"
                                 />
-                                <SliderCustom>
-                                    <Slider {...settings}>
-                                        <FoodCardShimmer />
-                                        <FoodCardShimmer />
-                                        <FoodCardShimmer />
-                                        <FoodCardShimmer />
-                                        <FoodCardShimmer />
-                                    </Slider>
-                                </SliderCustom>
+                                <Typography
+                                    fontSize={{ xs: '16px', md: '20px' }}
+                                    fontWeight={{ xs: '500', md: '700' }}
+                                    color={theme.palette.neutral[1000]}
+                                    component="h2"
+                                >
+                                    {t('Todays Trends')}
+
+                                </Typography>
                             </Stack>
                         )}
-                    </CustomStackFullWidth>
-                </CustomGridWithBgColor>
+
+                        <CustomStackFullWidth justifyContent="right">
+                            {!isLoading ? (
+                                <CustomStackFullWidth>
+                                    <SliderCustom
+                                        gap="12px"
+                                        paddingBottom={isSmall ? '10px' : '20px'}
+                                        languageDirection={languageDirection}
+                                    >
+                                        {campaignFoods?.length > 0 && (
+                                            <Slider
+                                                ref={foodCampaignSliderRef}
+                                                {...settings}
+                                            >
+                                                {campaignFoods?.map((product) => {
+                                                    if (
+                                                        product?.variations === null ||
+                                                        product?.variations[0]
+                                                            ?.values ||
+                                                        product?.variations?.length ===
+                                                        0
+                                                    ) {
+                                                        return (
+                                                            <FoodCard
+                                                                campaign
+                                                                key={product?.id}
+                                                                product={product}
+                                                                productImageUrl={
+                                                                    global?.base_urls
+                                                                        ?.campaign_image_url
+                                                                }
+                                                                hasBackGroundSection="true"
+                                                            />
+                                                        )
+                                                    }
+                                                })}
+                                            </Slider>
+                                        )}
+                                    </SliderCustom>
+                                </CustomStackFullWidth>
+                            ) : (
+                                <Stack marginTop="40px" spacing={2}>
+                                    <Skeleton
+                                        variant="rectangular"
+                                        width="40%"
+                                        height="20px"
+                                    />
+                                    <SliderCustom>
+                                        <Slider {...settings}>
+                                            <FoodCardShimmer />
+                                            <FoodCardShimmer />
+                                            <FoodCardShimmer />
+                                            <FoodCardShimmer />
+                                            <FoodCardShimmer />
+                                        </Slider>
+                                    </SliderCustom>
+                                </Stack>
+                            )}
+                        </CustomStackFullWidth>
+                    </CustomGridWithBgColor>
+                )}
             </Grid>
         </>
     )

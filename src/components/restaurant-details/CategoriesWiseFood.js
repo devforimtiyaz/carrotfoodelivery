@@ -211,13 +211,14 @@ const CategoriesWiseFood = ({
                             paddingTop="5px"
                         >
                             <Typography
-                                fontWeight="500"
+                                fontWeight="700"
                                 fontSize={{
-                                    xs: '16px',
-                                    sm: '18px',
-                                    md: '20px',
+                                    xs: '20px',
+                                    sm: '24px',
+                                    md: '28px',
                                 }}
                                 color={theme.palette.neutral[1000]}
+                                sx={{ mb: 2 }}
                             >
                                 {data?.name}
                             </Typography>

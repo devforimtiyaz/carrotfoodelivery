@@ -165,36 +165,42 @@ const RestaurantBoxCard = (props) => {
                             bottom: 0,
                             left: 0,
                             width: '100%',
-                            background: (theme) =>
-                                alpha(theme.palette.primary.overLay, 0.5),
-
+                            background: 'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%)',
                             color: 'theme.palette.whiteContainer.main',
                             height: '100%',
                             justifyContent: 'center',
+                            alignItems: 'center',
                             zIndex: 1,
-                            backdropFilter: 'blur(1.5px)',
-                            borderRadius: '5px',
+                            backdropFilter: 'blur(2px)',
+                            borderRadius: '8px',
                         }}
                     >
-                        <Typography
-                            variant="h4"
-                            align="center"
-                            color={theme.palette.whiteContainer.main}
+                        <Stack
                             sx={{
-                                textTransform: 'uppercase',
-                                position: 'relative',
-                                zIndex: 1,
+                                backgroundColor: 'rgba(0,0,0,0.65)',
+                                backdropFilter: 'blur(8px)',
+                                borderRadius: '20px',
+                                padding: '8px 20px',
+                                boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
                             }}
                         >
-                            {opening_time === 'closed' || !opening_time
-                                ? t('Closed Now')
-                                : (() => {
-                                    const time = moment(opening_time, 'HH:mm:ss')
-                                    return time.isValid()
-                                        ? `Open at ${time.format('hh:mm A')}`
-                                        : t('Closed Now')
-                                })()}
-                        </Typography>
+                            <Typography
+                                fontSize="13px"
+                                fontWeight={600}
+                                align="center"
+                                color="#fff"
+                                sx={{ letterSpacing: '0.5px' }}
+                            >
+                                {opening_time === 'closed' || !opening_time
+                                    ? t('CLOSED NOW')
+                                    : (() => {
+                                        const time = moment(opening_time, 'HH:mm:ss')
+                                        return time.isValid()
+                                            ? `Opens at ${time.format('hh:mm A')}`
+                                            : t('CLOSED NOW')
+                                    })()}
+                            </Typography>
+                        </Stack>
                     </Stack>
                 )
             }
@@ -207,23 +213,34 @@ const RestaurantBoxCard = (props) => {
                         bottom: 0,
                         left: 0,
                         width: '100%',
-                        background: (theme) =>
-                            alpha(theme.palette.primary.overLay, 0.5),
-
+                        background: 'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%)',
                         color: 'theme.palette.whiteContainer.main',
                         height: '100%',
                         justifyContent: 'center',
-                        borderRadius: '5px',
+                        alignItems: 'center',
+                        backdropFilter: 'blur(2px)',
+                        borderRadius: '8px',
                     }}
                 >
-                    <Typography
-                        variant="h4"
-                        align="center"
-                        color={theme.palette.whiteContainer.main}
-                        sx={{ textTransform: 'uppercase', fontWeight: '700' }}
+                    <Stack
+                        sx={{
+                            backgroundColor: 'rgba(0,0,0,0.65)',
+                            backdropFilter: 'blur(8px)',
+                            borderRadius: '20px',
+                            padding: '8px 20px',
+                            boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
+                        }}
                     >
-                        {t('Closed Now')}
-                    </Typography>
+                        <Typography
+                            fontSize="13px"
+                            fontWeight={600}
+                            align="center"
+                            color="#fff"
+                            sx={{ letterSpacing: '0.5px' }}
+                        >
+                            {t('CLOSED NOW')}
+                        </Typography>
+                    </Stack>
                 </Stack>
             )
         }
@@ -251,14 +268,22 @@ const RestaurantBoxCard = (props) => {
                 sx={{
                     boxShadow:
                         theme.palette.mode === 'dark'
-                            ? '0px 8.092px 24.275px 0px rgba(0, 0, 0, 0.20)'
-                            : '0px 10px 30px 0px rgba(0, 0, 0, 0.10)',
-                    padding: '10px 10px 25px 10px',
+                            ? '0px 4px 20px rgba(0, 0, 0, 0.25)'
+                            : '0px 4px 20px rgba(0, 0, 0, 0.08)',
+                    padding: '12px 12px 24px 12px',
                     cursor: 'pointer',
                     width: visitAgain ? '110%' : '100%',
                     height: '100%',
+                    borderRadius: '16px',
+                    border: theme.palette.mode === 'dark'
+                        ? '1px solid rgba(255, 255, 255, 0.06)'
+                        : '1px solid rgba(0, 0, 0, 0.04)',
+                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                     '&:hover': {
-                        boxShadow: `0px 0px 2px rgba(145, 158, 171, 0.2), 0px 5px 20px ${theme.palette.paperBoxShadow}`,
+                        transform: 'translateY(-4px)',
+                        boxShadow: theme.palette.mode === 'dark'
+                            ? '0px 8px 32px rgba(0, 0, 0, 0.35)'
+                            : '0px 8px 32px rgba(0, 0, 0, 0.12)',
                     },
                 }}
             >

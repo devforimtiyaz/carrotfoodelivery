@@ -181,6 +181,10 @@ const DineIn = () => {
         )
     }
 
+    if (!isLoading && (!newRestuarants?.data?.restaurants || newRestuarants?.data?.restaurants?.length === 0)) {
+        return null
+    }
+
     return (
         <Grid
             container
