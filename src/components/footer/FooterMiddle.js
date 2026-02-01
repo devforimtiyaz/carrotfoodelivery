@@ -73,10 +73,14 @@ const FooterMiddle = ({ landingPageData, isLoading }) => {
                                 <Typography
                                     fontSize="14px"
                                     align="left"
-                                    color={alpha(
-                                        theme.palette.whiteContainer.main,
-                                        0.8
-                                    )}
+                                    sx={{
+                                        lineHeight: 1.7,
+                                        maxWidth: '320px',
+                                        color: alpha(
+                                            theme.palette.whiteContainer.main,
+                                            0.7
+                                        ),
+                                    }}
                                 >
                                     {landingPageData?.footer_data}
                                 </Typography>

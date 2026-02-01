@@ -119,13 +119,28 @@ const RouteLinks = (props) => {
 
     return (
         <CustomStackFullWidth
-            spacing={{ xs: 1.2, sm: 2 }}
+            spacing={{ xs: 1.5, sm: 2 }}
             alignItems={isCenter && 'center'}
         >
             <Typography
-                color={alpha(theme.palette.whiteContainer.main, 0.8)}
-                fontSize="14px"
-                fontWeight="600"
+                color="whiteContainer.main"
+                fontSize="15px"
+                fontWeight="700"
+                sx={{
+                    position: 'relative',
+                    display: 'inline-block',
+                    paddingBottom: '8px',
+                    '&::after': {
+                        content: '""',
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        width: '30px',
+                        height: '2px',
+                        backgroundColor: 'primary.main',
+                        borderRadius: '2px',
+                    },
+                }}
             >
                 {t(title)}
             </Typography>
@@ -139,13 +154,15 @@ const RouteLinks = (props) => {
                         onClick={() => handleClick(item.link, item.value)}
                         sx={{
                             cursor: 'pointer',
-                            fontWeight: 300,
+                            fontWeight: 400,
                             color: alpha(
                                 theme.palette.whiteContainer.main,
-                                0.8
+                                0.7
                             ),
+                            transition: 'all 0.2s ease',
                             '&:hover': {
                                 color: 'primary.main',
+                                paddingLeft: '5px',
                             },
                         }}
                     >
@@ -159,11 +176,13 @@ const RouteLinks = (props) => {
                     color="whiteContainer.main"
                     onClick={() => handleClickToRoute('/refund-policy')}
                     sx={{
-                        fontWeight: 300,
-                        color: alpha(theme.palette.whiteContainer.main, 0.8),
+                        fontWeight: 400,
+                        color: alpha(theme.palette.whiteContainer.main, 0.7),
                         cursor: 'pointer',
+                        transition: 'all 0.2s ease',
                         '&:hover': {
                             color: 'primary.main',
+                            paddingLeft: '5px',
                         },
                     }}
                 >
@@ -176,11 +195,13 @@ const RouteLinks = (props) => {
                     color="whiteContainer.main"
                     onClick={() => handleClickToRoute('/cancellation-policy')}
                     sx={{
-                        fontWeight: 300,
-                        color: alpha(theme.palette.whiteContainer.main, 0.8),
+                        fontWeight: 400,
+                        color: alpha(theme.palette.whiteContainer.main, 0.7),
                         cursor: 'pointer',
+                        transition: 'all 0.2s ease',
                         '&:hover': {
                             color: 'primary.main',
+                            paddingLeft: '5px',
                         },
                     }}
                 >

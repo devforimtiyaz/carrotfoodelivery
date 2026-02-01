@@ -28,6 +28,7 @@ export const CustomHomeTab = styled(Tabs)(({ theme }) => ({
             backgroundColor: theme.palette.mode === 'dark'
                 ? 'rgba(255,255,255,0.08)'
                 : 'rgba(0,0,0,0.04)',
+            color: theme.palette.mode === 'light' ? '#333333' : 'inherit',
         },
         '& .MuiTabScrollButton-root': {
             width: 20,
@@ -138,9 +139,11 @@ const DifferentFoodCompontent = ({
                                     backgroundColor: isActive
                                         ? (theme) => theme.palette.primary.main
                                         : 'transparent',
-                                    color: isActive
+                                    color: (theme) => isActive
                                         ? '#fff'
-                                        : (theme) => theme.palette.customColor?.six,
+                                        : theme.palette.mode === 'light'
+                                            ? '#333333'
+                                            : theme.palette.customColor?.six || '#aaa',
                                     boxShadow: isActive
                                         ? '0 4px 12px rgba(255, 130, 0, 0.25)'
                                         : 'none',
@@ -153,6 +156,11 @@ const DifferentFoodCompontent = ({
                                             : (theme) => theme.palette.mode === 'dark'
                                                 ? 'rgba(255,255,255,0.08)'
                                                 : 'rgba(0,0,0,0.04)',
+                                        color: (theme) => isActive
+                                            ? '#fff'
+                                            : theme.palette.mode === 'light'
+                                                ? '#333333'
+                                                : theme.palette.primary.main,
                                     },
                                 }}
                                 label={t(item?.category_name)}

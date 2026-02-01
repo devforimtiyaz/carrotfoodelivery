@@ -24,6 +24,33 @@ const ContactInfo = ({ global }) => {
     const handleOpenCloseMap = () => {
         setOpen(!open)
     }
+
+    const contactItemStyle = (isHovered) => ({
+        cursor: 'pointer',
+        padding: '10px 14px',
+        borderRadius: '10px',
+        backgroundColor: isHovered ? 'rgba(255,130,0,0.08)' : 'rgba(255,255,255,0.03)',
+        border: '1px solid',
+        borderColor: isHovered ? 'rgba(255,130,0,0.3)' : 'rgba(255,255,255,0.08)',
+        transition: 'all 0.25s ease',
+        '&:hover': {
+            transform: 'translateY(-2px)',
+        },
+    })
+
+    const iconStyle = (isHovered) => ({
+        color: isHovered ? 'primary.main' : 'rgba(255,255,255,0.6)',
+        fontSize: { xs: '18px', md: '20px' },
+        transition: 'color 0.25s ease',
+    })
+
+    const textStyle = (isHovered) => ({
+        color: isHovered ? 'primary.main' : 'rgba(255,255,255,0.85)',
+        fontSize: { xs: '13px', md: '14px' },
+        fontWeight: 400,
+        transition: 'color 0.25s ease',
+    })
+
     if (!global)
         return (
             <>
@@ -44,30 +71,19 @@ const ContactInfo = ({ global }) => {
     return (
         <CustomStackFullWidth
             spacing={1.5}
-            alignItems={{ xs: 'center', sm: 'center', md: 'flex-start' }}
+            alignItems={{ xs: 'flex-start', sm: 'flex-start', md: 'flex-start' }}
         >
             <Stack
                 onMouseEnter={() => handleHover('address')}
                 onMouseLeave={handleMouseLeave}
                 onClick={handleOpenCloseMap}
                 direction="row"
-                spacing={1}
+                spacing={1.5}
                 alignItems="flex-start"
-                color={theme.palette.text.footerText}
-                sx={{ cursor: 'pointer' }}
+                sx={contactItemStyle(hovered === 'address')}
             >
-                <ApartmentIcon
-                    sx={{
-                        color: hovered === 'address' && 'primary.main',
-                        fontSize: { xs: '20px', md: '24px' },
-                    }}
-                />
-                <Typography
-                    sx={{
-                        color: hovered === 'address' && 'primary.main',
-                        fontSize: { xs: '14px', md: '16px' },
-                    }}
-                >
+                <ApartmentIcon sx={iconStyle(hovered === 'address')} />
+                <Typography sx={textStyle(hovered === 'address')}>
                     {global?.address}
                 </Typography>
             </Stack>
@@ -76,24 +92,12 @@ const ContactInfo = ({ global }) => {
                     onMouseEnter={() => handleHover('mail')}
                     onMouseLeave={handleMouseLeave}
                     direction="row"
-                    spacing={1}
+                    spacing={1.5}
                     alignItems="center"
-                    color={theme.palette.text.footerText}
-                    sx={{ cursor: 'pointer' }}
+                    sx={contactItemStyle(hovered === 'mail')}
                 >
-                    <MailIcon
-                        sx={{
-                            color: hovered === 'mail' && 'primary.main',
-                            fontSize: { xs: '20px', md: '24px' },
-                        }}
-                    />
-                    <Typography
-                        sx={{
-                            color: hovered === 'mail' && 'primary.main',
-                            fontSize: { xs: '14px', md: '16px' },
-                        }}
-                        component="p"
-                    >
+                    <MailIcon sx={iconStyle(hovered === 'mail')} />
+                    <Typography sx={textStyle(hovered === 'mail')} component="p">
                         {global?.email}
                     </Typography>
                 </Stack>
@@ -103,24 +107,12 @@ const ContactInfo = ({ global }) => {
                     onMouseEnter={() => handleHover('phone')}
                     onMouseLeave={handleMouseLeave}
                     direction="row"
-                    spacing={1}
+                    spacing={1.5}
                     alignItems="center"
-                    color={theme.palette.text.footerText}
-                    sx={{ cursor: 'pointer' }}
+                    sx={contactItemStyle(hovered === 'phone')}
                 >
-                    <LocalPhoneIcon
-                        sx={{
-                            color: hovered === 'phone' && 'primary.main',
-                            fontSize: { xs: '20px', md: '24px' },
-                        }}
-                    />
-                    <Typography
-                        sx={{
-                            color: hovered === 'phone' && 'primary.main',
-                            fontSize: { xs: '14px', md: '16px' },
-                        }}
-                        component="p"
-                    >
+                    <LocalPhoneIcon sx={iconStyle(hovered === 'phone')} />
+                    <Typography sx={textStyle(hovered === 'phone')} component="p">
                         {global?.phone}
                     </Typography>
                 </Stack>

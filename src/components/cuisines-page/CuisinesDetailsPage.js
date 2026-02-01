@@ -15,14 +15,22 @@ const CuisinesDetailsPage = ({ data, isLoading }) => {
     return (
         <CustomStackFullWidth spacing={2} sx={{ minHeight: '70vh' }}>
             <CustomPageTitle title="Cuisine Restaurant" />
-            <Grid container gap="10px">
+            <Grid
+                container
+                spacing={1.5}
+                sx={{
+                    margin: '0 !important',
+                    width: '100% !important',
+                    paddingRight: { xs: '12px', sm: 0 }
+                }}
+            >
                 {data &&
                     data?.restaurants.length > 0 &&
                     data?.restaurants?.map((restaurant) => {
                         return (
                             <Grid
                                 item
-                                xs={matchesToSmall ? 12 : 6}
+                                xs={6}
                                 sm={4}
                                 md={3}
                                 key={restaurant?.id}
