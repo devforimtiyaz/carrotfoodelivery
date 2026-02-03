@@ -81,11 +81,11 @@ const OrderDetailsBottom = ({
                 }}
             >
                 {trackData &&
-                getToken() &&
-                trackData?.data?.order_status === 'confirmed' &&
-                !isTrackOrder &&
-                trackData?.data?.order_type !== 'dine_in' &&
-                trackData?.data?.order_type !== 'take_away' ? (
+                    getToken() &&
+                    trackData?.data?.order_status === 'confirmed' &&
+                    !isTrackOrder &&
+                    trackData?.data?.order_type !== 'dine_in' &&
+                    trackData?.data?.order_type !== 'take_away' ? (
                     <CustomButton
                         variant="contained"
                         onClick={handleTrackOrderClick}
@@ -110,9 +110,9 @@ const OrderDetailsBottom = ({
                     </>
                 )}
                 {trackData &&
-                trackData?.data?.order_status === 'pending' &&
-                trackData?.data?.payment_method === 'digital_payment' &&
-                trackData?.data?.payment_status === 'unpaid' ? (
+                    trackData?.data?.order_status === 'pending' &&
+                    trackData?.data?.payment_method === 'digital_payment' &&
+                    trackData?.data?.payment_status === 'unpaid' ? (
                     <CustomButton
                         variant="outlined"
                         onClick={() => setModalOpenForPayment(true)}
@@ -128,7 +128,6 @@ const OrderDetailsBottom = ({
                     </CustomButton>
                 ) : (
                     trackData?.data?.order_status === 'pending' &&
-                    !isTrackOrder &&
                     trackData?.data?.subscription === null && (
                         <CustomButton
                             variant="outlined"
@@ -150,7 +149,7 @@ const OrderDetailsBottom = ({
                 setModalOpen={setOpenModal}
                 maxWidth="350px"
 
-                // onSuccess={handleOnSuccess}
+            // onSuccess={handleOnSuccess}
             >
                 <CancelOrder
                     cancelReason={cancelReason}

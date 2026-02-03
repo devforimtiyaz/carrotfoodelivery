@@ -20,15 +20,7 @@ const CampaignOrders = ({ global }) => {
         <>
             {campFoodList.map((item) => (
                 <Grid container md={12} xs={12} spacing={{ xs: 1 }}>
-                    <Grid item md={4} xs={4}>
-                        <CustomImageContainer
-                            height="90px"
-                            width="90px"
-                            src={item.image_full_url}
-                            loading="lazy"
-                            borderRadius="10px"
-                        />
-                    </Grid>
+
                     <Grid
                         item
                         md={8}

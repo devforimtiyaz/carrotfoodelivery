@@ -5,7 +5,14 @@ import {
     OrderFoodName,
     OrderFoodSubtitle,
 } from '../CheckOut.style'
-import { getAmount, getSelectedAddOn } from '@/utils/customFunctions'
+import {
+    getAmount,
+    getSelectedAddOn,
+    getConvertDiscount,
+    getTotalVariationsPrice,
+    calculateItemBasePrice,
+    handleTotalAmountWithAddonsFF,
+} from '@/utils/customFunctions'
 import { useSelector, useDispatch } from 'react-redux'
 import { CustomStackFullWidth } from '@/styled-components/CustomStyles.style'
 import Skeleton from '@mui/material/Skeleton'
@@ -13,7 +20,6 @@ import CustomImageContainer from '../../CustomImageContainer'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '@mui/material/styles'
 import VisibleVariations from '../../floating-cart/VisibleVariations'
-import { handleTotalAmountWithAddonsFF } from '@/utils/customFunctions'
 import {
     removeProduct,
     incrementProductQty,
@@ -25,7 +31,12 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import { toast } from 'react-hot-toast'
-import { getCartItemDisplayName } from '@/utils/customFunctions'
+import useDeleteCartItem from '../../../hooks/react-query/add-cart/useDeleteCartItem'
+import useCartItemUpdate from '../../../hooks/react-query/add-cart/useCartItemUpdate'
+import { getGuestId } from '../functions/getGuestUserId'
+import { onErrorResponse } from '../../ErrorResponse'
+import { getSelectedAddons } from '../../navbar/second-navbar/SecondNavbar'
+import { getItemDataForAddToCart } from '../../floating-cart/helperFunction'
 
 const RegularOrders = ({ orderType }) => {
     const theme = useTheme()
@@ -33,6 +44,10 @@ const RegularOrders = ({ orderType }) => {
     const dispatch = useDispatch()
     const { cartList } = useSelector((state) => state.cart)
     const { global } = useSelector((state) => state.globalSettings)
+    const { mutate: itemRemove, isLoading: removeIsLoading } = useDeleteCartItem()
+    const { mutate: updateMutate, isLoading: updatedLoading } = useCartItemUpdate()
+    const guestId = getGuestId()
+
     let currencySymbol
     let currencySymbolDirection
     let digitAfterDecimalPoint
@@ -44,27 +59,138 @@ const RegularOrders = ({ orderType }) => {
     const languageDirection = localStorage.getItem('direction')
 
     const router = useRouter()
-    const handleRemove = (item) => {
+
+    const handleSuccess = (item) => {
         dispatch(removeProduct(item))
     }
 
+    const handleRemove = (item) => {
+        const cartIdAndGuestId = {
+            cart_id: item?.cartItemId,
+            guestId: getGuestId(),
+        }
+        itemRemove(cartIdAndGuestId, {
+            onSuccess: () => handleSuccess(item),
+            onError: onErrorResponse,
+        })
+    }
+
+    const cartUpdateHandleSuccess = (res, cartItem) => {
+        if (res) {
+            res?.forEach((item) => {
+                if (cartItem?.cartItemId === item?.id) {
+                    const product = {
+                        ...item?.item,
+                        cartItemId: item?.id,
+                        totalPrice: item?.price,
+                        quantity: item?.quantity,
+                        variations: item?.item?.variations,
+                        selectedAddons: getSelectedAddons(item?.item?.addons),
+                        itemBasePrice: getConvertDiscount(
+                            item?.item?.discount,
+                            item?.item?.discount_type,
+                            calculateItemBasePrice(
+                                item,
+                                item?.item?.variations
+                            ),
+                            item?.item?.restaurant_discount
+                        ),
+                    }
+
+                    dispatch(incrementProductQty(product))
+                }
+            })
+        }
+    }
+
+    const cartUpdateHandleSuccessDecrement = (res, cartItem) => {
+        if (res) {
+            res?.forEach((item) => {
+                if (cartItem?.cartItemId === item?.id) {
+                    const product = {
+                        ...item?.item,
+                        cartItemId: item?.id,
+                        totalPrice: item?.price,
+                        quantity: item?.quantity,
+                        variations: item?.item?.variations,
+                        selectedAddons: getSelectedAddons(item?.item?.addons),
+                        itemBasePrice: getConvertDiscount(
+                            item?.item?.discount,
+                            item?.item?.discount_type,
+                            calculateItemBasePrice(
+                                item,
+                                item?.item?.variations
+                            ),
+                            item?.item?.restaurant_discount
+                        ),
+                    }
+
+                    dispatch(decrementProductQty(product))
+                }
+            })
+        }
+    }
+
     const handleIncrement = (item) => {
+        const updateQuantity = item?.quantity + 1
+        const totalPrice =
+            item?.price + getTotalVariationsPrice(item?.variations)
+        const getPriceAfterDiscount = getConvertDiscount(
+            item?.discount,
+            item?.discount_type,
+            totalPrice,
+            item?.restaurant_discount
+        )
+        const productPrice = getPriceAfterDiscount * updateQuantity
+        const itemObject = getItemDataForAddToCart(
+            item,
+            updateQuantity,
+            productPrice,
+            guestId
+        )
+
         if (item?.maximum_cart_quantity) {
             if (item?.maximum_cart_quantity <= item?.quantity) {
                 toast.error(t('Out of Stock'))
+            } else {
+                updateMutate(itemObject, {
+                    onSuccess: (res) => cartUpdateHandleSuccess(res, item),
+                    onError: onErrorResponse,
+                })
             }
+        } else {
+            updateMutate(itemObject, {
+                onSuccess: (res) => cartUpdateHandleSuccess(res, item),
+                onError: onErrorResponse,
+            })
         }
-        const quantity = item?.quantity + 1
-        const price = item?.totalPrice / item?.quantity
-        const totalPrice = price * quantity
-        dispatch(incrementProductQty({ ...item, quantity, totalPrice }))
     }
 
     const handleDecrement = (item) => {
-        const quantity = item?.quantity - 1
-        const price = item?.totalPrice / item?.quantity
-        const totalPrice = price * quantity
-        dispatch(decrementProductQty({ ...item, quantity, totalPrice }))
+        const updateQuantity = item?.quantity - 1
+        const totalPrice =
+            item?.price + getTotalVariationsPrice(item?.variations)
+        const getPriceAfterDiscount = getConvertDiscount(
+            item?.discount,
+            item?.discount_type,
+            totalPrice,
+            item?.restaurant_discount
+        )
+        const productPrice = getPriceAfterDiscount * updateQuantity
+        const itemObject = getItemDataForAddToCart(
+            item,
+            updateQuantity,
+            productPrice,
+            guestId
+        )
+        updateMutate(itemObject, {
+            onSuccess: (res) => cartUpdateHandleSuccessDecrement(res, item),
+            onError: (error) => {
+                error?.response?.data?.errors?.forEach((items) => {
+                    toast.error(items?.message)
+                })
+            },
+        })
     }
 
     const restaurantId = cartList.length > 0 ? cartList[0].restaurant_id : null
@@ -80,42 +206,7 @@ const RegularOrders = ({ orderType }) => {
                         spacing={2}
                         mt={index !== 0 && '1rem'}
                     >
-                        <Stack position="relative">
-                            <CustomImageContainer
-                                height="90px"
-                                width="90px"
-                                src={item.image_full_url}
-                                loading="lazy"
-                                borderRadius="10px"
-                                objectFit="cover"
-                            />
-                            <Stack
-                                sx={{
-                                    position: 'absolute',
-                                    bottom: 0,
-                                    left: 0,
-                                    width: '100%',
 
-                                    background: (theme) =>
-                                        theme.palette.primary.overLay,
-                                    opacity: '0.6',
-                                    padding: '10px',
-                                    height: '30%',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    borderBottomRightRadius: '10px',
-                                    borderBottomLeftRadius: '10px',
-                                }}
-                            >
-                                <Typography
-                                    variant="h5"
-                                    align="center"
-                                    color={theme.palette.neutral[100]}
-                                >
-                                    {item?.veg === 0 ? t('non-veg') : t('veg')}
-                                </Typography>
-                            </Stack>
-                        </Stack>
                         <Stack
                             paddingRight={languageDirection === 'rtl' && '10px'}
                             flexGrow="1"
@@ -174,6 +265,7 @@ const RegularOrders = ({ orderType }) => {
                                     <IconButton
                                         size="small"
                                         onClick={() => handleDecrement(item)}
+                                        disabled={updatedLoading}
                                         sx={{
                                             padding: '4px',
                                             color: theme.palette.neutral[400],
@@ -184,6 +276,7 @@ const RegularOrders = ({ orderType }) => {
                                 ) : (
                                     <IconButton
                                         size="small"
+                                        disabled={removeIsLoading}
                                         onClick={() => handleRemove(item)}
                                         sx={{
                                             padding: '4px',
@@ -202,6 +295,7 @@ const RegularOrders = ({ orderType }) => {
                                 </Typography>
                                 <IconButton
                                     size="small"
+                                    disabled={updatedLoading}
                                     onClick={() => handleIncrement(item)}
                                     sx={{
                                         padding: '4px',

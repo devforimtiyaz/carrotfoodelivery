@@ -164,7 +164,7 @@ const getItemsPrice = (items) => {
 const getAddOnsPrice = (items) => {
     let productAddonsPrice = items?.reduce(
         (total, product) =>
-            (product.add_ons.length > 0
+            (product?.add_ons?.length > 0
                 ? product?.add_ons?.reduce(
                     (cTotal, cProduct) =>
                         cProduct.price * cProduct.quantity + cTotal,
@@ -180,9 +180,9 @@ const getSubTotalPrice = (dataList) => {
     return getItemsPrice(dataList) + getAddOnsPrice(dataList)
 }
 const getAddOnsNames = (addOns) => {
-    const names = addOns.map(
+    const names = addOns?.map(
         (item, index) =>
-            `${addOns[0].name}(${addOns[0]?.quantity})${index !== addOns?.length - 1 ? ',' : ''
+            `${item?.name}(${item?.quantity})${index !== addOns?.length - 1 ? ',' : ''
             }`
     )
     return names
@@ -1056,8 +1056,8 @@ const OrderDetails = ({ OrderIdDigital }) => {
                                                                 }
                                                             >
                                                                 {`${t('Table No-')} ${trackData.data
-                                                                        .order_reference
-                                                                        .table_number
+                                                                    .order_reference
+                                                                    .table_number
                                                                     }`}
                                                             </Typography>
                                                         )}
@@ -2204,8 +2204,8 @@ const OrderDetails = ({ OrderIdDigital }) => {
                                                                 {`${t(
                                                                     'Total Delivered'
                                                                 )} (${trackData?.data
-                                                                        ?.subscription
-                                                                        ?.delivered_count
+                                                                    ?.subscription
+                                                                    ?.delivered_count
                                                                     })`}
                                                             </InfoTypography>
                                                             <CustomTooltip

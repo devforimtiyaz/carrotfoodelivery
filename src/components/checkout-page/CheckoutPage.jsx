@@ -38,6 +38,7 @@ import { getDayNumber } from './const'
 import OrderCalculation from './order-summary/OrderCalculation'
 import OrderSummaryDetails from './order-summary/OrderSummaryDetails'
 import PaymentOptions from './order-summary/PaymentOptions'
+import CustomEmptyResult from '@/components/empty-view/CustomEmptyResult'
 
 import useGetCashBackAmount from '@/hooks/react-query/cashback/useGetCashBackAmount'
 import { useOfflinePayment } from '@/hooks/react-query/offline-payment/useOfflinePayment'
@@ -233,10 +234,13 @@ const CheckoutPage = ({ isDineIn }) => {
     const isRehydrated = useSelector((state) => state._persist?.rehydrated)
 
     useEffect(() => {
-        if (isRehydrated && cartList?.length === 0 && page !== 'campaign') {
-            router.push('/home')
+        if ((cartList?.length === 0 || !cartList) && page !== 'campaign') {
+            const timer = setTimeout(() => {
+                window.location.href = `/home?refresh=${new Date().getTime()}`
+            }, 1000)
+            return () => clearTimeout(timer)
         }
-    }, [cartList, page, router, isRehydrated])
+    }, [cartList, page])
     const { data: offlinePaymentOptions, refetch: OfflinePaymentRefetch } =
         useGetOfflinePaymentOptions({})
 
@@ -1159,15 +1163,43 @@ const CheckoutPage = ({ isDineIn }) => {
         hasOnlyPaymentMethod()
     }, [global])
 
-    if (isRehydrated && cartList?.length === 0 && page !== 'campaign') {
+    if (isRehydrated && (cartList?.length === 0 || !cartList) && page !== 'campaign') {
         return (
             <CustomStackFullWidth
                 alignItems="center"
                 justifyContent="center"
                 sx={{ height: '50vh' }}
             >
-                <CircularLoader />
+                <CustomEmptyResult
+                    label="Cart is empty"
+                    subTitle={restaurantIdRef.current ? "Redirecting to restaurant..." : "Redirecting to home page..."}
+                />
             </CustomStackFullWidth>
+        )
+    }
+
+    if ((cartList?.length === 0 || !cartList) && page !== 'campaign') {
+        return (
+            <Grid
+                container
+                spacing={3}
+                mb="2rem"
+                paddingTop={{ xs: '0px', md: '60px' }}
+                sx={{ minHeight: '50vh' }}
+                alignItems="center"
+                justifyContent="center"
+            >
+                <CustomStackFullWidth
+                    alignItems="center"
+                    justifyContent="center"
+                    sx={{ height: '100%' }}
+                >
+                    <CustomEmptyResult
+                        label="Cart is empty"
+                        subTitle="Redirecting to home page..."
+                    />
+                </CustomStackFullWidth>
+            </Grid>
         )
     }
 

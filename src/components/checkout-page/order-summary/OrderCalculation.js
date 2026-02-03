@@ -194,21 +194,24 @@ const OrderCalculation = (props) => {
         dispatch(setCouponType(''))
     }, [])
 
-    const handleOrderAmount = () => {
-        let totalAmount = 0
-        if (subscriptionOrderCount > 0) {
-            totalAmount =
-                truncate(totalPrice.toString(), digitAfterDecimalPoint) *
-                subscriptionOrderCount
-        } else {
-            totalAmount = totalPrice
-        }
+    let finalTotalAmount = 0
+    if (subscriptionOrderCount > 0) {
+        finalTotalAmount =
+            truncate(totalPrice.toString(), digitAfterDecimalPoint) *
+            subscriptionOrderCount
+    } else {
+        finalTotalAmount = totalPrice
+    }
 
-        dispatch(setTotalAmount(totalAmount))
+    useEffect(() => {
+        dispatch(setTotalAmount(finalTotalAmount))
+    }, [finalTotalAmount])
+
+    const handleOrderAmount = () => {
         return getAmount(
             userData?.is_valid_for_discount
-                ? totalAmount - referDiscount
-                : totalAmount,
+                ? finalTotalAmount - referDiscount
+                : finalTotalAmount,
             currencySymbolDirection,
             currencySymbol,
             digitAfterDecimalPoint
