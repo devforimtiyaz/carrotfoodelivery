@@ -65,6 +65,7 @@ const OrderCalculation = (props) => {
         extraPackagingCharge,
         distanceLoading,
         floorCharges,
+        setOpenPaymentModal,
     } = props
     const dispatch = useDispatch()
     const { couponType, zoneData } = useSelector(

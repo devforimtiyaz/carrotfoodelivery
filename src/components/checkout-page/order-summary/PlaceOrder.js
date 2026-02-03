@@ -10,7 +10,7 @@ import {
 } from '@/redux/slices/OfflinePayment'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
-import { Alert } from '@mui/material'
+import { Alert, Grid, Button } from '@mui/material'
 
 const PlaceOrder = (props) => {
     const {
@@ -22,6 +22,7 @@ const PlaceOrder = (props) => {
         usePartialPayment,
         page,
         paymentMethodDetails,
+        setOpenPaymentModal,
     } = props
     const router = useRouter()
     const { t } = useTranslation()
@@ -67,14 +68,45 @@ const PlaceOrder = (props) => {
     }
 
     return (
-        <CustomStackFullWidth alignItems="center" spacing={2} marginTop="1rem">
+        <CustomStackFullWidth alignItems="center" spacing={2} marginTop={{ xs: 0, md: '1rem' }}>
             {paymentMethodDetails?.method !== 'offline_payment' ? (
                 <>
-                    <Alert severity="warning" sx={{ mb: 1, fontSize: '13px' }}>
+                    {/* Mobile View: 70/30 Split */}
+                    <Grid container spacing={1} sx={{ display: { xs: 'flex', md: 'none' }, width: '100%' }}>
+                        <Grid item xs={8}>
+                            <Alert severity="warning" sx={{ fontSize: '12px', padding: '0px 8px', height: '100%', alignItems: 'center', display: 'flex' }} icon={false}>
+                                {t(`Please double check your order and address details. Order Cannot be CANCELLED once accepted by Restaurant.`)}
+                            </Alert>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => setOpenPaymentModal(true)}
+                                sx={{
+                                    fontSize: '12px',
+                                    padding: '5px',
+                                    height: '100%',
+                                    width: '100%',
+                                    whiteSpace: 'normal',
+                                    lineHeight: '1.2'
+                                }}
+                            >
+                                <CustomStackFullWidth alignItems="center" justifyContent="center">
+                                    <span style={{ fontWeight: '600' }}>{t('Payment Mode')}</span>
+                                    <span style={{ fontSize: '10px' }}>{t('(COD/UPI)')}</span>
+                                </CustomStackFullWidth>
+                            </Button>
+                        </Grid>
+                    </Grid>
+
+                    {/* Desktop View: Standard Layout */}
+                    <Alert severity="warning" sx={{ mb: 1, fontSize: '13px', display: { xs: 'none', md: 'flex' } }}>
                         {t(
                             `Please double check your order and address details. Order Cannot be CANCELLED once accepted by Restaurant.`
                         )}
                     </Alert>
+
                     <LoadingButton
                         type="submit"
                         fullWidth

@@ -43,12 +43,14 @@ const PaymentOptions = (props) => {
         totalAmount,
         switchToWallet,
         setChangeAmount,
-        changeAmount
+        changeAmount,
+        openModal,
+        setOpenModal
 
     } = props
     const { t } = useTranslation()
     const dispatch = useDispatch()
-    const [openModal, setOpenModal] = useState(false)
+    // const [openModal, setOpenModal] = useState(false)
     const { offLineWithPartial } = useSelector((state) => state.offlinePayment)
     const [isCheckedOffline, setIsCheckedOffline] = useState(
         selected?.method === 'offline_payment'

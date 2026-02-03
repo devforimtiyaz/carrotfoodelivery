@@ -168,6 +168,7 @@ const CheckoutPage = ({ isDineIn }) => {
     const [usePartialPayment, setUsePartialPayment] = useState(false)
     const [switchToWallet, setSwitchToWallet] = useState(false)
     const [openModal, setOpenModal] = useState(false)
+    const [openPaymentModal, setOpenPaymentModal] = useState(false)
     const [openPartialModel, setOpenPartialModel] = useState(false)
     const [deliveryTip, setDeliveryTip] = useState(0)
     const [selected, setSelected] = useState('')
@@ -1357,6 +1358,7 @@ const CheckoutPage = ({ isDineIn }) => {
                                 ? parseInt(additionalInformationStates?.floor) * 3
                                 : 0
                     }
+                    setOpenPaymentModal={setOpenPaymentModal}
                 />
             </Stack>
         </CustomPaperBigCard>
@@ -1473,6 +1475,8 @@ const CheckoutPage = ({ isDineIn }) => {
                             removePartialPayment={removePartialPayment}
                             setChangeAmount={setChangeAmount}
                             changeAmount={changeAmount}
+                            openModal={openPaymentModal}
+                            setOpenModal={setOpenPaymentModal}
                         />
                     </Stack>
                 ) : (
