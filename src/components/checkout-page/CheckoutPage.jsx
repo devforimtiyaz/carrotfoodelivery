@@ -236,7 +236,12 @@ const CheckoutPage = ({ isDineIn }) => {
     useEffect(() => {
         if ((cartList?.length === 0 || !cartList) && page !== 'campaign') {
             const timer = setTimeout(() => {
-                window.location.href = `/home?refresh=${new Date().getTime()}`
+                const rId = restaurantIdRef.current || sessionStorage.getItem('last_restaurant_id')
+                if (rId) {
+                    window.location.href = `/restaurant/${rId}`
+                } else {
+                    window.location.href = '/home'
+                }
             }, 1000)
             return () => clearTimeout(timer)
         }
@@ -697,7 +702,10 @@ const CheckoutPage = ({ isDineIn }) => {
                     const page = 'order'
                     setOrderId(response?.data?.order_id)
                     if (response?.data) {
-                        if (paymenMethod !== 'cash_on_delivery') {
+                        if (
+                            paymenMethod !== 'cash_on_delivery' &&
+                            !paymenMethod?.toLowerCase()?.includes('razor')
+                        ) {
                             const callBackUrl = token
                                 ? // ? `${window.location.origin}/order-history/${response?.data?.order_id}`
                                 `${window.location.origin}/info?page=${page}`
@@ -1196,7 +1204,7 @@ const CheckoutPage = ({ isDineIn }) => {
                 >
                     <CustomEmptyResult
                         label="Cart is empty"
-                        subTitle="Redirecting to home page..."
+                        subTitle={(restaurantIdRef.current || (typeof window !== 'undefined' && sessionStorage.getItem('last_restaurant_id'))) ? "Redirecting to restaurant..." : "Redirecting to home page..."}
                     />
                 </CustomStackFullWidth>
             </Grid>

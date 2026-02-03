@@ -782,7 +782,22 @@ const OrderCalculation = (props) => {
                 ) : (
                     ''
                 )}
-                <Grid md={12}>
+                <Grid item xs={12} sx={{ display: { xs: 'block', md: 'none' }, height: '100px' }} />
+                <Grid
+                    item
+                    md={12}
+                    xs={12}
+                    sx={{
+                        position: { xs: 'fixed', md: 'static' },
+                        bottom: { xs: 0, md: 'unset' },
+                        left: { xs: 0, md: 'unset' },
+                        width: '100%',
+                        zIndex: { xs: 999, md: 'unset' },
+                        backgroundColor: { xs: theme.palette.background.paper, md: 'transparent' },
+                        padding: { xs: '10px', md: 0 },
+                        boxShadow: { xs: '0px -5px 10px rgba(0, 0, 0, 0.05)', md: 'unset' },
+                    }}
+                >
                     <PlaceOrder
                         usePartialPayment={usePartialPayment}
                         placeOrder={placeOrder}
