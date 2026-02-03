@@ -809,6 +809,7 @@ const OrderCalculation = (props) => {
                         page={page}
                         paymentMethodDetails={paymentMethodDetails}
                         distanceLoading={distanceLoading}
+                        setOpenPaymentModal={setOpenPaymentModal}
                     />
                 </Grid>
             </CalculationGrid>

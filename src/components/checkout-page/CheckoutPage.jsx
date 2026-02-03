@@ -49,7 +49,7 @@ import {
     setOrderDetailsModal,
     setOfflineMethod,
 } from '@/redux/slices/OfflinePayment'
-import AllPaymentMethod from './order-summary/AllPaymentMethod'
+import AllPaymentMethod from './AllPaymentMethod'
 import { setWalletAmount } from '@/redux/slices/cart'
 import { setUser } from '@/redux/slices/customer'
 import { setZoneData } from '@/redux/slices/global'
