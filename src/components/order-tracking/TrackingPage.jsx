@@ -29,11 +29,11 @@ const TrackingPage = ({ data, guestOrderTracking }) => {
 
     const steps = [
         {
-            label: 'Order placed',
+            label: 'Order Accepted',
             time: data?.pending,
         },
         {
-            label: 'Order Confirmed',
+            label: 'Delivery Boy Assigned',
             time: data?.confirmed,
         },
         {
@@ -41,11 +41,11 @@ const TrackingPage = ({ data, guestOrderTracking }) => {
             time: data?.processing,
         },
         {
-            label: 'Food is on the way',
+            label: 'Food Picked-Up',
             time: data?.picked_up,
         },
         {
-            label: 'Delivered',
+            label: 'Order Delivered',
             time: data?.delivered,
         },
     ]
@@ -105,7 +105,7 @@ const TrackingPage = ({ data, guestOrderTracking }) => {
         })
         setRerenderMap((prvMap) => !prvMap)
     }
-    
+
     return (
         <RTL direction={languageDirection}>
             <CustomStackFullWidth>
@@ -138,7 +138,7 @@ const TrackingPage = ({ data, guestOrderTracking }) => {
                                                             }
                                                         >
                                                             {labels.time !==
-                                                            null ? (
+                                                                null ? (
                                                                 <CustomFormatedTime
                                                                     date={
                                                                         labels.time

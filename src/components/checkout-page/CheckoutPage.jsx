@@ -47,7 +47,9 @@ import {
     setOfflineInfoStep,
     setOfflineWithPartials,
     setOrderDetailsModal,
+    setOfflineMethod,
 } from '@/redux/slices/OfflinePayment'
+import AllPaymentMethod from './order-summary/AllPaymentMethod'
 import { setWalletAmount } from '@/redux/slices/cart'
 import { setUser } from '@/redux/slices/customer'
 import { setZoneData } from '@/redux/slices/global'
@@ -1364,6 +1366,35 @@ const CheckoutPage = ({ isDineIn }) => {
         </CustomPaperBigCard>
     )
 
+    const handleSubmit = () => {
+        if (selected?.name === 'wallet') {
+            setPaymenMethod(selected?.name)
+            setPaymentMethodDetails(selected)
+            setOpenPaymentModal(false)
+            setSwitchToWallet(true)
+            dispatch(setOfflineInfoStep(0))
+        } else if (selected?.method === 'offline_payment') {
+            setPaymenMethod(selected)
+            setPaymentMethodDetails(selected)
+            dispatch(setOfflineMethod(selected))
+            setOpenPaymentModal(false)
+            setSwitchToWallet(false)
+            dispatch(setOfflineInfoStep(1))
+        } else {
+            setPaymenMethod(selected?.name)
+            setPaymentMethodDetails(selected)
+            setOpenPaymentModal(false)
+            setSwitchToWallet(false)
+            dispatch(setOfflineInfoStep(0))
+        }
+    }
+
+    // Helper to get payment method from modal
+    const getPaymentMethod = (item) => {
+        setSelected(item)
+        setSwitchToWallet(false)
+    }
+
     return (
         <Grid
             container
@@ -1532,6 +1563,40 @@ const CheckoutPage = ({ isDineIn }) => {
                         reject={notAgreeToPartial}
                         colorTitle=" Want to pay partially with wallet ? "
                         title="You do not have sufficient balance to pay full amount via wallet."
+                    />
+                </CustomModal>
+            )}
+            {openPaymentModal && (
+                <CustomModal
+                    openModal={openPaymentModal}
+                    handleClose={() => setOpenPaymentModal(false)}
+                    setModalOpen={setOpenPaymentModal}
+                    maxWidth="640px"
+                    bgColor={theme.palette.customColor.ten}
+                >
+                    <AllPaymentMethod
+                        handleClose={() => setOpenPaymentModal(false)}
+                        paymenMethod={paymenMethod}
+                        usePartialPayment={usePartialPayment}
+                        global={global}
+                        setPaymenMethod={setPaymenMethod}
+                        getPaymentMethod={getPaymentMethod}
+                        setSelected={setSelected}
+                        selected={selected}
+                        handleSubmit={handleSubmit}
+                        subscriptionStates={subscriptionStates}
+                        offlinePaymentOptions={offlinePaymentOptions}
+                        setIsCheckedOffline={() => { }}
+                        isCheckedOffline={selected?.method === 'offline_payment'}
+                        offLineWithPartial={offLineWithPartial}
+                        paymentMethodDetails={paymentMethodDetails}
+                        walletAmount={walletAmount}
+                        totalAmount={totalAmount}
+                        handlePartialPayment={handlePartialPayment}
+                        removePartialPayment={removePartialPayment}
+                        switchToWallet={switchToWallet}
+                        setChangeAmount={setChangeAmount}
+                        changeAmount={changeAmount}
                     />
                 </CustomModal>
             )}

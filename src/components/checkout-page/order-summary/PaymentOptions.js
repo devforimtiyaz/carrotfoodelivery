@@ -75,31 +75,7 @@ const PaymentOptions = (props) => {
     const handleClick = () => {
         setOpenModal(true)
     }
-    const handleSubmit = () => {
-        if (selected?.name === 'wallet') {
-            setPaymenMethod(selected?.name)
-            setPaymentMethodDetails(selected)
-            setOpenModal(false)
-            setSwitchToWallet(true)
-            dispatch(setOfflineInfoStep(0))
-            setIsCheckedOffline(false)
-        } else if (selected?.method === 'offline_payment') {
-            setPaymenMethod(selected)
-            setPaymentMethodDetails(selected)
-            dispatch(setOfflineMethod(selected))
-            setOpenModal(false)
-            setSwitchToWallet(false)
-            dispatch(setOfflineInfoStep(1))
-            setIsCheckedOffline(true)
-        } else {
-            setPaymenMethod(selected?.name)
-            setPaymentMethodDetails(selected)
-            setOpenModal(false)
-            setSwitchToWallet(false)
-            dispatch(setOfflineInfoStep(0))
-            setIsCheckedOffline(false)
-        }
-    }
+
 
     // Direct payment selection handlers
     const handleCashOnDelivery = () => {
@@ -282,40 +258,7 @@ const PaymentOptions = (props) => {
                     </Stack>
                 </CustomStackFullWidth>
 
-                {openModal && (
-                    <CustomModal
-                        openModal={openModal}
-                        handleClose={() => setOpenModal(false)}
-                        setModalOpen={setOpenModal}
-                        maxWidth="640px"
-                        bgColor={theme.palette.customColor.ten}
-                    >
-                        <AllPaymentMethod
-                            handleClose={() => setOpenModal(false)}
-                            paymenMethod={paymenMethod}
-                            usePartialPayment={usePartialPayment}
-                            global={global}
-                            setPaymenMethod={setPaymenMethod}
-                            getPaymentMethod={getPaymentMethod}
-                            setSelected={setSelected}
-                            selected={selected}
-                            handleSubmit={handleSubmit}
-                            subscriptionStates={subscriptionStates}
-                            offlinePaymentOptions={offlinePaymentOptions}
-                            setIsCheckedOffline={setIsCheckedOffline}
-                            isCheckedOffline={isCheckedOffline}
-                            offLineWithPartial={offLineWithPartial}
-                            paymentMethodDetails={paymentMethodDetails}
-                            walletAmount={walletAmount}
-                            totalAmount={totalAmount}
-                            handlePartialPayment={handlePartialPayment}
-                            removePartialPayment={removePartialPayment}
-                            switchToWallet={switchToWallet}
-                            setChangeAmount={setChangeAmount}
-                            changeAmount={changeAmount}
-                        />
-                    </CustomModal>
-                )}
+
             </Grid>
         </CustomPaperBigCard>
     )
