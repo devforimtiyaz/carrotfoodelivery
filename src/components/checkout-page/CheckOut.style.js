@@ -15,7 +15,7 @@ export const DeliveryTitle = styled(Typography)(({ theme }) => ({
     color: theme.palette.neutral[1000],
     fontSize: '16px',
     fontWeight: '700',
-    paddingBottom: '20px',
+    paddingBottom: '5px',
 }))
 export const DeliveryCaption = styled(Typography)(
     ({ theme, no_margin_top, no_margin_bottom }) => ({

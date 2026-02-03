@@ -597,7 +597,7 @@ const OrderCalculation = (props) => {
                         </Stack>
                     </Grid>
                 )}
-                <Grid item md={12} xs={12} marginBottom="1rem">
+                <Grid item md={12} xs={12} marginBottom={{ xs: '10px', md: '1rem' }}>
                     {restaurantData?.data && token && (
                         <HaveCoupon
                             restaurant_id={restaurantData?.data?.id}
@@ -666,7 +666,7 @@ const OrderCalculation = (props) => {
                     </>
                 )}
 
-                <TotalGrid container md={12} xs={12} mt="1rem">
+                <TotalGrid container md={12} xs={12} mt={{ xs: '10px', md: '1rem' }}>
                     <Grid item md={8} xs={8} pl=".5rem">
                         <Typography color={theme.palette.primary.main}>
                             {t('Total')}
@@ -782,7 +782,7 @@ const OrderCalculation = (props) => {
                 ) : (
                     ''
                 )}
-                <Grid item xs={12} sx={{ display: { xs: 'block', md: 'none' }, height: '100px' }} />
+
                 <Grid
                     item
                     md={12}

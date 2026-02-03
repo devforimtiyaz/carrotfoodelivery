@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 import { DeliveryCaption, DeliveryTitle } from './CheckOut.style'
 import { useTranslation } from 'react-i18next'
+import { Box, Typography } from '@mui/material'
 import FormControl from '@mui/material/FormControl'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
@@ -12,7 +13,7 @@ import {
 } from '@/styled-components/CustomStyles.style'
 import OrderType from './order-type'
 import AdditionalAddresses from './AdditionalAddresses'
-import { Typography } from '@mui/material'
+
 import CheckoutSelectedAddressGuest from './guest-user/CheckoutSelectedAddressGuest'
 import { getToken } from './functions/getGuestUserId'
 const DeliveryDetails = (props) => {
@@ -79,14 +80,7 @@ const DeliveryDetails = (props) => {
                                 setOrderType={setOrderType}
                             />
                         )}
-                    {((restaurantData?.data?.delivery &&
-                        global?.home_delivery) ||
-                        (restaurantData?.data?.take_away &&
-                            global?.take_away)) && (
-                            <DeliveryCaption id="demo-row-radio-buttons-group-label">
-                                {t('Delivery Options')}
-                            </DeliveryCaption>
-                        )}
+
 
                     {restaurantData?.data && (
                         <RadioGroup
@@ -151,17 +145,19 @@ const DeliveryDetails = (props) => {
                 )}
 
                 {getToken() && (
-                    <AdditionalAddresses
-                        orderType={orderType}
-                        t={t}
-                        additionalInformationStates={
-                            additionalInformationStates
-                        }
-                        additionalInformationDispatch={
-                            additionalInformationDispatch
-                        }
-                        onSavedAddressClick={handleSavedAddressClick}
-                    />
+                    <Box sx={{ mt: 2 }}>
+                        <AdditionalAddresses
+                            orderType={orderType}
+                            t={t}
+                            additionalInformationStates={
+                                additionalInformationStates
+                            }
+                            additionalInformationDispatch={
+                                additionalInformationDispatch
+                            }
+                            onSavedAddressClick={handleSavedAddressClick}
+                        />
+                    </Box>
                 )}
             </CustomStackFullWidth>
         </CustomPaperBigCard>

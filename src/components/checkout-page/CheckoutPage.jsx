@@ -1211,6 +1211,157 @@ const CheckoutPage = ({ isDineIn }) => {
         )
     }
 
+    const orderSummaryContent = (
+        <CustomPaperBigCard height="auto">
+            <Stack spacing={2} justifyContent="space-between">
+                <OrderSummary variant="h4">
+                    {t('Order Summary')}
+                </OrderSummary>
+                <SimpleBar
+                    style={{ maxHeight: '500px', width: '100%' }}
+                >
+                    <OrderSummaryDetails
+                        type={type}
+                        page={page}
+                        global={global}
+                        orderType={orderType}
+                    />
+                </SimpleBar>
+                <Stack>
+                    {restaurantData?.data?.cutlery &&
+                        orderType === 'delivery' && (
+                            <Box mb={1}>
+                                <Cutlery
+                                    isChecked={cutlery}
+                                    handleChange={handleCutlery}
+                                />
+                            </Box>
+                        )}
+                    {orderType === 'delivery' && (
+                        <Box mb={1}>
+                            <ItemSelectWithChip
+                                title="If Any product is not available"
+                                data={productUnavailableData}
+                                handleChange={handleItemUnavailableNote}
+                            />
+                        </Box>
+                    )}
+                    {orderType === 'delivery' && (
+                        <Box mb={1}>
+                            <ItemSelectWithChip
+                                title="Add More Delivery Instruction"
+                                data={deliveryInstructions}
+                                handleChange={
+                                    handleDeliveryInstructionNote
+                                }
+                            />
+                        </Box>
+                    )}
+
+                    {restaurantData?.data?.is_extra_packaging_active &&
+                        global?.extra_packaging_charge
+                        ? !restaurantData?.data
+                            ?.extra_packaging_status &&
+                        restaurantData?.data
+                            ?.extra_packaging_amount != null &&
+                        restaurantData?.data?.extra_packaging_amount >
+                        0 &&
+                        orderType !== 'dine_in' && (
+                            <Stack
+                                direction="row"
+                                justifyContent="space-between"
+                                alignItems="center"
+                                boxShadow={theme.shadows2[0]}
+                                borderRadius="8px"
+                                minHeight="50px"
+                                py={0.5}
+                                px={2}
+                            >
+                                <FormControlLabel
+                                    onChange={(e) =>
+                                        handleExtraPackaging(e)
+                                    }
+                                    control={<Checkbox />}
+                                    label={
+                                        <Typography
+                                            fontWeight="700"
+                                            fontSize="14px"
+                                            color={
+                                                theme.palette.primary
+                                                    .main
+                                            }
+                                        >
+                                            {t(
+                                                'Need Extra Packaging'
+                                            )}
+                                        </Typography>
+                                    }
+                                />
+                                <Typography
+                                    component="span"
+                                    m="0"
+                                    fontWeight="700"
+                                    fontSize="14px"
+                                    mt="6px"
+                                >
+                                    {getAmount(
+                                        restaurantData.data
+                                            .extra_packaging_amount,
+                                        currencySymbolDirection,
+                                        currencySymbol,
+                                        digitAfterDecimalPoint
+                                    )}
+                                </Typography>
+                            </Stack>
+                        )
+                        : null}
+                </Stack>
+
+                <OrderCalculation
+                    subscriptionStates={subscriptionStates}
+                    cartList={
+                        page === 'campaign' ? campFoodList : cartList
+                    }
+                    restaurantData={restaurantData}
+                    couponDiscount={couponDiscount}
+                    taxAmount={taxAmount}
+                    distanceData={distanceData}
+                    total_order_amount={total_order_amount}
+                    global={global}
+                    couponInfo={couponInfo}
+                    orderType={orderType}
+                    deliveryTip={deliveryTip}
+                    origin={restaurantData?.data}
+                    destination={address}
+                    extraCharge={extraCharge}
+                    additionalCharge={global?.additional_charge}
+                    totalAmount={totalAmount}
+                    walletBalance={walletAmount}
+                    usePartialPayment={usePartialPayment}
+                    placeOrder={placeOrder}
+                    orderLoading={orderLoading}
+                    offlinePaymentLoading={offlinePaymentLoading}
+                    setCouponDiscount={setCouponDiscount}
+                    counponRemove={counponRemove}
+                    offlineFormRef={offlineFormRef}
+                    setOfflineCheck={setOfflineCheck}
+                    page={page}
+                    paymentMethodDetails={paymentMethodDetails}
+                    cashbackAmount={cashbackAmount}
+                    extraPackagingCharge={extraPackagingCharge}
+                    distanceLoading={distanceLoading}
+                    floorCharges={
+                        additionalInformationStates?.workingLift === 'yes'
+                            ? 0
+                            : additionalInformationStates?.floor
+                                ? parseInt(additionalInformationStates?.floor) * 3
+                                : 0
+                    }
+                />
+            </Stack>
+        </CustomPaperBigCard>
+    )
+
     return (
         <Grid
             container
@@ -1245,6 +1396,12 @@ const CheckoutPage = ({ isDineIn }) => {
                             setUsePartialPayment={setUsePartialPayment}
                             setSwitchToWallet={setSwitchToWallet}
                         />
+
+                        {/* Mobile Order Summary: Shown between Details and Tips only on Mobile */}
+                        <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+                            {orderSummaryContent}
+                        </Box>
+
                         {orderType === 'dine_in' && (
                             <CustomPaperBigCard padding=".5rem">
                                 <CustomStackFullWidth>
@@ -1337,156 +1494,9 @@ const CheckoutPage = ({ isDineIn }) => {
                 )}
             </Grid>
 
-            <Grid item xs={12} md={5} height="auto">
-                <CustomPaperBigCard height="auto">
-                    <Stack spacing={2} justifyContent="space-between">
-                        <OrderSummary variant="h4">
-                            {t('Order Summary')}
-                        </OrderSummary>
-                        {/* Bad weather UI removed as per user request */}
-                        <SimpleBar
-                            style={{ maxHeight: '500px', width: '100%' }}
-                        >
-                            <OrderSummaryDetails
-                                type={type}
-                                page={page}
-                                global={global}
-                                orderType={orderType}
-                            />
-                        </SimpleBar>
-                        <Stack>
-                            {restaurantData?.data?.cutlery &&
-                                orderType === 'delivery' && (
-                                    <Box mb={1}>
-                                        <Cutlery
-                                            isChecked={cutlery}
-                                            handleChange={handleCutlery}
-                                        />
-                                    </Box>
-                                )}
-                            {orderType === 'delivery' && (
-                                <Box mb={1}>
-                                    <ItemSelectWithChip
-                                        title="If Any product is not available"
-                                        data={productUnavailableData}
-                                        handleChange={handleItemUnavailableNote}
-                                    />
-                                </Box>
-                            )}
-                            {orderType === 'delivery' && (
-                                <Box mb={1}>
-                                    <ItemSelectWithChip
-                                        title="Add More Delivery Instruction"
-                                        data={deliveryInstructions}
-                                        handleChange={
-                                            handleDeliveryInstructionNote
-                                        }
-                                    />
-                                </Box>
-                            )}
-
-                            {restaurantData?.data?.is_extra_packaging_active &&
-                                global?.extra_packaging_charge
-                                ? !restaurantData?.data
-                                    ?.extra_packaging_status &&
-                                restaurantData?.data
-                                    ?.extra_packaging_amount != null &&
-                                restaurantData?.data?.extra_packaging_amount >
-                                0 &&
-                                orderType !== 'dine_in' && (
-                                    <Stack
-                                        direction="row"
-                                        justifyContent="space-between"
-                                        alignItems="center"
-                                        boxShadow={theme.shadows2[0]}
-                                        borderRadius="8px"
-                                        minHeight="50px"
-                                        py={0.5}
-                                        px={2}
-                                    >
-                                        <FormControlLabel
-                                            onChange={(e) =>
-                                                handleExtraPackaging(e)
-                                            }
-                                            control={<Checkbox />}
-                                            label={
-                                                <Typography
-                                                    fontWeight="700"
-                                                    fontSize="14px"
-                                                    color={
-                                                        theme.palette.primary
-                                                            .main
-                                                    }
-                                                >
-                                                    {t(
-                                                        'Need Extra Packaging'
-                                                    )}
-                                                </Typography>
-                                            }
-                                        />
-                                        <Typography
-                                            component="span"
-                                            m="0"
-                                            fontWeight="700"
-                                            fontSize="14px"
-                                            mt="6px"
-                                        >
-                                            {getAmount(
-                                                restaurantData.data
-                                                    .extra_packaging_amount,
-                                                currencySymbolDirection,
-                                                currencySymbol,
-                                                digitAfterDecimalPoint
-                                            )}
-                                        </Typography>
-                                    </Stack>
-                                )
-                                : null}
-                        </Stack>
-
-                        <OrderCalculation
-                            subscriptionStates={subscriptionStates}
-                            cartList={
-                                page === 'campaign' ? campFoodList : cartList
-                            }
-                            restaurantData={restaurantData}
-                            couponDiscount={couponDiscount}
-                            taxAmount={taxAmount}
-                            distanceData={distanceData}
-                            total_order_amount={total_order_amount}
-                            global={global}
-                            couponInfo={couponInfo}
-                            orderType={orderType}
-                            deliveryTip={deliveryTip}
-                            origin={restaurantData?.data}
-                            destination={address}
-                            extraCharge={extraCharge}
-                            additionalCharge={global?.additional_charge}
-                            totalAmount={totalAmount}
-                            walletBalance={walletAmount}
-                            usePartialPayment={usePartialPayment}
-                            placeOrder={placeOrder}
-                            orderLoading={orderLoading}
-                            offlinePaymentLoading={offlinePaymentLoading}
-                            setCouponDiscount={setCouponDiscount}
-                            counponRemove={counponRemove}
-                            offlineFormRef={offlineFormRef}
-                            setOfflineCheck={setOfflineCheck}
-                            page={page}
-                            paymentMethodDetails={paymentMethodDetails}
-                            cashbackAmount={cashbackAmount}
-                            extraPackagingCharge={extraPackagingCharge}
-                            distanceLoading={distanceLoading}
-                            floorCharges={
-                                additionalInformationStates?.workingLift === 'yes'
-                                    ? 0
-                                    : additionalInformationStates?.floor
-                                        ? parseInt(additionalInformationStates?.floor) * 3
-                                        : 0
-                            }
-                        />
-                    </Stack>
-                </CustomPaperBigCard>
+            {/* Desktop Order Summary: Hidden on Mobile */}
+            <Grid item xs={12} md={5} height="auto" sx={{ display: { xs: 'none', md: 'block' } }}>
+                {orderSummaryContent}
             </Grid>
 
             {openModal && (
