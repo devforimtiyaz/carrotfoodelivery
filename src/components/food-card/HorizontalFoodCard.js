@@ -275,20 +275,28 @@ const HorizontalFoodCard = (props) => {
                                     )}
                                 </>
                             )}
-                            {!isInCart && (
-                                <IconButton
-                                    onClick={(e) => addToCart(e)}
-                                    sx={{ padding: '3px' }}
-                                >
-                                    {addToCartLoading ? (
-                                        <CircularLoader size="20px" />
-                                    ) : (
-                                        <AddShoppingCartIcon color="primary" />
-                                    )}
-                                </IconButton>
-                            )}
+                            {!isInCart &&
+                                isAvailable(
+                                    available_time_starts,
+                                    available_time_ends
+                                ) && (
+                                    <IconButton
+                                        onClick={(e) => addToCart(e)}
+                                        sx={{ padding: '3px' }}
+                                    >
+                                        {addToCartLoading ? (
+                                            <CircularLoader size="20px" />
+                                        ) : (
+                                            <AddShoppingCartIcon color="primary" />
+                                        )}
+                                    </IconButton>
+                                )}
                             {isInCart &&
                                 !incrOpen &&
+                                isAvailable(
+                                    available_time_starts,
+                                    available_time_ends
+                                ) &&
                                 product?.variations?.length === 0 && (
                                     <AfterAddToCart
                                         isInCart={isInCart}

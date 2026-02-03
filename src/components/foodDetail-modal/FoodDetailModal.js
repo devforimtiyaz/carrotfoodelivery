@@ -246,15 +246,15 @@ const FoodDetailModal = ({
                 add_on_ids:
                     add_on?.length > 0
                         ? add_on?.map((add) => {
-                              return add.id
-                          })
+                            return add.id
+                        })
                         : [],
                 add_on_qtys:
                     add_on?.length > 0
                         ? add_on?.map((add) => {
-                              totalQty = add.quantity
-                              return totalQty
-                          })
+                            totalQty = add.quantity
+                            return totalQty
+                        })
                         : [],
                 item_id: product?.id,
                 price: getConvertDiscount(
@@ -271,15 +271,15 @@ const FoodDetailModal = ({
                 variations:
                     getNewVariationForDispatch()?.length > 0
                         ? getNewVariationForDispatch()?.map((variation) => {
-                              return {
-                                  name: variation.name,
-                                  values: {
-                                      label: handleValuesFromCartItems(
-                                          variation.values
-                                      ),
-                                  },
-                              }
-                          })
+                            return {
+                                name: variation.name,
+                                values: {
+                                    label: handleValuesFromCartItems(
+                                        variation.values
+                                    ),
+                                },
+                            }
+                        })
                         : [],
             }
 
@@ -304,15 +304,15 @@ const FoodDetailModal = ({
                 add_on_ids:
                     add_on?.length > 0
                         ? add_on?.map((add) => {
-                              return add.id
-                          })
+                            return add.id
+                        })
                         : [],
                 add_on_qtys:
                     add_on?.length > 0
                         ? add_on?.map((add) => {
-                              totalQty = add.quantity
-                              return totalQty
-                          })
+                            totalQty = add.quantity
+                            return totalQty
+                        })
                         : [],
                 item_id: modalData[0]?.id,
                 price: getConvertDiscount(
@@ -326,15 +326,15 @@ const FoodDetailModal = ({
                 variations:
                     getNewVariationForDispatch()?.length > 0
                         ? getNewVariationForDispatch()?.map((variation) => {
-                              return {
-                                  name: variation.name,
-                                  values: {
-                                      label: handleValuesFromCartItems(
-                                          variation.values
-                                      ),
-                                  },
-                              }
-                          })
+                            return {
+                                name: variation.name,
+                                values: {
+                                    label: handleValuesFromCartItems(
+                                        variation.values
+                                    ),
+                                },
+                            }
+                        })
                         : [],
                 variation_options: selectedOptions?.map(
                     (item) => item.option_id
@@ -361,7 +361,75 @@ const FoodDetailModal = ({
                 (item) => item.restaurant_id === modalData[0].restaurant_id
             )
             if (isRestaurantExist) {
-                handleAddUpdate()
+                // Check if the specific item with same variations already exists
+                const existingItem = cartList.find((item) => {
+                    // Check if item ID matches
+                    if (item.id !== modalData[0].id) return false;
+
+                    // Compare variations
+                    // Using JSON stringify for deep comparison of complex objects is simple but effective here
+                    // assuming the structure is consistent. 
+                    // Ideally we should compare sorted variation values but typically the structure is preserved.
+                    const existingVariations = JSON.stringify(item.variations);
+                    const newVariations = JSON.stringify(getNewVariationForDispatch());
+
+                    // Compare addons
+                    // We need to compare selected addons. 
+                    const existingAddons = JSON.stringify(item.selectedAddons?.map(addon => addon.id).sort());
+                    const newAddons = JSON.stringify(add_on?.map(addon => addon.id).sort());
+
+                    return existingVariations === newVariations && existingAddons === newAddons;
+                });
+
+                if (existingItem && !productUpdate) {
+                    // Item exists, update quantity instead of adding new
+                    const newQuantity = existingItem.quantity + quantity;
+
+                    const itemObject = {
+                        cart_id: existingItem.cartItemId, // Use existing cart_id
+                        guest_id: getGuestId(),
+                        model: modalData[0]?.available_date_starts ? 'ItemCampaign' : 'Food',
+                        add_on_ids: add_on?.length > 0 ? add_on?.map((add) => add.id) : [],
+                        add_on_qtys: add_on?.length > 0 ? add_on?.map((add) => add.quantity) : [],
+                        item_id: modalData[0]?.id,
+                        price: getConvertDiscount(
+                            modalData[0]?.discount,
+                            modalData[0]?.discount_type,
+                            totalPrice,
+                            modalData[0]?.restaurant_discount,
+                            quantity // Note: This price calc might need to reflect total for SINGLE item unit or total? 
+                            // Usually price in updateMutate/addToCartMutate is UNIT price or TOTAL?
+                            // Looking at handleAddUpdate:
+                            // price: getConvertDiscount(..., quantity) 
+                            // It seems to be calculating total price for the batch being added.
+                        ),
+                        quantity: newQuantity, // Update to new TOTAL quantity
+                        variation_options: selectedOptions?.map((item) => item.option_id),
+                        variations: getNewVariationForDispatch()?.length > 0
+                            ? getNewVariationForDispatch()?.map((variation) => ({
+                                name: variation.name,
+                                values: {
+                                    label: handleValuesFromCartItems(variation.values),
+                                },
+                            }))
+                            : [],
+                    }
+
+                    updateMutate(itemObject, {
+                        onSuccess: cartListSuccessHandler,
+                        onError: (error) => {
+                            error?.response?.data?.errors?.forEach((item) => {
+                                CustomToaster('error', item?.message)
+                                if (item?.code === 'stock_out') {
+                                    refetch()
+                                }
+                            })
+                        },
+                    })
+
+                } else {
+                    handleAddUpdate()
+                }
             } else {
                 if (cartList.length !== 0) {
                     handleClearCartModalOpen()
@@ -448,7 +516,7 @@ const FoodDetailModal = ({
 
                             if (
                                 count >=
-                                    Number.parseInt(optionalItemIndex.min) &&
+                                Number.parseInt(optionalItemIndex.min) &&
                                 count <= Number.parseInt(optionalItemIndex.max)
                             ) {
                                 isTrue = true
@@ -528,7 +596,7 @@ const FoodDetailModal = ({
                             })
                             if (
                                 selectedOptionCount >=
-                                    Number.parseInt(item.min) &&
+                                Number.parseInt(item.min) &&
                                 selectedOptionCount <= Number.parseInt(item.max)
                             ) {
                                 //call add/update to cart functionalities
@@ -665,9 +733,9 @@ const FoodDetailModal = ({
                                     Number.parseInt(
                                         isItemExistFromSameVariation.optionPrice
                                     ) *
-                                        quantity +
+                                    quantity +
                                     Number.parseInt(option.optionPrice) *
-                                        quantity
+                                    quantity
                             )
                         } else {
                             const newObj = {
@@ -685,7 +753,7 @@ const FoodDetailModal = ({
                                 (prevState) =>
                                     prevState +
                                     Number.parseInt(option.optionPrice) *
-                                        quantity
+                                    quantity
                             )
                         }
                     }
@@ -1017,12 +1085,12 @@ const FoodDetailModal = ({
                                                                         ?.veg
                                                                 ) === 0
                                                                     ? theme
-                                                                          .palette
-                                                                          .nonVeg
+                                                                        .palette
+                                                                        .nonVeg
                                                                     : theme
-                                                                          .palette
-                                                                          .success
-                                                                          .light
+                                                                        .palette
+                                                                        .success
+                                                                        .light
                                                             }
                                                         />
                                                     ) : null}
@@ -1031,7 +1099,7 @@ const FoodDetailModal = ({
                                                         1 &&
                                                         modalData[0]
                                                             ?.is_halal ===
-                                                            1 && (
+                                                        1 && (
                                                             <Tooltip
                                                                 arrow
                                                                 title={t(
@@ -1053,13 +1121,13 @@ const FoodDetailModal = ({
                                                             ?.item_stock &&
                                                         modalData[0]
                                                             ?.stock_type !==
-                                                            'unlimited' && (
+                                                        'unlimited' && (
                                                             <Typography
                                                                 fontSize="12px"
                                                                 color={
                                                                     quantity >=
-                                                                        modalData[0]
-                                                                            ?.item_stock &&
+                                                                    modalData[0]
+                                                                        ?.item_stock &&
                                                                     theme
                                                                         .palette
                                                                         .info
@@ -1088,98 +1156,98 @@ const FoodDetailModal = ({
                                                 </ReadMore>
                                                 {modalData[0]?.nutritions_name
                                                     ?.length > 0 && (
-                                                    <>
-                                                        <Typography
-                                                            fontSize="14px"
-                                                            fontWeight="500"
-                                                            mt="5px"
-                                                        >
-                                                            {t(
-                                                                'Nutrition Details'
-                                                            )}
-                                                        </Typography>
+                                                        <>
+                                                            <Typography
+                                                                fontSize="14px"
+                                                                fontWeight="500"
+                                                                mt="5px"
+                                                            >
+                                                                {t(
+                                                                    'Nutrition Details'
+                                                                )}
+                                                            </Typography>
 
-                                                        <Stack
-                                                            direction="row"
-                                                            spacing={0.5}
-                                                        >
-                                                            {modalData[0]?.nutritions_name?.map(
-                                                                (
-                                                                    item,
-                                                                    index
-                                                                ) => (
-                                                                    <Typography
-                                                                        fontSize="12px"
-                                                                        key={
-                                                                            index
-                                                                        }
-                                                                        color={
-                                                                            theme
-                                                                                .palette
-                                                                                .neutral[400]
-                                                                        }
-                                                                    >
-                                                                        {item}
-                                                                        {index !==
-                                                                        modalData[0]
-                                                                            ?.nutritions_name
-                                                                            .length -
-                                                                            1
-                                                                            ? ','
-                                                                            : '.'}
-                                                                    </Typography>
-                                                                )
-                                                            )}
-                                                        </Stack>
-                                                    </>
-                                                )}
+                                                            <Stack
+                                                                direction="row"
+                                                                spacing={0.5}
+                                                            >
+                                                                {modalData[0]?.nutritions_name?.map(
+                                                                    (
+                                                                        item,
+                                                                        index
+                                                                    ) => (
+                                                                        <Typography
+                                                                            fontSize="12px"
+                                                                            key={
+                                                                                index
+                                                                            }
+                                                                            color={
+                                                                                theme
+                                                                                    .palette
+                                                                                    .neutral[400]
+                                                                            }
+                                                                        >
+                                                                            {item}
+                                                                            {index !==
+                                                                                modalData[0]
+                                                                                    ?.nutritions_name
+                                                                                    .length -
+                                                                                1
+                                                                                ? ','
+                                                                                : '.'}
+                                                                        </Typography>
+                                                                    )
+                                                                )}
+                                                            </Stack>
+                                                        </>
+                                                    )}
                                                 {modalData[0]?.allergies_name
                                                     ?.length > 0 && (
-                                                    <>
-                                                        <Typography
-                                                            fontSize="14px"
-                                                            fontWeight="500"
-                                                            mt="5px"
-                                                        >
-                                                            {t(
-                                                                'Allergic Ingredients'
-                                                            )}
-                                                        </Typography>
+                                                        <>
+                                                            <Typography
+                                                                fontSize="14px"
+                                                                fontWeight="500"
+                                                                mt="5px"
+                                                            >
+                                                                {t(
+                                                                    'Allergic Ingredients'
+                                                                )}
+                                                            </Typography>
 
-                                                        <Stack
-                                                            direction="row"
-                                                            spacing={0.5}
-                                                        >
-                                                            {modalData[0]?.allergies_name?.map(
-                                                                (
-                                                                    item,
-                                                                    index
-                                                                ) => (
-                                                                    <Typography
-                                                                        fontSize="12px"
-                                                                        key={
-                                                                            index
-                                                                        }
-                                                                        color={
-                                                                            theme
-                                                                                .palette
-                                                                                .neutral[400]
-                                                                        }
-                                                                    >
-                                                                        {item}
-                                                                        {index !==
-                                                                        modalData[0]
-                                                                            ?.allergies_name
-                                                                            .length -
-                                                                            1
-                                                                            ? ','
-                                                                            : '.'}
-                                                                    </Typography>
-                                                                )
-                                                            )}
-                                                        </Stack>
-                                                    </>
-                                                )}
+                                                            <Stack
+                                                                direction="row"
+                                                                spacing={0.5}
+                                                            >
+                                                                {modalData[0]?.allergies_name?.map(
+                                                                    (
+                                                                        item,
+                                                                        index
+                                                                    ) => (
+                                                                        <Typography
+                                                                            fontSize="12px"
+                                                                            key={
+                                                                                index
+                                                                            }
+                                                                            color={
+                                                                                theme
+                                                                                    .palette
+                                                                                    .neutral[400]
+                                                                            }
+                                                                        >
+                                                                            {item}
+                                                                            {index !==
+                                                                                modalData[0]
+                                                                                    ?.allergies_name
+                                                                                    .length -
+                                                                                1
+                                                                                ? ','
+                                                                                : '.'}
+                                                                        </Typography>
+                                                                    )
+                                                                )}
+                                                            </Stack>
+                                                        </>
+                                                    )}
                                                 <Stack
                                                     spacing={1}
                                                     direction={{
@@ -1261,7 +1329,7 @@ const FoodDetailModal = ({
                                                 )}
                                             {modalData?.length > 0 &&
                                                 modalData[0]?.add_ons?.length >
-                                                    0 && (
+                                                0 && (
                                                     <AddOnsManager
                                                         t={t}
                                                         modalData={modalData}
@@ -1334,48 +1402,48 @@ const FoodDetailModal = ({
                                                 xs={12}
                                             >
                                                 {modalData?.length > 0 &&
-                                                isAvailable(
-                                                    modalData[0]
-                                                        ?.available_time_starts,
-                                                    modalData[0]
-                                                        ?.available_time_ends
-                                                ) ? (
+                                                    isAvailable(
+                                                        modalData[0]
+                                                            ?.available_time_starts,
+                                                        modalData[0]
+                                                            ?.available_time_ends
+                                                    ) ? (
                                                     <>
                                                         {isInCart(
                                                             modalData[0].id
                                                         ) && (
-                                                            <UpdateToCartUi
-                                                                addToCard={
-                                                                    addToCard
-                                                                }
-                                                                t={t}
-                                                                isUpdateDisabled={
-                                                                    isUpdateDisabled
-                                                                }
-                                                            />
-                                                        )}
+                                                                <UpdateToCartUi
+                                                                    addToCard={
+                                                                        addToCard
+                                                                    }
+                                                                    t={t}
+                                                                    isUpdateDisabled={
+                                                                        isUpdateDisabled
+                                                                    }
+                                                                />
+                                                            )}
                                                         {!isInCart(
                                                             product.id
                                                         ) && (
-                                                            <AddOrderToCart
-                                                                addToCartLoading={
-                                                                    addToCartLoading
-                                                                }
-                                                                product={
-                                                                    modalData[0]
-                                                                }
-                                                                t={t}
-                                                                addToCard={
-                                                                    addToCard
-                                                                }
-                                                                orderNow={
-                                                                    orderNow
-                                                                }
-                                                                getFullFillRequirements={
-                                                                    getFullFillRequirements
-                                                                }
-                                                            />
-                                                        )}
+                                                                <AddOrderToCart
+                                                                    addToCartLoading={
+                                                                        addToCartLoading
+                                                                    }
+                                                                    product={
+                                                                        modalData[0]
+                                                                    }
+                                                                    t={t}
+                                                                    addToCard={
+                                                                        addToCard
+                                                                    }
+                                                                    orderNow={
+                                                                        orderNow
+                                                                    }
+                                                                    getFullFillRequirements={
+                                                                        getFullFillRequirements
+                                                                    }
+                                                                />
+                                                            )}
                                                     </>
                                                 ) : (
                                                     <AddUpdateOrderToCart

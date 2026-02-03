@@ -175,6 +175,15 @@ const DrawerMenu = ({ zoneid, cartListRefetch }) => {
         )
         setOpenDrawer(false)
     }
+    const handleRouteToOrders = () => {
+        Router.push(
+            {
+                pathname: '/info',
+                query: { page: 'order' },
+            }
+        )
+        setOpenDrawer(false)
+    }
     const menuList = () => (
         <RTL direction={languageDirection ? languageDirection : 'ltr'}>
             <Box
@@ -244,6 +253,30 @@ const DrawerMenu = ({ zoneid, cartListRefetch }) => {
                                             </Typography>
                                         }
                                         onClick={handleRouteToUserInfo}
+                                    />
+                                </ListItemButton>
+                                <ListItemButton
+                                    sx={{
+                                        borderBottom: '1px solid',
+                                        borderBottomColor: (theme) =>
+                                            alpha(
+                                                theme.palette.neutral[300],
+                                                0.3
+                                            ),
+                                        '&:hover': {
+                                            backgroundColor: 'primary.main',
+                                        },
+                                    }}
+                                >
+                                    <ListItemText
+                                        primary={
+                                            <Typography
+                                                sx={{ fontSize: '12px' }}
+                                            >
+                                                {t('Orders')}
+                                            </Typography>
+                                        }
+                                        onClick={handleRouteToOrders}
                                     />
                                 </ListItemButton>
                             </>

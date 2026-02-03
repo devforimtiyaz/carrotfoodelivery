@@ -21,18 +21,18 @@ import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 
 const HaveCoupon = ({
-                        restaurant_id,
-                        setCouponDiscount,
-                        couponDiscount,
-                        cartList,
-                        total_order_amount,
-                        couponCode,
-                        setCouponCode,
-                        data,
-                        anchorEl,
-                        setAnchorEl,
-                        handleClose
-                    }) => {
+    restaurant_id,
+    setCouponDiscount,
+    couponDiscount,
+    cartList,
+    total_order_amount,
+    couponCode,
+    setCouponCode,
+    data,
+    anchorEl,
+    setAnchorEl,
+    handleClose
+}) => {
     const theme = useTheme();
     const router = useRouter();
     const { method } = router.query;
@@ -104,7 +104,7 @@ const HaveCoupon = ({
         }
         handleClose();
     };
-    const handelError=(error)=>{
+    const handelError = (error) => {
         setInputValue(null)
         setCouponDiscount(null)
         localStorage.removeItem("coupon");
@@ -118,7 +118,7 @@ const HaveCoupon = ({
         {
             retry: 0,
             onSuccess: handleSuccess,
-            onError:(error)=> handelError(error),
+            onError: (error) => handelError(error),
             enabled: false
         }
     );
@@ -199,6 +199,7 @@ const HaveCoupon = ({
                                 <CouponButton
                                     loading={isLoading}
                                     loadingPosition="start"
+                                    startIcon={<CouponStartSvg />}
                                     variant="contained"
                                     onClick={() => handleApply(inputValue)}
                                     disabled={inputValue === "" || !inputValue}
@@ -229,7 +230,7 @@ const HaveCoupon = ({
 
             >
                 <CheckOutPromo loading={isLoading || isRefetching} handleClose={handleClose} data={data}
-                               handleApply={handleApply} />
+                    handleApply={handleApply} />
             </CustomPopover>
         </Grid>
     );

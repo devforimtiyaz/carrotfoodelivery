@@ -45,12 +45,6 @@ const RegularOrders = ({ orderType }) => {
 
     const router = useRouter()
     const handleRemove = (item) => {
-        if (cartList?.length === 1) {
-            const rId = item?.restaurant_id
-            if (rId) {
-                router.push(`/restaurant/${rId}`)
-            }
-        }
         dispatch(removeProduct(item))
     }
 

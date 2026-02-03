@@ -233,21 +233,8 @@ const CheckoutPage = ({ isDineIn }) => {
     const isRehydrated = useSelector((state) => state._persist?.rehydrated)
 
     useEffect(() => {
-        console.log('Redirect Debug:', {
-            isRehydrated,
-            cartLength: cartList?.length,
-            page,
-            ref: restaurantIdRef.current,
-            session: typeof window !== 'undefined' ? sessionStorage.getItem('last_restaurant_id') : 'N/A'
-        })
         if (isRehydrated && cartList?.length === 0 && page !== 'campaign') {
-            if (restaurantIdRef.current) {
-                console.log('Redirecting to Restaurant:', restaurantIdRef.current)
-                router.push(`/restaurant/${restaurantIdRef.current}`)
-            } else {
-                console.log('Redirecting to Home (No Ref)')
-                router.push('/home')
-            }
+            router.push('/home')
         }
     }, [cartList, page, router, isRehydrated])
     const { data: offlinePaymentOptions, refetch: OfflinePaymentRefetch } =
@@ -918,27 +905,25 @@ const CheckoutPage = ({ isDineIn }) => {
         }
     }
     const counponRemove = () => { }
-    if (orderSuccess) {
-        if (token) {
-            router.push(
-                {
-                    pathname: '/info',
-                    query: { page: 'order', orderId: orderId },
-                },
-                undefined,
-                { shallow: true }
-            )
-        } else {
-            router.push(
-                {
-                    pathname: '/order',
-                    query: { orderId: orderId },
-                },
-                undefined,
-                { shallow: true }
-            )
+    useEffect(() => {
+        if (orderSuccess) {
+            if (token) {
+                router.push(
+                    {
+                        pathname: '/info',
+                        query: { page: 'order', orderId: orderId },
+                    }
+                )
+            } else {
+                router.push(
+                    {
+                        pathname: '/order',
+                        query: { orderId: orderId },
+                    }
+                )
+            }
         }
-    }
+    }, [orderSuccess, token, orderId, router])
 
     const handleBadWeatherUi = (zoneData) => {
         const currentZoneInfo = zoneData?.find(

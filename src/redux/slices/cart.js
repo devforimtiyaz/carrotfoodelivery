@@ -90,10 +90,10 @@ export const cartSlice = createSlice({
             state.cartList = state.cartList.map((item) =>
                 item.id === action.payload.id
                     ? {
-                          ...item,
-                          totalPrice: action.payload.totalPrice,
-                          quantity: action.payload.quantity,
-                      }
+                        ...item,
+                        totalPrice: action.payload.totalPrice,
+                        quantity: action.payload.quantity,
+                    }
                     : item
             )
         },
@@ -110,10 +110,10 @@ export const cartSlice = createSlice({
                 newData = state.cartList.map((item, i) =>
                     i === index
                         ? {
-                              ...item,
-                              totalPrice: action.payload.totalPrice,
-                              quantity: action.payload.quantity,
-                          }
+                            ...item,
+                            totalPrice: action.payload.totalPrice,
+                            quantity: action.payload.quantity,
+                        }
                         : item
                 )
                 state.cartList = newData
@@ -121,10 +121,10 @@ export const cartSlice = createSlice({
                 newData = state.cartList.map((item) =>
                     item.id === action.payload.id
                         ? {
-                              ...item,
-                              totalPrice: action.payload.totalPrice,
-                              quantity: action.payload.quantity,
-                          }
+                            ...item,
+                            totalPrice: action.payload.totalPrice,
+                            quantity: action.payload.quantity,
+                        }
                         : item
                 )
                 state.cartList = newData
@@ -140,10 +140,10 @@ export const cartSlice = createSlice({
                 newData = state.cartList.map((item, i) =>
                     i === index
                         ? {
-                              ...item,
-                              totalPrice: action.payload.totalPrice,
-                              quantity: action.payload.quantity,
-                          }
+                            ...item,
+                            totalPrice: action.payload.totalPrice,
+                            quantity: action.payload.quantity,
+                        }
                         : item
                 )
                 state.cartList = newData
@@ -151,29 +151,22 @@ export const cartSlice = createSlice({
                 newData = state.cartList.map((item) =>
                     item.id === action.payload.id
                         ? {
-                              ...item,
-                              totalPrice: action.payload.totalPrice,
-                              quantity: action.payload.quantity,
-                          }
+                            ...item,
+                            totalPrice: action.payload.totalPrice,
+                            quantity: action.payload.quantity,
+                        }
                         : item
                 )
                 state.cartList = newData
             }
         },
         removeProduct: (state = initialState, action) => {
-            let newData
-            if (action.payload.variations.length > 0) {
-                let index = getIndexFromArrayByComparision(
-                    state.cartList,
-                    action.payload
-                )
-                newData = state.cartList.filter((item, i) => i !== index)
-                state.cartList = newData
-            } else {
-                newData = state.cartList.filter(
-                    (item) => item.id !== action.payload.id
-                )
-                state.cartList = newData
+            let index = getIndexFromArrayByComparision(
+                state.cartList,
+                action.payload
+            )
+            if (index !== -1) {
+                state.cartList.splice(index, 1)
             }
         },
         setClearCart: (state = initialState, action) => {

@@ -39,7 +39,7 @@ const FoodCardIncrementAndDecrement = ({
     const { mutate: itemRemove, isLoading: removeIsLoading } =
         useDeleteCartItem()
     const guestId = getGuestId()
-    const handleHover = () => {}
+    const handleHover = () => { }
 
     const cartUpdateHandleSuccess = (res) => {
         if (res) {
@@ -71,7 +71,10 @@ const FoodCardIncrementAndDecrement = ({
 
     const handleIncrement = (e) => {
         e.stopPropagation()
-        if (getQuantity(product?.id) >= product?.item_stock) {
+        if (
+            product?.stock_type !== 'unlimited' &&
+            getQuantity(product?.id) >= product?.item_stock
+        ) {
             CustomToaster('error', t('Out Of Stock'))
         } else {
             const updateQuantity = isInCart?.quantity + 1
